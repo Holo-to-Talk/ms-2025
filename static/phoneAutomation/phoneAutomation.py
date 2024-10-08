@@ -26,11 +26,11 @@ driver.get(URL)
 try:
     # 「Visit Site」
     # ButtonがClick可能になるまで待機
-    visitSiteButton = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/main/div/div/section[1]/div/footer/button'))
-    )
+    #visitSiteButton = WebDriverWait(driver, 10).until(
+    #    EC.element_to_be_clickable((By.XPATH, '//*[@id="root"]/div/main/div/div/section[1]/div/footer/button'))
+    #)
     # Click
-    visitSiteButton.click()
+    #visitSiteButton.click()
 
     # 「デバイスを起動する」
     # ButtonがClick可能になるまで待機
