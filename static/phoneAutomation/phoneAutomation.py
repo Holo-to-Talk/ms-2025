@@ -6,12 +6,10 @@ from selenium.webdriver.common.by import By
 import time
 
 # 定数
-# URL
-URL = 'https://dc6a-118-238-235-115.ngrok-free.app/'
+# URL（※定期的に変わる可能性）
+URL = 'https://k1zuna.shop/'
 # 電話番号（代表回線）
 PHONE_NUMBER = '+1 8302242800'
-# クラス名
-CLASS_NAME = 'hide'
 
 # Options指定
 options = Options()
@@ -75,21 +73,22 @@ hangUpOutGoingButton = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable((By.XPATH, '//*[@id="button-hangup-outgoing"]'))
 )
 
-# 電話が途切れる → ブラウザを閉じるまで
+# 電話がつながる → 電話が途切れる → ブラウザを閉じるまで
 try:
-    # 電話が途切れるまでタブを維持
+    # 電話が途切れるまでタブを維持（「電話を終了」ボタンが消えた瞬間 = 電話が切れた（途切れた）瞬間）
     while True:
         # ButtonのClass取得
         hangUpOutGoingButton_className = hangUpOutGoingButton.get_attribute('class')
-        # 対象のClass（hide）があるかないか
-        if CLASS_NAME in hangUpOutGoingButton_className.split():
-            # hideがある（電話が途切れてる）
+        # 「電話を終了」ボタンを消すClass（hide）があるかないか
+        if 'hide' in hangUpOutGoingButton_className.split():
+            # hideがある（「電話を終了」ボタンが消えた = 電話が途切れた）
             # Browserを閉じる
             driver.quit()
             # ループ終了
             exit
         else:
-            # hideがない（電話が途切れていない）
+            # hideがない（「電話を終了」ボタンがある = 電話が途切れていない）
+            # 5秒ごとに確認
             time.sleep(5)
 
 except Exception as e:
