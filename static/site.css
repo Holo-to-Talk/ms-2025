@@ -1,23 +1,45 @@
 ﻿@import url(https://fonts.googleapis.com/css?family=Share+Tech+Mono);
-
-body,
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap");
+body {
+  font-family: "Noto Sans JP", sans-serif;
+}
 p {
   padding: 0;
   margin: auto;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 h1 {
   text-align: center;
+  font-weight: 400;
 }
 
 h2 {
   margin-top: 0;
   border-bottom: 1px solid black;
+  padding: 0 0 10px 0;
+  font-weight: 400;
 }
 
 button {
-  margin-bottom: 10px;
+  margin: 20px 0 10px 0;
+  border: none;
+  border-radius: 10px;
+  background-color: #299fff;
+  padding: 5px 15px;
+  color: white;
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: 300;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  transition: transform 0.2s ease;
+}
+
+#startup-button {
+  margin: 5px 0 30px 0;
+}
+
+button:hover {
+  transform: scale(0.98);
 }
 
 label {
@@ -25,6 +47,7 @@ label {
   font-size: 1.25em;
   color: #777776;
   display: block;
+  margin: 0 0 10px 0;
 }
 
 header {
@@ -32,7 +55,6 @@ header {
 }
 
 main {
-  padding: 3em;
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -43,9 +65,9 @@ main {
 .left-column,
 .center-column,
 .right-column {
+  min-width: 240px;
   width: 30%;
-  min-width: 16em;
-  margin: 0 1.5em;
+  margin: 0 1.5em 50px 1.5em;
   text-align: center;
 }
 
@@ -59,11 +81,26 @@ main {
 }
 
 select {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  -moz-appearance: none; /* Firefox */
   width: 250px;
-  height: 60px;
+  height: 120px;
   margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 10px;
 }
 
+select::-webkit-scrollbar {
+  width: 0; /* 幅を0にすることでスクロールバーを非表示に */
+  height: 0;
+}
+
+select option {
+  white-space: normal; /* テキストを改行可能にする */
+  word-wrap: break-word; /* 長い単語を自動で改行する */
+  overflow-wrap: break-word;
+  font-family: "Helvetica Light", Helvetica, sans-serif;
+}
 /* Center Column */
 input {
   font-family: Helvetica-LightOblique, Helvetica, sans-serif;
@@ -74,6 +111,7 @@ input {
   padding: 0;
   display: block;
   margin: 10px 0;
+  border-radius: 10px;
 }
 
 div#volume-indicators {
@@ -89,17 +127,19 @@ div#volume-indicators > div {
   width: 0;
 }
 
-/* Right Column */
-.right-column {
-  padding: 0 1.5em;
-}
-
 #log {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  -moz-appearance: none; /* Firefox */
   text-align: left;
   border: 1px solid #686865;
-  padding: 10px;
-  height: 9.5em;
+  padding: 20px 10px;
+  height: 400px;
   overflow-y: scroll;
+  border-radius: 10px;
+}
+#log::-webkit-scrollbar {
+  width: 0; /* 幅を0にすることでスクロールバーを非表示に */
+  height: 0;
 }
 
 .log-entry {
@@ -107,7 +147,7 @@ div#volume-indicators > div {
   font-family: "Share Tech Mono", "Courier New", Courier, fixed-width;
   font-size: 1.25em;
   line-height: 1.25em;
-  margin-left: 1em;
+  margin: 0 0 1em 1em;
   text-indent: -1.25em;
   width: 90%;
 }
@@ -121,4 +161,18 @@ div#volume-indicators > div {
 
 button:disabled {
   cursor: not-allowed;
+}
+
+@media (max-width: 860px) {
+  main {
+    flex-direction: column; /* 画面が小さくなったら縦並びに */
+    align-items: center; /* 要素を中央に揃える */
+  }
+
+  .left-column,
+  .center-column,
+  .right-column {
+    min-width: 240px;
+    width: 70%;
+  }
 }
