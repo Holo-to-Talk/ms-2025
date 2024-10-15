@@ -11,6 +11,7 @@ p {
 h1 {
   text-align: center;
   font-weight: 400;
+  font-size: 38px;
 }
 
 h2 {
@@ -18,6 +19,7 @@ h2 {
   border-bottom: 1px solid black;
   padding: 0 0 10px 0;
   font-weight: 400;
+  font-size: 30px;
 }
 
 button {
@@ -25,13 +27,15 @@ button {
   border: none;
   border-radius: 10px;
   background-color: #299fff;
-  padding: 5px 15px;
+  padding: 5px 25px;
   color: white;
   font-family: "Noto Sans JP", sans-serif;
+  font-size: 26px;
   font-weight: 300;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   transition: transform 0.2s ease;
+
+  
 }
 
 #startup-button {
@@ -44,10 +48,10 @@ button:hover {
 
 label {
   text-align: left;
-  font-size: 1.25em;
   color: #777776;
   display: block;
   margin: 0 0 10px 0;
+  font-size: 28px
 }
 
 header {
@@ -75,8 +79,7 @@ main {
 #client-name {
   text-align: left;
   margin-bottom: 1em;
-  font-family: "Helvetica Light", Helvetica, sans-serif;
-  font-size: 1.25em;
+  font-size: 28px;
   color: #777776;
 }
 
@@ -88,6 +91,7 @@ select {
   margin-bottom: 10px;
   border-radius: 10px;
   padding: 10px;
+  font-size: 22px;
 }
 
 select::-webkit-scrollbar {
@@ -99,19 +103,19 @@ select option {
   white-space: normal; /* テキストを改行可能にする */
   word-wrap: break-word; /* 長い単語を自動で改行する */
   overflow-wrap: break-word;
-  font-family: "Helvetica Light", Helvetica, sans-serif;
 }
 /* Center Column */
 input {
-  font-family: Helvetica-LightOblique, Helvetica, sans-serif;
-  font-style: oblique;
-  font-size: 1em;
+  font-size: 25px;
   width: 100%;
   height: 2.5em;
   padding: 0;
   display: block;
   margin: 10px 0;
   border-radius: 10px;
+}
+#phone-number{
+  padding: 0 10px;
 }
 
 div#volume-indicators {
@@ -132,10 +136,11 @@ div#volume-indicators > div {
   -moz-appearance: none; /* Firefox */
   text-align: left;
   border: 1px solid #686865;
-  padding: 20px 10px;
+  padding: 20px 29px;
   height: 400px;
   overflow-y: scroll;
   border-radius: 10px;
+  font-size: 18px
 }
 #log::-webkit-scrollbar {
   width: 0; /* 幅を0にすることでスクロールバーを非表示に */
@@ -144,7 +149,6 @@ div#volume-indicators > div {
 
 .log-entry {
   color: #686865;
-  font-family: "Share Tech Mono", "Courier New", Courier, fixed-width;
   font-size: 1.25em;
   line-height: 1.25em;
   margin: 0 0 1em 1em;
@@ -164,6 +168,20 @@ button:disabled {
 }
 
 @media (max-width: 860px) {
+  main {
+    flex-direction: column; /* 画面が小さくなったら縦並びに */
+    align-items: center; /* 要素を中央に揃える */
+  }
+
+  .left-column,
+  .center-column,
+  .right-column {
+    min-width: 240px;
+    width: 70%;
+  }
+}
+
+@media (max-width: 430px) {
   main {
     flex-direction: column; /* 画面が小さくなったら縦並びに */
     align-items: center; /* 要素を中央に揃える */
