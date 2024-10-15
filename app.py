@@ -1,7 +1,9 @@
 import os
 import re
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, redirect, request
+from flask import Flask, Response, jsonify, redirect, request, session, url_for, render_template, flash
+from flask_mysqldb import MySQL
+from werkzeug.security import check_password_hash
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
@@ -11,6 +13,18 @@ load_dotenv()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__)
+
+#セッションのための秘密鍵
+app.secret_key = os.environ.get("SECRET_KEY")
+
+#DB_設定
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST')
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB')
+
+# MySQL拡張機能を初期化
+mysql = MySQL(app)
 
 # 特殊文字やアンダースコアを除去する正規表現
 alphanumeric_only = re.compile("[\W_]+")
