@@ -9,7 +9,11 @@
       <h1>Holo >> Talk スタッフ着信画面</h1>
       <button id="startup-button">デバイスを起動</button>
     </header>
-
+    <ul>
+      {% for table in tables %}
+          <li>{{ table[0] }}</li>
+      {% endfor %}
+  </ul>
     <main id="controls">
       <section class="left-column" id="info">
         <h2>端末情報</h2>

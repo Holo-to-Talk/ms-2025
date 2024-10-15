@@ -41,7 +41,23 @@ IDENTITY = {"identity": "Admin-Center"}
 # ルートURLにアクセスされた際にindex.htmlを返す
 @app.route("/")
 def index():
-    return app.send_static_file("index.html")
+
+        # MySQLに接続してカーソルを取得
+    cur = mysql.connection.cursor()
+
+    # テーブル名を取得するクエリを実行
+    cur.execute("SHOW TABLES")
+
+    # テーブル名をすべて取得
+    tables = cur.fetchall()
+
+    # テーブル名をprint
+    print("テーブル名:", tables)
+
+    # カーソルを閉じる
+    cur.close()
+
+    return render_template("index.html", tables=tables)
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
