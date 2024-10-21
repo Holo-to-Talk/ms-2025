@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 import time
 
 # 定数
-# URL（※定期的に変わる可能性）
+# URL
 URL = 'https://holog.net/'
 # 電話番号（代表回線）
 PHONE_NUMBER = '+1 8302242800'
