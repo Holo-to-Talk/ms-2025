@@ -1,7 +1,7 @@
 import os
 import re
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, redirect, request
+from flask import Flask, Response, jsonify, redirect, request,send_from_directory
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
@@ -88,6 +88,33 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
-# アプリケーションを実行
+# レポートページの画面・バック側処理
+@app.route("/report",methods=["POST","GET"])
+def report():
+    if request.method == "POST":
+        return "レポートを作成しました！（本来はDBに情報格納）"
+
+    if request.method == "GET":
+        return send_from_directory('static', 'report.html')
+
+# ログインページの画面・バック側処理
+@app.route("/login",methods=["POST","GET"])
+def login():
+    if request.method == "POST":
+        return "ログインの処理が走る"
+    
+    if request.method == "GET":
+        return send_from_directory('static', 'login.html')
+    
+# 新規アカウント登録ページの画面・バック側処理
+@app.route("/register",methods=["POST","GET"])
+def login():
+    if request.method == "POST":
+        return "新規アカウントの処理が走る"
+    
+    if request.method == "GET":
+        return send_from_directory('static', 'register.html')
+
+    # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
