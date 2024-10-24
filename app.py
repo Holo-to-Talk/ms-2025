@@ -108,7 +108,7 @@ def login():
     
 # 新規アカウント登録ページの画面・バック側処理
 @app.route("/register",methods=["POST","GET"])
-def login():
+def register():
     if request.method == "POST":
         return "新規アカウントの処理が走る"
     
