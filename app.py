@@ -97,24 +97,6 @@ def report():
     if request.method == "GET":
         return send_from_directory('static', 'report.html')
 
-# ログインページの画面・バック側処理
-@app.route("/login",methods=["POST","GET"])
-def login():
-    if request.method == "POST":
-        return "ログインの処理が走る"
-    
-    if request.method == "GET":
-        return send_from_directory('static', 'login.html')
-    
-# 新規アカウント登録ページの画面・バック側処理
-@app.route("/register",methods=["POST","GET"])
-def register():
-    if request.method == "POST":
-        return "新規アカウントの処理が走る"
-    
-    if request.method == "GET":
-        return send_from_directory('static', 'register.html')
-
     # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
