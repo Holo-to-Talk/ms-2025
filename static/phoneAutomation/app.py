@@ -1,0 +1,3 @@
+import phoneAutomation
+
+phoneAutomation.phoneAutomation()
