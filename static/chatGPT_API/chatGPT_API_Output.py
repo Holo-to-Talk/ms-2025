@@ -1,12 +1,9 @@
 import openai
 
-def chatGPT_API():
+def chatGPT_API_Output(inputContent):
     # 定数
     # API Key
     openai.api_key = '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'
-
-    # 入力内容の取得
-    inputContent = input()
 
     # ChatGPT APIに入力
     response = openai.ChatCompletion.create(
@@ -25,5 +22,8 @@ def chatGPT_API():
         temperature = 0.7,
     )
 
+    # 応答内容の取得
+    outputContent = response['choices'][0]['message']['content']
+
     # 応答内容の返し
-    return(response['choices'][0]['message']['content'])
+    return outputContent
