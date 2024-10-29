@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログ一覧</title>
+
+    <!-- Google Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Materialize CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- Google Fonts Noto Sans JP -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="log-list.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h4 class="center-align">ログ一覧</h4>
+
+      <!-- ログ一覧テーブル -->
+      <table class="highlight centered">
+        <thead>
+          <tr>
+            <th>駅名</th>
+            <th>駅番</th>
+            <th>概要</th>
+            <th>担当者</th>
+            <th>日時</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>東京駅</td>
+            <td>12345</td>
+            <td>機器の定期点検に関する相談</td>
+            <td>山田 太郎</td>
+            <td>2023-10-29 14:00</td>
+          </tr>
+          <tr>
+            <td>新宿駅</td>
+            <td>23456</td>
+            <td>設備故障の修理依頼</td>
+            <td>佐藤 花子</td>
+            <td>2023-10-28 10:30</td>
+          </tr>
+          <tr>
+            <td>大阪駅</td>
+            <td>34567</td>
+            <td>清掃の進捗確認</td>
+            <td>田中 一郎</td>
+            <td>2023-10-27 08:45</td>
+          </tr>
+          <tr>
+            <td>京都駅</td>
+            <td>45678</td>
+            <td>セキュリティの見直し</td>
+            <td>井上 美咲</td>
+            <td>2023-10-26 15:20</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 戻るボタン -->
+      <div class="center-align" style="margin-top: 20px;">
+        <a href="index.html" class="btn waves-effect waves-light">
+          戻る
+          <i class="material-icons left">arrow_back</i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
