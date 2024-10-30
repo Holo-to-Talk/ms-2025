@@ -1,7 +1,7 @@
 import os
 import re
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, redirect, request
+from flask import Flask, Response, jsonify, redirect, request,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
@@ -10,7 +10,7 @@ from twilio.twiml.voice_response import Dial, VoiceResponse
 load_dotenv()
 
 # Flaskアプリケーションを作成
-app = Flask(__name__)
+app = Flask(__name__,template_folder='./static/')
 
 # 特殊文字やアンダースコアを除去する正規表現
 alphanumeric_only = re.compile("[\W_]+")
@@ -27,7 +27,11 @@ IDENTITY = {"identity": "Admin-Center"}
 # ルートURLにアクセスされた際にindex.htmlを返す
 @app.route("/")
 def index():
-    return app.send_static_file("index.html")
+    return render_template("index.html")
+
+@app.route("/index")
+def s_index():
+    return redirect("/")
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
@@ -88,6 +92,15 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
+@app.route("/log-detail",methods=["GET"])
+def log_detail():
+    if request.method == "GET":
+        return render_template("log-detail.html")
+
+@app.route("/log-list",methods=["GET"])
+def log_list():
+    if request.method == "GET":
+        return render_template("log-list.html")
 # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
