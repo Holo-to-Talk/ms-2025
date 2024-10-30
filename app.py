@@ -22,7 +22,7 @@ phone_pattern = re.compile(r"^[\d\+\-\(\) ]+$")
 twilio_number = os.environ.get("TWILIO_CALLER_ID")
 
 # 最新のユーザーIDをメモリに保存する辞書
-IDENTITY = {"identity": "Admin-Center"}
+IDENTITY = {"identity":twilio_number }
 
 # ルートURLにアクセスされた際にindex.htmlを返す
 @app.route("/")
@@ -101,6 +101,15 @@ def log_detail():
 def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
-# アプリケーションを実行
+# レポートページの画面・バック側処理
+@app.route("/report",methods=["POST","GET"])
+def report():
+    if request.method == "POST":
+        return "レポートを作成しました！（本来はDBに情報格納）"
+
+    if request.method == "GET":
+        return send_from_directory('static', 'report.html')
+
+    # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
