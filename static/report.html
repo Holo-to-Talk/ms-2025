@@ -52,13 +52,30 @@
           />
           <label for="inquiryDestination">問い合わせ先（有人駅・駅員）</label>
         </div>
+
         <!-- 担当者名 -->
         <div class="input-field">
-          <input type="text" id="personInCharge" name="personInCharge" required/>
+          <input
+            type="text"
+            id="personInCharge"
+            name="personInCharge"
+            required
+          />
           <label for="personInCharge">担当者名</label>
         </div>
 
-        <!-- 3. 問い合わせ内容 -->
+        <!-- 概要 -->
+        <div class="input-field">
+          <input
+            type="text"
+            id="overview"
+            name="overview"
+            required
+          />
+          <label for="overview">問い合わせ概要</label>
+        </div>
+
+        <!-- 問い合わせ詳細 -->
         <div class="input-field">
           <textarea
             id="inquiryContent"
@@ -66,10 +83,10 @@
             class="materialize-textarea"
             required
           ></textarea>
-          <label for="inquiryContent">問い合わせ内容</label>
+          <label for="inquiryContent">問い合わせ詳細</label>
         </div>
 
-        <!-- 4. 回答内容 -->
+        <!-- 回答内容 -->
         <div class="input-field">
           <textarea
             id="responseContent"
@@ -112,15 +129,22 @@
             id="previewInquiryDestination"
           ></div>
         </div>
+
         <!-- 担当者名 -->
         <div class="preview-item">
           <div class="preview-item-title">担当者名</div>
           <div class="preview-item-content" id="previewPersonInCharge"></div>
         </div>
 
-        <!-- 問い合わせ内容 -->
+        <!-- 概要 -->
         <div class="preview-item">
-          <div class="preview-item-title">問い合わせ内容</div>
+          <div class="preview-item-title">問い合わせ概要</div>
+          <div class="preview-item-content" id="previewOverview"></div>
+        </div>
+
+        <!-- 問い合わせ詳細 -->
+        <div class="preview-item">
+          <div class="preview-item-title">問い合わせ詳細</div>
           <div class="preview-item-content" id="previewInquiryContent"></div>
         </div>
 
@@ -180,6 +204,8 @@
               document.getElementById("inquirySource").value;
             document.getElementById("previewInquiryDestination").textContent =
               document.getElementById("inquiryDestination").value;
+            document.getElementById("previewOverview").textContent =
+              document.getElementById("overview").value;
             document.getElementById("previewInquiryContent").innerHTML = nl2br(
               document.getElementById("inquiryContent").value
             );
@@ -187,7 +213,7 @@
               document.getElementById("responseContent").value
             );
             document.getElementById("previewPersonInCharge").textContent =
-              document.getElementById("personInCharge").value; // 担当者名の追加
+              document.getElementById("personInCharge").value;
           });
       });
     </script>
