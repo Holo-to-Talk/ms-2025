@@ -108,7 +108,7 @@ def report():
         return "レポートを作成しました！（本来はDBに情報格納）"
 
     if request.method == "GET":
-        return send_from_directory('static', 'report.html')
+        return render_template('report.html')
 
     # アプリケーションを実行
 if __name__ == "__main__":
