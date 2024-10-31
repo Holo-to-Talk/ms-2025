@@ -22,7 +22,7 @@ phone_pattern = re.compile(r"^[\d\+\-\(\) ]+$")
 twilio_number = os.environ.get("TWILIO_CALLER_ID")
 
 # 最新のユーザーIDをメモリに保存する辞書
-IDENTITY = {"identity": "Admin-Center"}
+IDENTITY = {"identity": ""}
 
 # ルートURLにアクセスされた際にindex.htmlを返す
 @app.route("/")
