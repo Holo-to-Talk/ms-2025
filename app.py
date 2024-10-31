@@ -1,16 +1,18 @@
 import os
 import re
+import mysql.connector
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, redirect, request
+from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
+
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
 
 # Flaskアプリケーションを作成
-app = Flask(__name__)
+app = Flask(__name__,template_folder="./static")
 
 # 特殊文字やアンダースコアを除去する正規表現
 alphanumeric_only = re.compile("[\W_]+")
@@ -24,10 +26,99 @@ twilio_number = os.environ.get("TWILIO_CALLER_ID")
 # 最新のユーザーIDをメモリに保存する辞書
 IDENTITY = {"identity": "Admin-Center"}
 
-# ルートURLにアクセスされた際にindex.htmlを返す
-@app.route("/")
+# MySQLデータベースの接続設定
+def connect_db():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="06GP2025",
+        database="holo_to_talk"
+    )
+
+# バリデーション関数
+def validate_name(name):
+    if not name:
+        return "駅名を入力してください。"
+    return ""
+
+def validate_station_num(station_num):
+    if not station_num.isdigit():
+        return "駅番号を入力して下さい。"
+    return ""
+
+def validate_address(address):
+    if not address:
+        return "駅の住所を入力して下さい。"
+    return ""
+
+def validate_phone_num(phone_num):
+    pattern = r"^\+?[0-9]{10,15}$"
+    if not re.match(pattern, phone_num):
+        return "電話番号が無効です。"
+    return ""
+
+def validate_password(password):
+    if len(password) < 6:
+        return "パスワードは6文字以上で入力して下さい。"
+    return ""
+
+# ユーザー登録用のルート
+@app.route('/user/register', methods=['GET', 'POST'])
+def register():
+    error_msg = []
+
+    if request.method == 'POST':
+        name = request.form['name']
+        station_num = request.form['station_num']
+        address = request.form['address']
+        phone_num = request.form['phone_num']
+        password = request.form['password']
+
+        # バリデーション
+        error_msg.append(validate_name(name))
+        error_msg.append(validate_station_num(station_num))
+        error_msg.append(validate_address(address))
+        error_msg.append(validate_phone_num(phone_num))
+        error_msg.append(validate_password(password))
+
+        # バリデーションエラーチェック
+        error_msg = [msg for msg in error_msg if msg]  # エラーがあるものだけ保持
+        if not error_msg:
+            # データベースに保存
+            conn = connect_db()
+            cursor = conn.cursor()
+            cursor.execute('''
+            INSERT INTO users (name, station_num, address, phone_num, password) 
+            VALUES (%s, %s, %s, %s, %s)
+            ''', (name, station_num, address, phone_num, password))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return redirect(url_for('success'))  # 成功ページにリダイレクト
+
+    # register.htmlを静的ファイルから読み込み
+    with open('static/register.html', 'r', encoding='utf-8') as file:
+        html_content = file.read()
+
+    # エラーメッセージをHTMLに埋め込む
+    if error_msg:
+        error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
+        html_content = html_content.replace("{% error_msg %}", error_html)
+    else:
+        html_content = html_content.replace("{% error_msg %}", "")
+
+    return html_content
+
+# 成功メッセージ表示
+@app.route('/success')
+def success():
+    return "User registered successfully!"
+
+# ルートURLにアクセスされた際にregister.htmlを返す
+@app.route("/", methods=["GET"])
 def index():
-    return app.send_static_file("index.html")
+   return render_template("index.html")
+
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
