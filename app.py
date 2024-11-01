@@ -1,15 +1,17 @@
 import os
 import re
-import mysql.connector
+from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
-
+from db import *
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
+
+db_connection()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder="./static")
@@ -24,16 +26,7 @@ phone_pattern = re.compile(r"^[\d\+\-\(\) ]+$")
 twilio_number = os.environ.get("TWILIO_CALLER_ID")
 
 # 最新のユーザーIDをメモリに保存する辞書
-IDENTITY = {"identity": "Admin-Center"}
-
-# MySQLデータベースの接続設定
-def connect_db():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="06GP2025",
-        database="holo_to_talk"
-    )
+IDENTITY = {"identity": ""}
 
 # バリデーション関数
 def validate_name(name):
@@ -86,6 +79,8 @@ def register():
         if not error_msg:
             # データベースに保存
             conn = connect_db()
+            
+            print(conn)
             cursor = conn.cursor()
             cursor.execute('''
             INSERT INTO users (name, station_num, address, phone_num, password) 
@@ -117,8 +112,7 @@ def success():
 # ルートURLにアクセスされた際にregister.htmlを返す
 @app.route("/", methods=["GET"])
 def index():
-   return render_template("index.html")
-
+    return render_template("index.html")
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
@@ -179,6 +173,10 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
-# アプリケーションを実行
+
+@app.route('/test_connection')
+def test_connection():
+    return db_connection()
+    # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
