@@ -16,7 +16,7 @@ def chatGPT_API_Output(inputContent):
         ],
 
         # 最大トークン数の指定（要相談）
-        max_tokens = 100,
+        max_tokens = 10,
 
         # 創造性の度合い
         temperature = 0.7,
