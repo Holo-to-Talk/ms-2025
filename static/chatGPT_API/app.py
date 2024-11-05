@@ -1,15 +1,20 @@
-import chatGPT_API_Input
+import voice_Recording
+import audio_To_Text
 import chatGPT_API_Output
+import delete_Recording
 
 def main():
-    # 入力内容の取得
-    inputContent = chatGPT_API_Input.chatGPT_API_Input()
+    # 音声ファイルの生成
+    savedDirectory = voice_Recording.voice_Recording()
+
+    # 音声ファイルのテキスト化・取得
+    inputContent = audio_To_Text.audio_To_Text(savedDirectory)
 
     # 応答内容の取得
     outputContent = chatGPT_API_Output.chatGPT_API_Output(inputContent)
 
-    # 応答内容の表示
-    print(outputContent)
+    # 音声ファイルの削除
+    delete_Recording.delete_Recording(savedDirectory)
 
 if __name__ == "__main__":
     main()
