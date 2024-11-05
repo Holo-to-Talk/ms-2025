@@ -18,7 +18,7 @@ def voice_Recording():
     # 無音判定の閾値
     THRESHOLD = 1000
     # 無音が続く秒数
-    SILENCE_DURATION = 5
+    SILENCE_DURATION = 3
 
     # pyaudioインスタンスの作成
     audio = pyaudio.PyAudio()
