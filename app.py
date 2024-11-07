@@ -2,6 +2,7 @@ import os
 import re
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
+
 from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
@@ -14,7 +15,7 @@ load_dotenv()
 db_connection()
 
 # Flaskアプリケーションを作成
-app = Flask(__name__,template_folder="./static")
+app = Flask(__name__,template_folder='./static/')
 
 # 特殊文字やアンダースコアを除去する正規表現
 alphanumeric_only = re.compile("[\W_]+")
@@ -114,6 +115,10 @@ def success():
 def index():
     return render_template("index.html")
 
+@app.route("/index")
+def s_index():
+    return redirect("/")
+
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
 def token():
@@ -174,9 +179,29 @@ def voice():
     return Response(str(resp), mimetype="text/xml")
 
 
+
 @app.route('/test_connection')
 def test_connection():
     return db_connection()
+ 
+@app.route("/log-detail",methods=["GET"])
+def log_detail():
+    if request.method == "GET":
+        return render_template("log-detail.html")
+
+@app.route("/log-list",methods=["GET"])
+def log_list():
+    if request.method == "GET":
+        return render_template("log-list.html")
+# レポートページの画面・バック側処理
+@app.route("/report",methods=["POST","GET"])
+def report():
+    if request.method == "POST":
+        return "レポートを作成しました！（本来はDBに情報格納）"
+
+    if request.method == "GET":
+        return render_template('report.html')
+
     # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
