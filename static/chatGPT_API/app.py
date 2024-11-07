@@ -2,6 +2,7 @@ import voice_Recording
 import audio_To_Text
 import chatGPT_API_Output
 import delete_Recording
+import text_To_Audio
 
 def main():
     # 音声ファイルの生成
@@ -15,6 +16,9 @@ def main():
 
     # 音声ファイルの削除
     delete_Recording.delete_Recording(savedDirectory)
+
+    # 音声出力
+    text_To_Audio.text_To_Audio(outputContent)
 
 if __name__ == "__main__":
     main()

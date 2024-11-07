@@ -15,9 +15,9 @@ def voice_Recording():
     CHUNK = 1024
     # 出力ファイル名
     OUTPUT_FILE = "inputText.wav"
-    # 無音判定の閾値
+    # 無音判定の閾値（デフォルト：1000）
     THRESHOLD = 500
-    # 無音が続く秒数
+    # 無音が続く秒数（要相談）
     SILENCE_DURATION = 3
 
     # pyaudioインスタンスの作成
