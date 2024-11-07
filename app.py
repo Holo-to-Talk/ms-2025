@@ -1,13 +1,19 @@
 import os
 import re
+import bcrypt
+from flask_mysqldb import MySQL
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, redirect, request,render_template
+
+from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
+from db import *
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
+
+db_connection()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
@@ -24,8 +30,117 @@ twilio_number = os.environ.get("TWILIO_CALLER_ID")
 # 最新のユーザーIDをメモリに保存する辞書
 IDENTITY = {"identity": ""}
 
-# ルートURLにアクセスされた際にindex.htmlを返す
-@app.route("/")
+# バリデーション関数
+def validate_name(name):
+    if not name:
+        return "駅名を入力してください。"
+    return ""
+
+def validate_station_num(station_num):
+    if not station_num.isdigit():
+        return "駅番号を入力して下さい。"
+    return ""
+
+def validate_address(address):
+    if not address:
+        return "駅の住所を入力して下さい。"
+    return ""
+
+def validate_phone_num(phone_num):
+    pattern = r"^\+?[0-9]{10,15}$"
+    if not re.match(pattern, phone_num):
+        return "電話番号が無効です。"
+    return ""
+
+def validate_password(password):
+    if len(password) < 6:
+        return "パスワードは6文字以上で入力して下さい。"
+    return ""
+
+# ユーザー登録用のルート
+@app.route('/user/register', methods=['GET', 'POST'])
+def register():
+    error_msg = []
+    
+    form_data = {
+        "name": "",
+        "station_num": "",
+        "address": "",
+        "phone_num": "",
+        "password": ""
+    }
+
+    if request.method == 'POST':
+        # 入力内容を保持
+        form_data = {
+            "name": request.form.get("name", ""),
+            "station_num": request.form.get("station_num", ""),
+            "address": request.form.get("address", ""),
+            "phone_num": request.form.get("phone_num", ""),
+            "password": request.form.get("password", "")
+        }
+
+        # バリデーション
+        error_msg.append(validate_name(form_data["name"]))
+        error_msg.append(validate_station_num(form_data["station_num"]))
+        error_msg.append(validate_address(form_data["address"]))
+        error_msg.append(validate_phone_num(form_data["phone_num"]))
+        error_msg.append(validate_password(form_data["password"]))
+
+        error_msg = [msg for msg in error_msg if msg]
+
+        if not error_msg:
+
+            # パスワードをハッシュ化
+            hashed_password = bcrypt.hashpw(form_data["password"].encode('utf-8'), bcrypt.gensalt())
+
+            # データベースに保存
+            conn = db_connection()
+            
+            print(conn)
+            cursor = conn.cursor()
+            cursor.execute(''' use holo_to_talk ''')
+            # usersテーブルにデータを挿入  
+            cursor.execute('''
+                INSERT INTO users (station_num, password) 
+                VALUES (%s, %s)
+                ''', (form_data["station_num"], hashed_password))
+
+            # station_infoテーブルにデータを挿入 
+            cursor.execute('''
+            INSERT INTO station_info (name, station_num, address, phone_num) 
+            VALUES (%s, %s, %s, %s)
+            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
+
+            # データベースに変更を保存
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            return redirect(url_for('success'))  # 成功ページにリダイレクト
+
+    return render_template('register.html', error_msg=error_msg, form_data=form_data)
+
+    # register.htmlを静的ファイルから読み込み
+    #with open('static/register.html', 'r', encoding='utf-8') as file:
+    #    html_content = file.read()
+
+    # エラーメッセージをHTMLに埋め込む
+    #if error_msg:
+    #    error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
+    #    html_content = html_content.replace("{% error_msg %}", error_html)
+    #else:
+    #    html_content = html_content.replace("{% error_msg %}", "")
+
+    #return html_content
+    
+# 成功メッセージ表示
+@app.route('/success')
+def success():
+    return "User registered successfully!"
+
+# ルートURLにアクセスされた際にregister.htmlを返す
+@app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
 
@@ -92,6 +207,12 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
+
+
+@app.route('/test_connection')
+def test_connection():
+    return db_connection()
+ 
 @app.route("/log-detail",methods=["GET"])
 def log_detail():
     if request.method == "GET":
