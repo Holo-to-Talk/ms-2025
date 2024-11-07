@@ -1,5 +1,6 @@
 import os
 import re
+import bcrypt
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 
@@ -60,51 +61,79 @@ def validate_password(password):
 @app.route('/user/register', methods=['GET', 'POST'])
 def register():
     error_msg = []
+    
+    form_data = {
+        "name": "",
+        "station_num": "",
+        "address": "",
+        "phone_num": "",
+        "password": ""
+    }
 
     if request.method == 'POST':
-        name = request.form['name']
-        station_num = request.form['station_num']
-        address = request.form['address']
-        phone_num = request.form['phone_num']
-        password = request.form['password']
+        # 入力内容を保持
+        form_data = {
+            "name": request.form.get("name", ""),
+            "station_num": request.form.get("station_num", ""),
+            "address": request.form.get("address", ""),
+            "phone_num": request.form.get("phone_num", ""),
+            "password": request.form.get("password", "")
+        }
 
         # バリデーション
-        error_msg.append(validate_name(name))
-        error_msg.append(validate_station_num(station_num))
-        error_msg.append(validate_address(address))
-        error_msg.append(validate_phone_num(phone_num))
-        error_msg.append(validate_password(password))
+        error_msg.append(validate_name(form_data["name"]))
+        error_msg.append(validate_station_num(form_data["station_num"]))
+        error_msg.append(validate_address(form_data["address"]))
+        error_msg.append(validate_phone_num(form_data["phone_num"]))
+        error_msg.append(validate_password(form_data["password"]))
 
-        # バリデーションエラーチェック
-        error_msg = [msg for msg in error_msg if msg]  # エラーがあるものだけ保持
+        error_msg = [msg for msg in error_msg if msg]
+
         if not error_msg:
+
+            # パスワードをハッシュ化
+            hashed_password = bcrypt.hashpw(form_data["password"].encode('utf-8'), bcrypt.gensalt())
+
             # データベースに保存
-            conn = connect_db()
+            conn = db_connection()
             
             print(conn)
             cursor = conn.cursor()
+            cursor.execute(''' use holo_to_talk ''')
+            # usersテーブルにデータを挿入  
             cursor.execute('''
-            INSERT INTO users (name, station_num, address, phone_num, password) 
-            VALUES (%s, %s, %s, %s, %s)
-            ''', (name, station_num, address, phone_num, password))
+                INSERT INTO users (station_num, password) 
+                VALUES (%s, %s)
+                ''', (form_data["station_num"], hashed_password))
+
+            # station_infoテーブルにデータを挿入 
+            cursor.execute('''
+            INSERT INTO station_info (name, station_num, address, phone_num) 
+            VALUES (%s, %s, %s, %s)
+            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
+
+            # データベースに変更を保存
             conn.commit()
             cursor.close()
             conn.close()
+
             return redirect(url_for('success'))  # 成功ページにリダイレクト
 
+    return render_template('register.html', error_msg=error_msg, form_data=form_data)
+
     # register.htmlを静的ファイルから読み込み
-    with open('static/register.html', 'r', encoding='utf-8') as file:
-        html_content = file.read()
+    #with open('static/register.html', 'r', encoding='utf-8') as file:
+    #    html_content = file.read()
 
     # エラーメッセージをHTMLに埋め込む
-    if error_msg:
-        error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
-        html_content = html_content.replace("{% error_msg %}", error_html)
-    else:
-        html_content = html_content.replace("{% error_msg %}", "")
+    #if error_msg:
+    #    error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
+    #    html_content = html_content.replace("{% error_msg %}", error_html)
+    #else:
+    #    html_content = html_content.replace("{% error_msg %}", "")
 
-    return html_content
-
+    #return html_content
+    
 # 成功メッセージ表示
 @app.route('/success')
 def success():

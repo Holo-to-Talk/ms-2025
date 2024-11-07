@@ -19,8 +19,13 @@
 
 <!-- エラーメッセージ表示 -->
 <div id="error_messages">
-    {% error_msg %}
-</div>
+    {% if error_msg %}
+    <ul>
+        {% for msg in error_msg %}
+            <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}</div>
 
 </body>
 </html>
