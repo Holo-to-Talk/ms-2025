@@ -5,61 +5,22 @@ from flask import Flask, Response, jsonify, redirect, request, render_template, 
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
-import mysql.connector
-import logging
-from mysql.connector import Error
 import bcrypt
 from db import *
-
-logging.basicConfig(level=logging.DEBUG)
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY") or "your_default_secret_key"
+app.secret_key = os.environ.get("SECRET_KEY")
 
-# 仮のユーザー登録処理
-def register_user(num, plain_password):
-    # 1. パスワードをハッシュ化
-    hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), bcrypt.gensalt())
-
-    # 2. ハッシュ化されたパスワードをデータベースに保存
-    connection = db_connection()
-    if connection:
-        cursor = connection.cursor()
-        
-        sql = "INSERT INTO users (station_num, password) VALUES (%s, %s)"
-        cursor.execute(sql, (num, hashed_password))
-        connection.commit()
-        cursor.close()
-        connection.close()
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        # フォームからstation_numとpasswordを取得
-        num = request.form.get('num')
-        password = request.form.get('password')
-        
-        # station_numとpasswordが入力されているか確認
-        if not num or not password:
-            return "ユーザーIDとパスワードの両方を入力してください。"
-
-        # register_user関数を呼び出して新しいユーザーを登録
-        register_user(num, password)
-        
-        return "ユーザーが登録されました！"
-    
-    # GETリクエストでフォームを表示
-    return render_template('register.html')
 
 # ルートURLにアクセスされた際の処理
 @app.route('/')
 def home():
     if 'user' in session:
-        return render_template('logout.html')  # 一時的にログアウト用のページに遷移
+        return render_template('index.html')
     return redirect('/login')
 
 # ログイン処理
