@@ -8,7 +8,8 @@ from twilio.twiml.voice_response import Dial, VoiceResponse
 import mysql.connector
 import logging
 from mysql.connector import Error
-import bcrypt  # bcryptをインポート
+import bcrypt
+from db import *
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -19,32 +20,16 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or "your_default_secret_key"
 
-# MySQL接続情報の設定
-def get_db():
-    try:
-        connection = mysql.connector.connect(
-            host='localhost',
-            user='dev-user',
-            password='Ejdmpr6U@',
-            database='holo_to_talk'
-        )
-        if connection.is_connected():
-            logging.info("データベース接続成功")
-            return connection
-    except Error as e:
-        print(f"Error: {e}")
-        logging.error(f"接続エラー: {e}")
-        return None
-
 # 仮のユーザー登録処理
 def register_user(num, plain_password):
     # 1. パスワードをハッシュ化
     hashed_password = bcrypt.hashpw(plain_password.encode('utf-8'), bcrypt.gensalt())
-    
+
     # 2. ハッシュ化されたパスワードをデータベースに保存
-    connection = get_db()
+    connection = db_connection()
     if connection:
         cursor = connection.cursor()
+        
         sql = "INSERT INTO users (station_num, password) VALUES (%s, %s)"
         cursor.execute(sql, (num, hashed_password))
         connection.commit()
@@ -85,40 +70,31 @@ def login():
             return redirect("/")
         else:
             return render_template('login.html')
-    
+
     if request.method == 'POST':
         num = request.form.get('num', '')
         password = request.form.get('password', '')
-        
-        # データベースからユーザー情報を取得
-        connection = get_db()
-        if connection:
-            try:
-                cursor = connection.cursor()
-                sql = "SELECT * FROM users WHERE station_num = %s"
-                cursor.execute(sql, (num,))
-                users = cursor.fetchall()
 
-                if len(users) == 1:
-                    user = users[0]
-                    cursor.close()
-                    
-                    # 取得したハッシュ化パスワードと照合
-                    if bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
-                        session['user'] = user[0]
-                        return redirect('/')
-                    else:
-                        return "ログインエラー"
-                elif len(users) == 0:
-                    return "ログインエラー"
-                else:
-                    return "ログインエラー"
-            except Error as e:
-                return f"ログインエラー: {e}"
-            finally:
-                connection.close()
+        # データベースからユーザー情報を取得
+        conn = db_connection()
+
+        cursor = conn.cursor()
+        cursor.execute(''' use holo_to_talk''')
+        query = "SELECT * FROM users WHERE station_num = %s"
+        cursor.execute(query, (num,))
+        users = cursor.fetchall()
+
+        if len(users) == 1:
+            user = users[0]
+
+            # パスワードを照合
+            if bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):  # user[2]がハッシュ化パスワードと仮定
+                session['user'] = user[0]  # セッションにユーザーIDを保存
+                return redirect('/')
+            else:
+                return "ログインエラー: IDまたはパスワードが間違っています"
         else:
-            return "ログインエラー"
+            return "ログインエラー: IDまたはパスワードが間違っています"
 
     return render_template('login.html')
 
