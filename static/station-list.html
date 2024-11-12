@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ユーザー一覧</title>
+
+    <!-- Google Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Materialize CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- Google Fonts Noto Sans JP -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="user-list.css" />
+    <style>
+      /* 画面幅が600px以下の場合に住所列を非表示にする */
+      @media (max-width: 600px) {
+        .address-column {
+          display: none;
+        }
+      }
+
+      /* アイコンの色設定 */
+      .edit-icon,
+      .delete-icon {
+        color: white !important;
+      }
+
+      /* 削除ボタンの背景色を赤に設定 */
+      .delete-button {
+        background-color: red !important;
+      }
+
+      /* モーダルのサイズ調整 */
+      .modal {
+        width: 400px !important;
+        max-height: 200px;
+      }
+
+      /* モーダル内の削除ボタンとメッセージのスタイル */
+      .modal-delete-btn {
+        background-color: red !important;
+        color: white !important;
+      }
+      .modal-cancel-btn {
+        background-color: #26a69a !important; /* Materializeデフォルトのボタン色 */
+        color: white !important;
+      }
+      #deleteMessage {
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h4 class="center-align">ユーザー一覧</h4>
+
+      <!-- ユーザー一覧テーブル -->
+      <table class="highlight centered">
+        <thead>
+          <tr>
+            <th>駅番</th>
+            <th>駅名</th>
+            <th class="address-column">住所</th>
+            <th>電話番号</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12345</td>
+            <td>東京駅</td>
+            <td class="address-column">東京都千代田区丸の内1丁目</td>
+            <td>03-1234-5678</td>
+            <td>
+              <a href="#!" class="btn-small waves-effect waves-light">
+                <i class="material-icons edit-icon">edit</i>
+              </a>
+              <a href="#!" class="btn-small waves-effect waves-light delete-button modal-trigger" data-station="東京駅" data-target="deleteModal">
+                <i class="material-icons delete-icon">delete</i>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>23456</td>
+            <td>新宿駅</td>
+            <td class="address-column">東京都新宿区西新宿1丁目</td>
+            <td>03-2345-6789</td>
+            <td>
+              <a href="#!" class="btn-small waves-effect waves-light">
+                <i class="material-icons edit-icon">edit</i>
+              </a>
+              <a href="#!" class="btn-small waves-effect waves-light delete-button modal-trigger" data-station="新宿駅" data-target="deleteModal">
+                <i class="material-icons delete-icon">delete</i>
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td>34567</td>
+            <td>大阪駅</td>
+            <td class="address-column">大阪府大阪市北区梅田3丁目</td>
+            <td>06-3456-7890</td>
+            <td>
+              <a href="#!" class="btn-small waves-effect waves-light">
+                <i class="material-icons edit-icon">edit</i>
+              </a>
+              <a href="#!" class="btn-small waves-effect waves-light delete-button modal-trigger" data-station="大阪駅" data-target="deleteModal">
+                <i class="material-icons delete-icon">delete</i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 削除確認モーダル -->
+      <div id="deleteModal" class="modal">
+        <div class="modal-content">
+          <p id="deleteMessage"></p>
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect modal-cancel-btn btn">キャンセル</a>
+          <a href="#!" class="modal-close waves-effect modal-delete-btn btn">削除</a>
+        </div>
+      </div>
+
+      <!-- 戻るボタン -->
+      <div class="center-align" style="margin-top: 20px;">
+        <a href="index.html" class="btn waves-effect waves-light">
+          戻る
+          <i class="material-icons left">arrow_back</i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+
+        // 削除ボタンをクリックした際の処理
+        document.querySelectorAll('.delete-button').forEach(button => {
+          button.addEventListener('click', function() {
+            const stationName = this.getAttribute('data-station');
+            document.getElementById('deleteMessage').textContent = `${stationName}を本当に削除しますか？`;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

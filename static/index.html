@@ -2,9 +2,27 @@
 <html lang="ja">
   <head>
     <title>Holo >> Talk スタッフ着信画面</title>
-    <link rel="stylesheet" href="site.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="static/site.css" />
   </head>
   <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Holo >> Talk</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="#">ログ入力</a></li>
+          <li><a href="#">ログ一覧</a></li>
+          <li><a href="#">設定</a></li>
+          <li><a href="#">ログアウト</a></li>
+        </ul>
+      </div>
+    </nav>
     <header>
       <h1>Holo >> Talk スタッフ着信画面</h1>
       <button id="startup-button">デバイスを起動</button>
