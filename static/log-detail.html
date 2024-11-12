@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログ内容確認</title>
+
+    <!-- Google Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Materialize CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- Google Fonts Noto Sans JP -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="log-detail.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h4 class="center-align">ログ内容確認</h4>
+
+      <!-- ログ内容の詳細 -->
+      <div class="card">
+        <div class="card-content">
+          <!-- 問い合わせ概要 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>問い合わせ概要</strong>
+            </div>
+            <div class="col s8" id="logOverview">
+              機器の定期点検に関する相談
+            </div>
+          </div>
+
+          <!-- 駅番号 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>駅番号</strong>
+            </div>
+            <div class="col s8" id="logStationId">12345</div>
+          </div>
+
+          <!-- 日時 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>日時</strong>
+            </div>
+            <div class="col s8" id="logDateTime">2023-10-29 14:00</div>
+          </div>
+
+          <!-- 駅番号 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>駅番号</strong>
+            </div>
+            <div class="col s8" id="logStationId">12345</div>
+          </div>
+
+          <!-- 担当者 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>担当者</strong>
+            </div>
+            <div class="col s8" id="logPersonInCharge">山田 太郎</div>
+          </div>
+
+          <!-- 問い合わせ内容 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>問い合わせ内容</strong>
+            </div>
+            <div class="col s8" id="logInquiryContent">
+              駅設備に関する問い合わせ
+            </div>
+          </div>
+
+          <!-- 回答内容 -->
+          <div class="row">
+            <div class="col s4">
+              <strong>回答内容</strong>
+            </div>
+            <div class="col s8" id="logResponseContent">
+              駅設備に問題はありません
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 戻るボタン -->
+      <div class="center-align" style="margin-top: 20px">
+        <a href="./" class="btn waves-effect waves-light">
+          戻る
+          <i class="material-icons left">arrow_back</i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
