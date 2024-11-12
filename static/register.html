@@ -1,32 +1,122 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新規登録</title>
-</head>
-<body>
-    <h2>新規登録</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新規会員登録</title>
 
-    <form method="POST" action="/user/register">
-        駅名: <input type="text" name="name"><br>
-        駅番号: <input type="text" name="station_num"><br>
-        駅の住所: <input type="text" name="address"><br>
-        駅の電話番号: <input type="text" name="phone_num"><br>
-        パスワード: <input type="password" name="password"><br>
-        <input type="submit" value="登録">
-    </form>
+    <!-- Google Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Materialize CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- Google Fonts Noto Sans JP -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 外部CSSファイル -->
+    <link rel="stylesheet" href="register.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title center-align">新規会員登録</span>
+              <form method="POST" action="">
+                <!-- 駅名入力フィールド -->
+                <div class="input-field">
+                  <i class="material-icons prefix">location_on</i>
+                  <input id="station_name" type="text" name="name" required />
+                  <label for="station_name">駅名</label>
+                </div>
 
-<!-- エラーメッセージ表示 -->
-<div id="error_messages">
-    {% if error_msg %}
-    <ul>
-        {% for msg in error_msg %}
-            <li>{{ msg }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}</div>
+                <!-- 駅番入力フィールド -->
+                <div class="input-field">
+                  <i class="material-icons prefix">account_circle</i>
+                  <input id="station_id" type="text" name="station_num" required />
+                  <label for="station_id">駅番</label>
+                </div>
 
-</body>
+                <!-- 駅の住所入力フィールド -->
+                <div class="input-field">
+                  <i class="material-icons prefix">home</i>
+                  <input id="station_address" type="text" name="address" required />
+                  <label for="station_address">駅の住所</label>
+                </div>
+
+                <!-- 駅の電話番号入力フィールド -->
+                <div class="input-field">
+                  <i class="material-icons prefix">phone</i>
+                  <input id="station_phone" type="tel" name="phone_num" required />
+                  <label for="station_phone">駅の電話番号</label>
+                </div>
+
+                <!-- パスワード入力フィールド -->
+                <div class="input-field" style="position: relative;">
+                  <i class="material-icons prefix">lock</i>
+                  <input id="password" type="password"  name="password" required />
+                  <label for="password">パスワード</label>
+                  <i
+                    class="material-icons suffix"
+                    id="toggle-password"
+                    style="position: absolute; right: 0; top: 0; bottom: 0; margin: auto; cursor: pointer;"
+                  >
+                    visibility
+                  </i>
+                </div>
+
+                <!-- エラーメッセージ表示 -->
+                <div id="error_messages">
+                  {% if error_msg %}
+                  <ul>
+                    {% for msg in error_msg %}
+                    <li>{{ msg }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+
+                <!-- 会員登録ボタン -->
+                <div class="center-align">
+                  <button
+                    type="submit"
+                    class="btn waves-effect waves-light"
+                  >
+                    会員登録
+                    <i class="material-icons right">person_add</i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      // パスワードの表示/非表示切り替え
+      document.getElementById("toggle-password").addEventListener("click", function () {
+        const passwordInput = document.getElementById("password");
+        const icon = this;
+        
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.textContent = "visibility_off";
+        } else {
+          passwordInput.type = "password";
+          icon.textContent = "visibility";
+        }
+      });
+    </script>
+  </body>
 </html>
-
