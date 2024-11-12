@@ -23,6 +23,10 @@ def phoneAutomation():
     options = Options()
     # マイク（カメラ）ポップアップ無効化
     options.add_argument('--use-fake-ui-for-media-stream')
+    # ヘッドレス
+    options.add_argument('--headless')
+    # デフォルトのウィンドウサイズ
+    options.add_argument('--window-size=1920,1080')
     # 証明書エラー無視
     options.add_argument('--ignore-certificate-errors')
     # SSLエラー無視
