@@ -8,7 +8,10 @@ import time
 def phoneAutomation():
     # 定数
     # URL
+    # 本番
     URL = 'https://holog.net/'
+    # 開発
+    # URL = 'https://num-0145.holog.net/'
     # 電話番号（代表回線）
     PHONE_NUMBER = '+1 8302242800'
     # WebDriverWaitの時間指定
@@ -20,6 +23,14 @@ def phoneAutomation():
     options = Options()
     # マイク（カメラ）ポップアップ無効化
     options.add_argument('--use-fake-ui-for-media-stream')
+    # 証明書エラー無視
+    options.add_argument('--ignore-certificate-errors')
+    # SSLエラー無視
+    options.add_argument('--ignore-ssl-errors')
+    # GPUの無効化
+    options.add_argument('--disable-gpu')
+    # ソフトウェアによるレンダリングの無効化
+    options.add_argument('--disable-software-rasterizer')
 
     # ChromeDriver起動
     driver = webdriver.Chrome(options = options)
@@ -90,7 +101,7 @@ def phoneAutomation():
                 # Browserを閉じる
                 driver.quit()
                 # ループ終了
-                exit
+                break
             else:
                 # hideがない（「電話を終了」ボタンがある = 電話が途切れていない）
                 # 5秒ごとに確認
