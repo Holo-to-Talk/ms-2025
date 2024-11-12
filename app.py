@@ -1,6 +1,5 @@
 import os
 import re
-import bcrypt
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 from flask import Flask, Response, jsonify, redirect, request, render_template, session, url_for
@@ -9,15 +8,16 @@ from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
 import bcrypt
 from db import *
+from validation import *
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
 
+#DB接続テスト
 db_connection()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
-
 app.secret_key = os.environ.get("SECRET_KEY")
 
 # 特殊文字やアンダースコアを除去する正規表現
@@ -32,35 +32,7 @@ twilio_number = os.environ.get("TWILIO_CALLER_ID")
 # 最新のユーザーIDをメモリに保存する辞書
 IDENTITY = {"identity": ""}
 
-# バリデーション関数
-def validate_name(name):
-    if not name:
-        return "駅名を入力してください。"
-    return ""
-
-def validate_station_num(station_num):
-    if not station_num.isdigit():
-        return "駅番号を入力して下さい。"
-    return ""
-
-def validate_address(address):
-    if not address:
-        return "駅の住所を入力して下さい。"
-    return ""
-
-def validate_phone_num(phone_num):
-    pattern = r"^\+?[0-9]{10,15}$"
-    if not re.match(pattern, phone_num):
-        return "電話番号が無効です。"
-    return ""
-
-def validate_password(password):
-    if len(password) < 6:
-        return "パスワードは6文字以上で入力して下さい。"
-    return ""
-  
-  
- # トークンを生成して返すAPIエンドポイント
+# トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
 def token():
     # 環境変数からTwilioのアカウント情報を取得
@@ -88,7 +60,6 @@ def token():
 
     # トークンとユーザーIDをJSON形式で返す
     return jsonify(identity=identity, token=token)
-
 
 # ルートURLにアクセスされた際の処理
 @app.route('/')
@@ -133,11 +104,11 @@ def login():
 
     return render_template('login.html')
 
-# ユーザー登録用のルート
+# ユーザー登録処理
 @app.route('/user/register', methods=['GET', 'POST'])
 def register():
     error_msg = []
-    
+
     form_data = {
         "name": "",
         "station_num": "",
@@ -172,7 +143,7 @@ def register():
 
             # データベースに保存
             conn = db_connection()
-            
+
             cursor = conn.cursor()
             cursor.execute(''' use holo_to_talk ''')
             # usersテーブルにデータを挿入  
@@ -192,10 +163,10 @@ def register():
             cursor.close()
             conn.close()
 
-            return redirect(url_for('success'))  # 成功ページにリダイレクト
+            return redirect(url_for('login'))  # 成功ページにリダイレクト
 
     return render_template('register.html', error_msg=error_msg, form_data=form_data)
-    
+
 # 成功メッセージ表示
 @app.route('/success')
 def success():
@@ -206,7 +177,7 @@ def success():
 def logout():
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
- 
+
 @app.route("/log-detail",methods=["GET"])
 def log_detail():
     if request.method == "GET":
@@ -216,6 +187,7 @@ def log_detail():
 def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
+
 # レポートページの画面・バック側処理
 @app.route("/report",methods=["POST","GET"])
 def report():
@@ -226,5 +198,6 @@ def report():
         return render_template('report.html')
 
     # アプリケーションを実行
+
 if __name__ == "__main__":
     app.run()
