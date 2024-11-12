@@ -79,7 +79,8 @@ def login():
         conn = db_connection()
 
         cursor = conn.cursor()
-        cursor.execute(''' use holo_to_talk''')
+        cursor.execute(''' use holo_to_talk ''')
+
         query = "SELECT * FROM users WHERE station_num = %s"
         cursor.execute(query, (num,))
         users = cursor.fetchall()
