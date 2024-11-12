@@ -29,9 +29,9 @@ IDENTITY = {"identity": ""}
 def index():
     return render_template("index.html")
 
-@app.route("/index")
+@app.route("/register")
 def s_index():
-    return redirect("/")
+    return render_template("register.html")
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
