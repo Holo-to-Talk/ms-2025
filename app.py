@@ -3,11 +3,11 @@ import re
 import bcrypt
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
-
-from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
+from flask import Flask, Response, jsonify, redirect, request, render_template, session, url_for
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
+import bcrypt
 from db import *
 
 # .envファイルから環境変数を読み込む
@@ -17,6 +17,8 @@ db_connection()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
+
+app.secret_key = os.environ.get("SECRET_KEY")
 
 # 特殊文字やアンダースコアを除去する正規表現
 alphanumeric_only = re.compile("[\W_]+")
@@ -56,6 +58,80 @@ def validate_password(password):
     if len(password) < 6:
         return "パスワードは6文字以上で入力して下さい。"
     return ""
+  
+  
+ # トークンを生成して返すAPIエンドポイント
+@app.route("/token", methods=["GET"])
+def token():
+    # 環境変数からTwilioのアカウント情報を取得
+    account_sid = os.environ["TWILIO_ACCOUNT_SID"]
+    application_sid = os.environ["TWILIO_TWIML_APP_SID"]
+    api_key = os.environ["API_KEY"]
+    api_secret = os.environ["API_SECRET"]
+
+    # ランダムなユーザー名を生成し、記号を削除してIDとして保存
+    identity = twilio_number
+    IDENTITY["identity"] = identity
+
+    # アクセストークンを生成し、ユーザーIDを設定
+    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
+
+    # Voice Grantを作成し、トークンに追加（着信許可）
+    voice_grant = VoiceGrant(
+        outgoing_application_sid=application_sid,
+        incoming_allow=True,
+    )
+    token.add_grant(voice_grant)
+
+    # トークンをJWT形式に変換
+    token = token.to_jwt()
+
+    # トークンとユーザーIDをJSON形式で返す
+    return jsonify(identity=identity, token=token)
+
+
+# ルートURLにアクセスされた際の処理
+@app.route('/')
+def home():
+    if 'user' in session:
+        return render_template('index.html')
+    return redirect('/login')
+
+# ログイン処理
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        if 'user' in session:
+            return redirect("/")
+        else:
+            return render_template('login.html')
+
+    if request.method == 'POST':
+        num = request.form.get('num', '')
+        password = request.form.get('password', '')
+        # データベースからユーザー情報を取得
+        conn = db_connection()
+
+        cursor = conn.cursor()
+        cursor.execute(''' use holo_to_talk ''')
+
+        query = "SELECT * FROM users WHERE station_num = %s"
+        cursor.execute(query, (num,))
+        users = cursor.fetchall()
+
+        if len(users) == 1:
+            user = users[0]
+
+            # パスワードを照合
+            if bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):  # user[2]がハッシュ化パスワードと仮定
+                session['user'] = user[0]  # セッションにユーザーIDを保存
+                return redirect('/')
+            else:
+                return "ログインエラー: IDまたはパスワードが間違っています"
+        else:
+            return "ログインエラー: IDまたはパスワードが間違っています"
+
+    return render_template('login.html')
 
 # ユーザー登録用のルート
 @app.route('/user/register', methods=['GET', 'POST'])
@@ -97,7 +173,6 @@ def register():
             # データベースに保存
             conn = db_connection()
             
-            print(conn)
             cursor = conn.cursor()
             cursor.execute(''' use holo_to_talk ''')
             # usersテーブルにデータを挿入  
@@ -120,98 +195,17 @@ def register():
             return redirect(url_for('success'))  # 成功ページにリダイレクト
 
     return render_template('register.html', error_msg=error_msg, form_data=form_data)
-
-    # register.htmlを静的ファイルから読み込み
-    #with open('static/register.html', 'r', encoding='utf-8') as file:
-    #    html_content = file.read()
-
-    # エラーメッセージをHTMLに埋め込む
-    #if error_msg:
-    #    error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
-    #    html_content = html_content.replace("{% error_msg %}", error_html)
-    #else:
-    #    html_content = html_content.replace("{% error_msg %}", "")
-
-    #return html_content
     
 # 成功メッセージ表示
 @app.route('/success')
 def success():
     return "User registered successfully!"
 
-# ルートURLにアクセスされた際にregister.htmlを返す
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
-
-@app.route("/index")
-def s_index():
-    return redirect("/")
-
-# トークンを生成して返すAPIエンドポイント
-@app.route("/token", methods=["GET"])
-def token():
-    # 環境変数からTwilioのアカウント情報を取得
-    account_sid = os.environ["TWILIO_ACCOUNT_SID"]
-    application_sid = os.environ["TWILIO_TWIML_APP_SID"]
-    api_key = os.environ["API_KEY"]
-    api_secret = os.environ["API_SECRET"]
-
-    # ランダムなユーザー名を生成し、記号を削除してIDとして保存
-    identity = twilio_number
-    IDENTITY["identity"] = identity
-
-    # アクセストークンを生成し、ユーザーIDを設定
-    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
-
-    # Voice Grantを作成し、トークンに追加（着信許可）
-    voice_grant = VoiceGrant(
-        outgoing_application_sid=application_sid,
-        incoming_allow=True,
-    )
-    token.add_grant(voice_grant)
-
-    # トークンをJWT形式に変換
-    token = token.to_jwt()
-
-    # トークンとユーザーIDをJSON形式で返す
-    return jsonify(identity=identity, token=token)
-
-# 音声通話に対応するAPIエンドポイント
-@app.route("/voice", methods=["POST"])
-def voice():
-    resp = VoiceResponse()
-
-    # 発信先がTwilioの電話番号の場合、着信として処理
-    if request.form.get("To") == twilio_number:
-        dial = Dial()
-        # 最後に生成されたクライアントIDに接続
-        dial.client(IDENTITY["identity"])
-        resp.append(dial)
-    
-    # 発信先が指定されている場合、外部に発信する処理
-    elif request.form.get("To"):
-        dial = Dial(caller_id=twilio_number)
-        
-        # 電話番号が数字と記号のみで構成されているか確認
-        if phone_pattern.match(request.form["To"]):
-            dial.number(request.form["To"])
-        else:
-            dial.client(request.form["To"])
-        resp.append(dial)
-    
-    # 発信先がない場合のメッセージ
-    else:
-        resp.say("Thanks for calling!")
-
-    # TwiML形式の応答をXMLとして返す
-    return Response(str(resp), mimetype="text/xml")
-
-
-
-@app.route('/test_connection')
-def test_connection():
-    return db_connection()
+# ログアウト処理
+@app.route('/logout')
+def logout():
+    session.clear()  # セッションをクリア
+    return redirect(url_for('login'))
  
 @app.route("/log-detail",methods=["GET"])
 def log_detail():
