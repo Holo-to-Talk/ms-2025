@@ -27,6 +27,15 @@
   let device;
   let token;
 
+
+  const deviceOptions = {
+    sounds: {
+      incoming: '../static/Incoming-call.mp3', // 着信音
+      outgoing: '../static/outgoing-call.mp3', //発信音
+      disconnect: '../static/disconnect-call.mp3' //切断音
+
+    }
+  };
   // Event Listeners
 
   callButton.onclick = (e) => {
@@ -63,7 +72,7 @@
   function intitializeDevice() {
     logDiv.classList.remove("hide");
     log("デバイスを初期化中");
-    device = new Twilio.Device(token, {
+    device = new Twilio.Device(token,deviceOptions, {
       logLevel: 1,
       // Set Opus as our preferred codec. Opus generally performs better, requiring less bandwidth and
       // providing better audio quality in restrained network conditions.

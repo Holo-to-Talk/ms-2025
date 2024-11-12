@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録</title>
+</head>
+<body>
+    <h2>新規登録</h2>
+
+    <form method="POST" action="/user/register">
+        駅名: <input type="text" name="name"><br>
+        駅番号: <input type="text" name="station_num"><br>
+        駅の住所: <input type="text" name="address"><br>
+        駅の電話番号: <input type="text" name="phone_num"><br>
+        パスワード: <input type="password" name="password"><br>
+        <input type="submit" value="登録">
+    </form>
+
+<!-- エラーメッセージ表示 -->
+<div id="error_messages">
+    {% if error_msg %}
+    <ul>
+        {% for msg in error_msg %}
+            <li>{{ msg }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}</div>
+
+</body>
+</html>
+

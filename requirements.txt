@@ -3,3 +3,12 @@ twilio~=6.38.1
 faker~=4.0.3
 python-dotenv==0.13.0
 pytest==5.4.1
+
+# feat/chatGPT_API
+# openai==0.28.0
+# PyAudio==0.2.14
+# numpy==1.26.4
+# pyttsx3==2.98
+
+# feat/phoneAutomation
+# selenium==4.25.0
