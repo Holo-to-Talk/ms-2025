@@ -207,8 +207,6 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
-
-
 @app.route('/test_connection')
 def test_connection():
     return db_connection()
@@ -222,15 +220,43 @@ def log_detail():
 def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
+    
 # レポートページの画面・バック側処理
-@app.route("/report",methods=["POST","GET"])
+@app.route("/report", methods=["POST", "GET"])
 def report():
     if request.method == "POST":
-        return "レポートを作成しました！（本来はDBに情報格納）"
+        try:
+            # フォームデータの取得
+            inquirySource = request.form["inquirySource"]
+            inquiryDestination = request.form["inquiryDestination"]
+            personInCharge = request.form["personInCharge"]
+            overview = request.form["overview"]
+            inquiryContent = request.form["inquiryContent"]
+            responseContent = request.form["responseContent"]
 
-    if request.method == "GET":
+            # データベースに格納
+            conn = db_connection()
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO reports (inquirySource, inquiryDestination, personInCharge, overview, inquiryContent, responseContent)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            ''', (inquirySource, inquiryDestination, personInCharge, overview, inquiryContent, responseContent))
+            
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+            # 正常に登録された場合、成功メッセージを返す
+            return jsonify({"message": "レポートをデータベースに正常に格納しました！"}), 200
+
+        except Exception as e:
+            # エラーメッセージを返す
+            print(f"エラーが発生しました: {e}")
+            return jsonify({"message": "エラーが発生しました。データベースに保存できませんでした。"}), 500
+
+    elif request.method == "GET":
         return render_template('report.html')
 
-    # アプリケーションを実行
+# アプリケーションを実行
 if __name__ == "__main__":
     app.run()
