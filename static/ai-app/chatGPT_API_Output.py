@@ -1,9 +1,12 @@
 import openai
+from dotenv import load_dotenv
+import os
 
 def chatGPT_API_Output(inputContent):
     # 定数
     # API Key
-    openai.api_key = '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'
+    load_dotenv()
+    openai.api_key = os.getenv("OPENAI_API_KEY")
 
     # ChatGPT APIに入力
     response = openai.ChatCompletion.create(

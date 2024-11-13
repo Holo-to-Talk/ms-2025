@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Holo-to-Talk</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- ホログラム -->
+    <div></div>
+
+    <!-- テキスト -->
+    <div id="output">Enterを押して始めてください</div>
+
+    <!-- js -->
+     <script src="{{ url_for('static', filename='js/telop.js') }}"></script>
+</body>
+</html>
