@@ -56,12 +56,6 @@ def ai():
 def main():
     return render_template('index.html')
 
-# クライアントが接続完了したときのイベント処理
-@socketio.on('connect')
-def handle_connect():
-    # 別スレッドで実行
-    socketio.start_background_task(target = ai)
-
 # Enterキーが押されたときのイベント処理
 @socketio.on('enter_pressed')
 def handle_enter_event():
