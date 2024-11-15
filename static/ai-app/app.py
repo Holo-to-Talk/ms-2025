@@ -51,9 +51,10 @@ def ai():
 def main():
     return render_template('index.html')
 
+# クライアントが接続完了したときのイベント処理
 @socketio.on('connect')
 def handle_connect():
-    # クライアント接続が完了したとき、別スレッドで実行
+    # 別スレッドで実行
     socketio.start_background_task(target = ai)
 
 if __name__ == '__main__':
