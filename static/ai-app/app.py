@@ -36,8 +36,8 @@ def ai():
     # 音声ファイルの削除
     delete_Recording.delete_Recording(savedDirectory)
 
-    # APIの回答が'True'かどうか（学習範囲内かどうか）
-    if outputContent == 'True':
+    # APIの回答の確認
+    if outputContent == 'phoneAutomation':
         outputContent = '回答することが難しいため、駅員に電話をかけます。'
 
         # クライアント側にテキスト送信
