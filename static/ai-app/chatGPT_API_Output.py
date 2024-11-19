@@ -11,7 +11,7 @@ def chatGPT_API_Output(inputContent):
     # ChatGPT APIに入力
     response = openai.ChatCompletion.create(
         # ChatGPT APIのモデル（要相談）
-        model = "gpt-3.5-turbo",
+        model = "g-673c43bd77a48191ab82923135b8a3e5",
 
         # ChatGPT APIの入力内容
         messages = [
