@@ -9,7 +9,7 @@
   <body>
     <div>
       <span>駅情報編集</span>
-        <form method="POST" action="/edit/{{ station_num }}">
+        <form method="POST" >
         <!-- 駅名編集 -->
           <div>
             <input
@@ -21,14 +21,14 @@
             />
             <label for="station_name">駅名</label>
           </div>
-        <!-- 駅番編集（編集不可） -->
+        <!-- 駅番編集 -->
           <div>
             <input
               id="station_id"
               type="text"
               name="station_num"
               value="{{ form_data.station_num }}"
-              readonly
+              required
             />
             <label for="station_id">駅番</label>
           </div>

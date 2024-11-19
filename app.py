@@ -192,6 +192,7 @@ def success():
 def edit_station(station_num):
     error_msg = []
     form_data = {}
+    print(station_num)#編集駅番号
 
     conn = db_connection()
     if conn is None:
@@ -215,12 +216,14 @@ def edit_station(station_num):
             "address": result["address"],
             "phone_num": result["phone_num"],
         }
+        print(form_data)#編集内容
 
         cursor.close()
         return render_template("edit.html", form_data=form_data)
 
     # POSTメソッドでデータを更新
     if request.method == 'POST':
+        print("POST")
         form_data = {
             "name": request.form.get("name", ""),
             "station_num": request.form.get("station_num", ""),
@@ -248,6 +251,7 @@ def edit_station(station_num):
                 update_query,
                 (form_data["name"], form_data["address"], form_data["phone_num"], form_data["station_num"]),
             )
+            print("更新完了",form_data)
             conn.commit()
         except Exception as e:
             return f"更新中にエラーが発生しました: {e}", 500
