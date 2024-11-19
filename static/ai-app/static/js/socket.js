@@ -6,6 +6,10 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+socket.on('update_telop', (data) => {
+    document.getElementById('telop').textContent = data.telop;
+});
+
 socket.on('update_input', (data) => {
     document.getElementById('input').textContent = data.input;
 });

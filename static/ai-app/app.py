@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit
+from socketio_Config import socketio
 from dotenv import load_dotenv
 import os
 
@@ -17,18 +18,15 @@ load_dotenv()
 app.secret_key = os.getenv("SECRET_KEY")
 
 # SocketIOでFlask appをラップ
-socketio = SocketIO(app)
+socketio.init_app(app)
 
 # main処理
 def ai():
     # 音声ファイルの生成
     savedDirectory = voice_Recording.voice_Recording()
 
-    # 音声ファイルのテキスト化・取得
+    # 音声ファイルのテキスト化
     inputContent = audio_To_Text.audio_To_Text(savedDirectory)
-
-    # クライアント側にテキスト送信
-    socketio.emit('update_input', {'input': inputContent})
 
     # 応答内容の取得
     outputContent = chatGPT_API_Output.chatGPT_API_Output(inputContent)

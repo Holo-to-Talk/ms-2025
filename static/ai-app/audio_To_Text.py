@@ -1,3 +1,4 @@
+from socketio_Config import socketio
 import openai
 from dotenv import load_dotenv
 import os
@@ -21,6 +22,9 @@ def audio_To_Text(savedDirectory):
 
         # テキスト変換結果の表示
         print(inputContent)
+
+        # クライアントに送信
+        socketio.emit('update_input', {'input': inputContent})
 
         # テキスト変換結果の返し
         return inputContent
