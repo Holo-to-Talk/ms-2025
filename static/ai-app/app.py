@@ -27,21 +27,26 @@ def ai():
     # 音声ファイルのテキスト化・取得
     inputContent = audio_To_Text.audio_To_Text(savedDirectory)
 
+    # クライアント側にテキスト送信
+    socketio.emit('update_input', {'input': inputContent})
+
     # 応答内容の取得
     outputContent = chatGPT_API_Output.chatGPT_API_Output(inputContent)
 
     # 音声ファイルの削除
     delete_Recording.delete_Recording(savedDirectory)
 
-    # APIの回答が'True'かどうか（学習範囲内かどうか）
-    if outputContent == 'True':
+    # APIの回答の確認
+    if outputContent == 'phoneAutomation':
         outputContent = '回答することが難しいため、駅員に電話をかけます。'
 
+        # クライアント側にテキスト送信
         socketio.emit('update_output', {'output': outputContent})
 
         # 電話をかける
         phoneAutomation.phoneAutomation()
     else :
+        # クライアント側にテキスト送信
         socketio.emit('update_output', {'output': outputContent})
 
         # 音声出力
@@ -51,9 +56,10 @@ def ai():
 def main():
     return render_template('index.html')
 
-@socketio.on('connect')
-def handle_connect():
-    # クライアント接続が完了したとき、別スレッドで実行
+# Enterキーが押されたときのイベント処理
+@socketio.on('enter_pressed')
+def handle_enter_event():
+    # 別スレッドで実行
     socketio.start_background_task(target = ai)
 
 if __name__ == '__main__':
