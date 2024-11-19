@@ -221,22 +221,26 @@ def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
     
-# レポートページの画面・バック側処理
+# レポートエンドポイント
 @app.route("/report", methods=["POST", "GET"])
 def report():
     if request.method == "POST":
         try:
-            # フォームデータの取得
-            inquirySource = request.form["inquirySource"]
-            inquiryDestination = request.form["inquiryDestination"]
-            personInCharge = request.form["personInCharge"]
-            overview = request.form["overview"]
-            inquiryContent = request.form["inquiryContent"]
-            responseContent = request.form["responseContent"]
+            # フォームデータの受け取り
+            inquirySource = request.form.get("inquirySource")
+            inquiryDestination = request.form.get("inquiryDestination")
+            personInCharge = request.form.get("personInCharge")
+            overview = request.form.get("overview")
+            inquiryContent = request.form.get("inquiryContent")
+            responseContent = request.form.get("responseContent")
 
-            # データベースに格納
+            # データベース接続
             conn = db_connection()
+            if conn is None:
+                return jsonify({"message": "データベース接続に失敗しました"}), 500
+
             cursor = conn.cursor()
+            # データを挿入
             cursor.execute('''
                 INSERT INTO reports (inquirySource, inquiryDestination, personInCharge, overview, inquiryContent, responseContent)
                 VALUES (%s, %s, %s, %s, %s, %s)
@@ -246,17 +250,15 @@ def report():
             cursor.close()
             conn.close()
 
-            # 正常に登録された場合、成功メッセージを返す
-            return jsonify({"message": "レポートをデータベースに正常に格納しました！"}), 200
+            return jsonify({"message": "レポートが正常に保存されました！"}), 200
 
         except Exception as e:
-            # エラーメッセージを返す
             print(f"エラーが発生しました: {e}")
-            return jsonify({"message": "エラーが発生しました。データベースに保存できませんでした。"}), 500
+            return jsonify({"message": "データベース保存中にエラーが発生しました。"}), 500
 
     elif request.method == "GET":
+        # GETリクエスト時にHTMLフォームをレンダリング
         return render_template('report.html')
 
-# アプリケーションを実行
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
