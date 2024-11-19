@@ -47,7 +47,8 @@ def ai():
         # クライアントに送信
         socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
         socketio.emit('update_telop_remove_display_none', {})
-    else if outputContent == 'QRCode':
+
+    elif outputContent == 'QRCode':
         outputContent = "QRCodeを表示します。"
 
         # クライアントに送信
@@ -59,6 +60,7 @@ def ai():
         # クライアントに送信
         socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
         socketio.emit('update_telop_remove_display_none', {})
+
     else :
         # クライアントに送信
         socketio.emit('update_output', {'output': outputContent})
