@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ユーザー編集</title>
+
+  </head>
+  <body>
+    <div>
+      <span>駅情報編集</span>
+        <form method="POST" action="/edit/{{ station_num }}">
+        <!-- 駅名編集 -->
+          <div>
+            <input
+              id="station_name"
+              type="text"
+              name="name"
+              value="{{ form_data.name }}"
+              required
+            />
+            <label for="station_name">駅名</label>
+          </div>
+        <!-- 駅番編集（編集不可） -->
+          <div>
+            <input
+              id="station_id"
+              type="text"
+              name="station_num"
+              value="{{ form_data.station_num }}"
+              readonly
+            />
+            <label for="station_id">駅番</label>
+          </div>
+
+        <!-- 駅の住所編集 -->
+          <div>
+            <input
+              id="station_address"
+              type="text"
+              name="address"
+              value="{{ form_data.address }}"
+              required
+            />
+            <label for="station_address">駅の住所</label>
+          </div>
+
+          <!-- 駅の電話番号編集 -->
+          <div>
+            <input
+              id="station_phone"
+              type="tel"
+              name="phone_num"
+              value="{{ form_data.phone_num }}"
+              required
+            />
+            <label for="station_phone">駅の電話番号</label>
+          </div>
+          <!-- エラーメッセージ -->
+          <div>
+            {% if error_msg %}
+            <ul>
+              {% for msg in error_msg %}
+              <li>{{ msg }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          <!-- 編集ボタン -->
+          <div>
+            <button type="submit">
+              情報を更新
+            </button>
+          </div>
+      </form>
+    </div>
+  </body>
+</html>
