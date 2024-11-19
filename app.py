@@ -133,13 +133,13 @@ def register():
     #    html_content = html_content.replace("{% error_msg %}", "")
 
     #return html_content
-    
+
 # 成功メッセージ表示
 @app.route('/success')
 def success():
     return "User registered successfully!"
 
-# ルートURLにアクセスされた際にregister.htmlを返す
+# ルートURLにアクセスされた際にindex.htmlを返す
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -225,8 +225,41 @@ def log_list():
 # レポートページの画面・バック側処理
 @app.route("/report",methods=["POST","GET"])
 def report():
+
+    form_data = {
+        "responder": "",
+        "about": "",
+        "detail": "",
+        "answer": ""
+    }
+
     if request.method == "POST":
-        return "レポートを作成しました！（本来はDBに情報格納）"
+
+        # 入力内容を保持
+        form_data = {
+            "responder": request.form.get("responder", ""),
+            "about": request.form.get("about", ""),
+            "detail": request.form.get("detail", ""),
+            "answer": request.form.get("answer", "")
+        }
+
+        # データベースに保存
+        conn = db_connection()
+
+        cursor = conn.cursor()
+        cursor.execute(''' use holo_to_talk ''')
+
+        cursor.execute('''
+                INSERT INTO staff_log (responder, about, detail, answer) 
+                VALUES (%s, %s, %s, %s)
+                ''', (form_data["responder"], form_data["about"], form_data["detail"], form_data["answer"]))
+        
+        # データベースに変更を保存
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+        return redirect(url_for('success'))  # 成功ページにリダイレクト
 
     if request.method == "GET":
         return render_template('report.html')

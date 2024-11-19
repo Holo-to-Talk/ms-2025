@@ -27,7 +27,7 @@
     <div class="container">
       <h4 class="center-align">レポート内容入力フォーム</h4>
 
-      <form id="reportForm" method="post" action="">
+      <form id="reportForm" method="post" action="/report">
         <!-- 1. 問い合わせ元（コンボボックス） -->
         <div class="input-field">
           <input
@@ -58,7 +58,7 @@
           <input
             type="text"
             id="personInCharge"
-            name="personInCharge"
+            name="responder"
             required
           />
           <label for="personInCharge">担当者名</label>
@@ -69,7 +69,7 @@
           <input
             type="text"
             id="overview"
-            name="overview"
+            name="about"
             required
           />
           <label for="overview">問い合わせ概要</label>
@@ -79,7 +79,7 @@
         <div class="input-field">
           <textarea
             id="inquiryContent"
-            name="inquiryContent"
+            name="detail"
             class="materialize-textarea"
             required
           ></textarea>
@@ -90,7 +90,7 @@
         <div class="input-field">
           <textarea
             id="responseContent"
-            name="responseContent"
+            name="answer"
             class="materialize-textarea"
             required
           ></textarea>
