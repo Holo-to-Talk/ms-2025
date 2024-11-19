@@ -234,3 +234,39 @@ def report():
     # アプリケーションを実行
 if __name__ == "__main__":
     app.run()
+
+
+
+# データベース接続関数
+def db_connection():
+    return mysql.connector.connect(
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
+    )
+
+@app.route('/userlist', methods=['GET'])
+def userlist():
+    # データベース接続
+    conn = db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # `station_info` テーブルから必要なデータを取得
+        cursor.execute("SELECT name, station_num, address, phone_num FROM station_info")
+        stations = cursor.fetchall()
+
+        # `userlist.html` にデータを渡す
+        return render_template('userlist.html', stations=stations)
+
+    except Exception as e:
+        print(f"エラー: {e}")
+        return "データの取得中にエラーが発生しました。"
+
+    finally:
+        cursor.close()
+        conn.close()
+
+if __name__ == "__main__":
+    app.run(debug=True)
