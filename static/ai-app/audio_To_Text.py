@@ -20,6 +20,9 @@ def audio_To_Text(savedDirectory):
         # テキスト変換結果を出力
         inputContent = transcription['text']
 
+        # クライアントに送信
+        socketio.emit('update_telop_add_display_none', {})
+
         # テキスト変換結果の表示
         print(inputContent)
 

@@ -36,19 +36,27 @@ def ai():
 
     # APIの回答の確認
     if outputContent == 'phoneAutomation':
-        outputContent = '回答することが難しいため、駅員に電話をかけます。'
+        outputContent = "回答することが難しいため、駅員に電話をかけます。"
 
-        # クライアント側にテキスト送信
+        # クライアントに送信
         socketio.emit('update_output', {'output': outputContent})
 
         # 電話をかける
         phoneAutomation.phoneAutomation()
+
+        # クライアントに送信
+        socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
+        socketio.emit('update_telop_remove_display_none', {})
     else :
-        # クライアント側にテキスト送信
+        # クライアントに送信
         socketio.emit('update_output', {'output': outputContent})
 
         # 音声出力
         text_To_Audio.text_To_Audio(outputContent)
+
+        # クライアントに送信
+        socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
+        socketio.emit('update_telop_remove_display_none', {})
 
 @app.route('/')
 def main():

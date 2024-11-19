@@ -17,3 +17,11 @@ socket.on('update_input', (data) => {
 socket.on('update_output', (data) => {
     document.getElementById('output').textContent = data.output;
 });
+
+socket.on('update_telop_add_display_none', () => {
+    document.getElementById('telop').classList.add('display_none');
+});
+
+socket.on('update_telop_remove_display_none', () => {
+    document.getElementById('telop').classList.remove('display_none');
+});
