@@ -1,3 +1,4 @@
+from socketio_Config import socketio
 import pyaudio
 import wave
 import numpy as np
@@ -34,6 +35,9 @@ def voice_Recording():
 
     print("Recording...")
 
+    # クライアントに送信
+    socketio.emit('update_telop', {'telop': "Recording..."})
+
     frames = []
     # 無音が続くチャンク数
     silent_chunks = 0
@@ -55,6 +59,10 @@ def voice_Recording():
         # 無音がSILENCE_DURATION分続いた場合、録音を終了
         if silent_chunks > int(RATE / CHUNK * SILENCE_DURATION):
             print("Silence detected, stopping recording")
+
+            # クライアントに送信
+            socketio.emit('update_telop', {'telop': "Recording finished"})
+
             break
 
     # 録音停止とストリームの終了
