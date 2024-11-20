@@ -1,8 +1,9 @@
-from socketio_Config import socketio
 import pyaudio
 import wave
 import numpy as np
 import os
+
+import socketio_emit
 
 def voice_Recording():
     # 録音設定
@@ -36,7 +37,8 @@ def voice_Recording():
     print("Recording...")
 
     # クライアントに送信
-    socketio.emit('update_telop', {'telop': "Recording..."})
+    telopContent = "Recording..."
+    socketio_emit.socketio_emit_telop(telopContent)
 
     frames = []
     # 無音が続くチャンク数
@@ -61,7 +63,8 @@ def voice_Recording():
             print("Silence detected, stopping recording")
 
             # クライアントに送信
-            socketio.emit('update_telop', {'telop': "Recording finished"})
+            telopContent = "Recording finished"
+            socketio_emit.socketio_emit_telop(telopContent)
 
             break
 
