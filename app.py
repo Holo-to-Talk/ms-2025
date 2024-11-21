@@ -215,6 +215,7 @@ def edit_station(station_num):
             "station_num": result["station_num"],
             "address": result["address"],
             "phone_num": result["phone_num"],
+            "type_AI": result["type_AI"],
         }
         print(form_data)#編集内容
 
@@ -229,7 +230,14 @@ def edit_station(station_num):
             "station_num": request.form.get("station_num", ""),
             "address": request.form.get("address", ""),
             "phone_num": request.form.get("phone_num", ""),
+            "type_AI": request.form.get("type_AI", ""),
         }
+        # type_AI を boolean に変換
+        if form_data["type_AI"].lower() in ("1"):
+            form_data["type_AI"] = 1
+        else:
+            form_data["type_AI"] = 0
+        print("受け取りデータ",form_data)
 
         # バリデーション
         error_msg.append(validate_name(form_data["name"]))
@@ -244,12 +252,12 @@ def edit_station(station_num):
         try:
             update_query = """
                 UPDATE station_info
-                SET name = %s, address = %s, phone_num = %s
+                SET name = %s, address = %s, phone_num = %s, type_AI = %s
                 WHERE station_num = %s
             """
             cursor.execute(
                 update_query,
-                (form_data["name"], form_data["address"], form_data["phone_num"], form_data["station_num"]),
+                (form_data["name"], form_data["address"], form_data["phone_num"], form_data["type_AI"], form_data["station_num"]),
             )
             print("更新完了",form_data)
             conn.commit()

@@ -12,6 +12,7 @@
         <form method="POST" >
         <!-- 駅名編集 -->
           <div>
+            <label for="station_name">駅名</label>
             <input
               id="station_name"
               type="text"
@@ -19,10 +20,10 @@
               value="{{ form_data.name }}"
               required
             />
-            <label for="station_name">駅名</label>
           </div>
         <!-- 駅番編集 -->
           <div>
+            <label for="station_id">駅番</label>
             <input
               id="station_id"
               type="text"
@@ -30,11 +31,11 @@
               value="{{ form_data.station_num }}"
               required
             />
-            <label for="station_id">駅番</label>
           </div>
 
         <!-- 駅の住所編集 -->
           <div>
+            <label for="station_address">駅の住所</label>
             <input
               id="station_address"
               type="text"
@@ -42,11 +43,11 @@
               value="{{ form_data.address }}"
               required
             />
-            <label for="station_address">駅の住所</label>
           </div>
 
           <!-- 駅の電話番号編集 -->
           <div>
+            <label for="station_phone">駅の電話番号</label>
             <input
               id="station_phone"
               type="tel"
@@ -54,8 +55,27 @@
               value="{{ form_data.phone_num }}"
               required
             />
-            <label for="station_phone">駅の電話番号</label>
           </div>
+          <!-- 駅のAIor有人判断 -->
+          <div>
+            <label for="type_AI">駅のAI(1)or有人判断(0)</label>
+            <input
+              id="type_AI"
+              type="radio"
+              name="type_AI"
+              value="1"
+              {% if form_data.type_AI == 1 %} checked {% endif %}
+              required
+            />AI
+            <input
+              id="type_AI"
+              type="radio"
+              name="type_AI"
+              value="0"
+              {% if form_data.type_AI == 0 %} checked {% endif %}
+              required
+            />有人
+
           <!-- エラーメッセージ -->
           <div>
             {% if error_msg %}
