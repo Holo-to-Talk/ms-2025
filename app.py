@@ -13,24 +13,6 @@ from validation import *
 # .envファイルから環境変数を読み込む
 load_dotenv()
 
-#DB接続テスト
-# db_connection()
-def get_db_connection():
-    try:
-        connection = mysql.connector.connect(
-            host='localhost',
-            user='your_username',
-            password='your_password',
-            database='your_database'
-        )
-        
-        if connection.is_connected():
-            print("データベース接続成功")  # 成功メッセージ
-            return connection
-    except Exception as e:
-        print(f"データベース接続エラー: {e}")  # エラーメッセージ
-        return None
-
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
 app.secret_key = os.environ.get("SECRET_KEY")
@@ -78,13 +60,13 @@ def token():
 
 # ルートURLにアクセスされた際の処理
 @app.route('/')
-def home():
+def index():
     if 'user' in session:
         return render_template('index.html')
-    return redirect('/login')
+    return redirect('/user/login')
 
 # ログイン処理
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/user/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         if 'user' in session:
@@ -161,15 +143,15 @@ def register():
 
             cursor = conn.cursor()
             cursor.execute(''' use holo_to_talk ''')
-            # usersテーブルにデータを挿入  
+            # usersテーブルにデータを挿入
             cursor.execute('''
-                INSERT INTO users (station_num, password) 
+                INSERT INTO users (station_num, password)
                 VALUES (%s, %s)
                 ''', (form_data["station_num"], hashed_password))
 
-            # station_infoテーブルにデータを挿入 
+            # station_infoテーブルにデータを挿入
             cursor.execute('''
-            INSERT INTO station_info (name, station_num, address, phone_num) 
+            INSERT INTO station_info (name, station_num, address, phone_num)
             VALUES (%s, %s, %s, %s)
             ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
 
@@ -182,10 +164,11 @@ def register():
 
     return render_template('register.html', error_msg=error_msg, form_data=form_data)
 
-# 成功メッセージ表示
-@app.route('/success')
-def success():
-    return "User registered successfully!"
+# /editにアクセスしたときに/にリダイレクト
+@app.route('/edit/',methods=['GET'])
+def edit():
+    if request.method == 'GET':
+        return redirect("/")
 
 # ユーザー編集処理
 @app.route('/edit/<station_num>', methods=['GET', 'POST'])
@@ -208,7 +191,7 @@ def edit_station(station_num):
         result = cursor.fetchone()
 
         if not result:
-            return "指定された駅の情報が見つかりません", 404
+            return redirect("/user_list?station_num=not_found")
 
         form_data = {
             "name": result["name"],
@@ -247,7 +230,6 @@ def edit_station(station_num):
 
         if error_msg:
             return render_template("edit.html", form_data=form_data, error_msg=error_msg)
-        
 
         # データを更新
         try:
@@ -290,7 +272,7 @@ def edit_station(station_num):
         finally:
             cursor.close()
 
-        return redirect('/')
+        return redirect('/user_list?update_done')
 
 # ログアウト処理
 @app.route('/logout')
