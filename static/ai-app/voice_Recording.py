@@ -3,6 +3,8 @@ import wave
 import numpy as np
 import os
 
+import socketio_emit
+
 def voice_Recording():
     # 録音設定
     # 音声のフォーマット（16ビットの整数型）
@@ -34,6 +36,10 @@ def voice_Recording():
 
     print("Recording...")
 
+    # クライアントに送信
+    telopContent = "Recording..."
+    socketio_emit.socketio_emit_telop(telopContent)
+
     frames = []
     # 無音が続くチャンク数
     silent_chunks = 0
@@ -55,6 +61,11 @@ def voice_Recording():
         # 無音がSILENCE_DURATION分続いた場合、録音を終了
         if silent_chunks > int(RATE / CHUNK * SILENCE_DURATION):
             print("Silence detected, stopping recording")
+
+            # クライアントに送信
+            telopContent = "Recording finished"
+            socketio_emit.socketio_emit_telop(telopContent)
+
             break
 
     # 録音停止とストリームの終了

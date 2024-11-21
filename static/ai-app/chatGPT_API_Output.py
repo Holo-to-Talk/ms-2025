@@ -1,22 +1,29 @@
 import openai
+from dotenv import load_dotenv
+import os
 
 def chatGPT_API_Output(inputContent):
     # 定数
+    load_dotenv()
     # API Key
-    openai.api_key = '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'
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    # ChatGPT Model
+    OUTPUT_MODEL = os.getenv("OUTPUT_MODEL")
+    # Max Token
+    MAX_TOKENS = int(os.getenv("MAX_TOKENS"))
 
     # ChatGPT APIに入力
     response = openai.ChatCompletion.create(
-        # ChatGPT APIのモデル（要相談）
-        model = "gpt-3.5-turbo",
+        # ChatGPT APIのモデル
+        model = OUTPUT_MODEL,
 
         # ChatGPT APIの入力内容
         messages = [
             {"role": "user", "content": inputContent}
         ],
 
-        # 最大トークン数の指定（要相談）
-        max_tokens = 10,
+        # 最大トークン数の指定
+        max_tokens = MAX_TOKENS,
 
         # 創造性の度合い
         temperature = 0.7,

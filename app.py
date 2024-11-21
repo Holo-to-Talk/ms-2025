@@ -1,19 +1,21 @@
 import os
 import re
-import bcrypt
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
-from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
+from flask import Flask, Response, jsonify, redirect, request, render_template, session, url_for
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import Dial, VoiceResponse
+import bcrypt
 from db import *
+from validation import *
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
+app.secret_key = os.environ.get("SECRET_KEY")
 
 # 特殊文字やアンダースコアを除去する正規表現
 alphanumeric_only = re.compile("[\W_]+")
@@ -27,38 +29,83 @@ twilio_number = os.environ.get("TWILIO_CALLER_ID")
 # 最新のユーザーIDをメモリに保存する辞書
 IDENTITY = {"identity": ""}
 
-# バリデーション関数
-def validate_name(name):
-    if not name:
-        return "駅名を入力してください。"
-    return ""
+# トークンを生成して返すAPIエンドポイント
+@app.route("/token", methods=["GET"])
+def token():
+    # 環境変数からTwilioのアカウント情報を取得
+    account_sid = os.environ["TWILIO_ACCOUNT_SID"]
+    application_sid = os.environ["TWILIO_TWIML_APP_SID"]
+    api_key = os.environ["API_KEY"]
+    api_secret = os.environ["API_SECRET"]
 
-def validate_station_num(station_num):
-    if not station_num.isdigit():
-        return "駅番号を入力して下さい。"
-    return ""
+    # ランダムなユーザー名を生成し、記号を削除してIDとして保存
+    identity = twilio_number
+    IDENTITY["identity"] = identity
 
-def validate_address(address):
-    if not address:
-        return "駅の住所を入力して下さい。"
-    return ""
+    # アクセストークンを生成し、ユーザーIDを設定
+    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
 
-def validate_phone_num(phone_num):
-    pattern = r"^\+?[0-9]{10,15}$"
-    if not re.match(pattern, phone_num):
-        return "電話番号が無効です。"
-    return ""
+    # Voice Grantを作成し、トークンに追加（着信許可）
+    voice_grant = VoiceGrant(
+        outgoing_application_sid=application_sid,
+        incoming_allow=True,
+    )
+    token.add_grant(voice_grant)
 
-def validate_password(password):
-    if len(password) < 6:
-        return "パスワードは6文字以上で入力して下さい。"
-    return ""
+    # トークンをJWT形式に変換
+    token = token.to_jwt()
 
-# ユーザー登録用のルート
+    # トークンとユーザーIDをJSON形式で返す
+    return jsonify(identity=identity, token=token)
+
+# ルートURLにアクセスされた際の処理
+@app.route('/')
+def index():
+    if 'user' in session:
+        return render_template('index.html')
+    return redirect('/user/login')
+
+# ログイン処理
+@app.route('/user/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        if 'user' in session:
+            return redirect("/")
+        else:
+            return render_template('login.html')
+
+    if request.method == 'POST':
+        num = request.form.get('num', '')
+        password = request.form.get('password', '')
+        # データベースからユーザー情報を取得
+        conn = db_connection()
+
+        cursor = conn.cursor()
+        cursor.execute(''' use holo_to_talk ''')
+
+        query = "SELECT * FROM users WHERE station_num = %s"
+        cursor.execute(query, (num,))
+        users = cursor.fetchall()
+
+        if len(users) == 1:
+            user = users[0]
+
+            # パスワードを照合
+            if bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):  # user[2]がハッシュ化パスワードと仮定
+                session['user'] = user[0]  # セッションにユーザーIDを保存
+                return redirect('/')
+            else:
+                return "ログインエラー: IDまたはパスワードが間違っています"
+        else:
+            return "ログインエラー: IDまたはパスワードが間違っています"
+
+    return render_template('login.html')
+
+# ユーザー登録処理
 @app.route('/user/register', methods=['GET', 'POST'])
 def register():
     error_msg = []
-    
+
     form_data = {
         "name": "",
         "station_num": "",
@@ -93,19 +140,18 @@ def register():
 
             # データベースに保存
             conn = db_connection()
-            
-            print(conn)
+
             cursor = conn.cursor()
             cursor.execute(''' use holo_to_talk ''')
-            # usersテーブルにデータを挿入  
+            # usersテーブルにデータを挿入
             cursor.execute('''
-                INSERT INTO users (station_num, password) 
+                INSERT INTO users (station_num, password)
                 VALUES (%s, %s)
                 ''', (form_data["station_num"], hashed_password))
 
-            # station_infoテーブルにデータを挿入 
+            # station_infoテーブルにデータを挿入
             cursor.execute('''
-            INSERT INTO station_info (name, station_num, address, phone_num) 
+            INSERT INTO station_info (name, station_num, address, phone_num)
             VALUES (%s, %s, %s, %s)
             ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
 
@@ -114,87 +160,125 @@ def register():
             cursor.close()
             conn.close()
 
-            return redirect(url_for('success'))  # 成功ページにリダイレクト
+            return redirect(url_for('login'))  # 成功ページにリダイレクト
 
     return render_template('register.html', error_msg=error_msg, form_data=form_data)
 
-    # register.htmlを静的ファイルから読み込み
-    #with open('static/register.html', 'r', encoding='utf-8') as file:
-    #    html_content = file.read()
+# /editにアクセスしたときに/にリダイレクト
+@app.route('/edit/',methods=['GET'])
+def edit():
+    if request.method == 'GET':
+        return redirect("/")
 
-    # エラーメッセージをHTMLに埋め込む
-    #if error_msg:
-    #    error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
-    #    html_content = html_content.replace("{% error_msg %}", error_html)
-    #else:
-    #    html_content = html_content.replace("{% error_msg %}", "")
+# ユーザー編集処理
+@app.route('/edit/<station_num>', methods=['GET', 'POST'])
+def edit_station(station_num):
+    error_msg = []
+    form_data = {}
+    print(station_num)#編集駅番号
 
-    #return html_content
+    conn = db_connection()
+    if conn is None:
+        return "データベース接続エラー", 500
 
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("USE holo_to_talk")
 
-# ルートURLにアクセスされた際にregister.htmlを返す
-@app.route("/", methods=["GET"])
-def index():
-    return render_template("index.html")
+    # GETメソッドでデータを取得し編集ページを表示
+    if request.method == 'GET':
+        query = "SELECT * FROM station_info WHERE station_num = %s"
+        cursor.execute(query, (station_num,))
+        result = cursor.fetchone()
 
-# トークンを生成して返すAPIエンドポイント
-@app.route("/token", methods=["GET"])
-def token():
-    # 環境変数からTwilioのアカウント情報を取得
-    account_sid = os.environ["TWILIO_ACCOUNT_SID"]
-    application_sid = os.environ["TWILIO_TWIML_APP_SID"]
-    api_key = os.environ["API_KEY"]
-    api_secret = os.environ["API_SECRET"]
+        if not result:
+            return redirect("/user_list?station_num=not_found")
 
-    # ランダムなユーザー名を生成し、記号を削除してIDとして保存
-    identity = twilio_number
-    IDENTITY["identity"] = identity
+        form_data = {
+            "name": result["name"],
+            "station_num": result["station_num"],
+            "address": result["address"],
+            "phone_num": result["phone_num"],
+            "type_AI": result["type_AI"],
+        }
+        print(form_data)#編集内容
 
-    # アクセストークンを生成し、ユーザーIDを設定
-    token = AccessToken(account_sid, api_key, api_secret, identity=identity)
+        cursor.close()
+        return render_template("edit.html", form_data=form_data)
 
-    # Voice Grantを作成し、トークンに追加（着信許可）
-    voice_grant = VoiceGrant(
-        outgoing_application_sid=application_sid,
-        incoming_allow=True,
-    )
-    token.add_grant(voice_grant)
-
-    # トークンをJWT形式に変換
-    token = token.to_jwt()
-
-    # トークンとユーザーIDをJSON形式で返す
-    return jsonify(identity=identity, token=token)
-
-# 音声通話に対応するAPIエンドポイント
-@app.route("/voice", methods=["POST"])
-def voice():
-    resp = VoiceResponse()
-
-    # 発信先がTwilioの電話番号の場合、着信として処理
-    if request.form.get("To") == twilio_number:
-        dial = Dial()
-        # 最後に生成されたクライアントIDに接続
-        dial.client(IDENTITY["identity"])
-        resp.append(dial)
-    
-    # 発信先が指定されている場合、外部に発信する処理
-    elif request.form.get("To"):
-        dial = Dial(caller_id=twilio_number)
-        
-        # 電話番号が数字と記号のみで構成されているか確認
-        if phone_pattern.match(request.form["To"]):
-            dial.number(request.form["To"])
+    # POSTメソッドでデータを更新
+    if request.method == 'POST':
+        print("POST")
+        form_data = {
+            "name": request.form.get("name", ""),
+            "station_num": request.form.get("station_num", ""),
+            "address": request.form.get("address", ""),
+            "phone_num": request.form.get("phone_num", ""),
+            "type_AI": request.form.get("type_AI", ""),
+        }
+        # type_AI を boolean に変換
+        if form_data["type_AI"].lower() in ("1"):
+            form_data["type_AI"] = 1
         else:
-            dial.client(request.form["To"])
-        resp.append(dial)
-    
-    # 発信先がない場合のメッセージ
-    else:
-        resp.say("Thanks for calling!")
+            form_data["type_AI"] = 0
+        print("受け取りデータ",form_data)
 
-    # TwiML形式の応答をXMLとして返す
-    return Response(str(resp), mimetype="text/xml")
+        # バリデーション
+        error_msg.append(validate_name(form_data["name"]))
+        error_msg.append(validate_address(form_data["address"]))
+        error_msg.append(validate_phone_num(form_data["phone_num"]))
+        error_msg = [msg for msg in error_msg if msg]
+
+        if error_msg:
+            return render_template("edit.html", form_data=form_data, error_msg=error_msg)
+
+        # データを更新
+        try:
+            conn.start_transaction()
+
+            # 新しい station_num が他の駅番号と重複していないか確認
+            if form_data["station_num"] != station_num:  # 駅番号が変更された場合
+                check_query = "SELECT COUNT(*) AS count FROM station_info WHERE station_num = %s"
+                cursor.execute(check_query, (form_data["station_num"],))
+                count = cursor.fetchone()["count"]  # 重複数を取得
+
+                if count > 0:  # 既に存在する場合
+                    conn.rollback()  # トランザクションを元に戻す
+                    error_msg.append("この駅番号は既に存在しています。")
+                    return render_template("edit.html", form_data=form_data, error_msg=error_msg)
+
+            # `station_info`テーブルのデータを更新
+            update_station_info = """
+                UPDATE station_info
+                SET name = %s, station_num = %s, address = %s, phone_num = %s, type_AI = %s
+                WHERE station_num = %s
+            """
+            cursor.execute(
+                update_station_info,
+                (
+                    form_data["name"],
+                    form_data["station_num"],
+                    form_data["address"],
+                    form_data["phone_num"],
+                    form_data["type_AI"],
+                    station_num,
+                ),
+            )
+
+            print("更新完了", form_data)
+            conn.commit()  # トランザクションを確定
+        except Exception as e:
+            conn.rollback()  # エラーが発生した場合はロールバック
+            return f"更新中にエラーが発生しました: {e}", 500
+        finally:
+            cursor.close()
+
+        return redirect('/user_list?update_done')
+
+# ログアウト処理
+@app.route('/logout')
+def logout():
+    session.clear()  # セッションをクリア
+    return redirect(url_for('login'))
 
 @app.route("/log-detail",methods=["GET"])
 def log_detail():
@@ -276,6 +360,8 @@ def userlist():
         finally:
             cursor.close()
             conn.close()
+
+# アプリケーションを実行
 
 if __name__ == "__main__":
     app.run(debug=True)
