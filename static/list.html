@@ -28,25 +28,21 @@
             <td>{{ station.station_num }}</td>
             <td>{{ station.address }}</td>
             <td>{{ station.phone_num }}</td>
-            <td><button onclick="editStation('{{ station.station_num }}')">編集</button></td>
-            <td><button onclick="deleteStation('{{ station.station_num }}')">削除</button></td>
+            <td>
+                <form action="" method="post">
+                    <input type="hidden" name="station_num" value="{{ station.station_num }}">
+                    <input type="submit" name="action" value="編集">
+            </td>
+            <td>
+                <input type="submit" name="action" value="削除" onclick="return confirm('駅番号 {{ station.station_num }} を本当に削除しますか？');">
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
+    
 
     <a href="/">戻る</a>
-
-    <script>
-        function editStation(stationNum) {
-            alert("駅番号 " + stationNum + " の編集画面に遷移します（未実装）");
-        }
-
-        function deleteStation(stationNum) {
-            if (confirm("駅番号 " + stationNum + " を削除しますか？")) {
-                alert("駅番号 " + stationNum + " を削除しました（未実装）");
-            }
-        }
-    </script>
 
 </body>
 </html>

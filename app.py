@@ -131,10 +131,6 @@ def register():
 
     #return html_content
 
-# 成功メッセージ表示
-@app.route('/success')
-def success():
-    return "User registered successfully!"
 
 # ルートURLにアクセスされた際にregister.htmlを返す
 @app.route("/", methods=["GET"])
@@ -219,9 +215,7 @@ def report():
     if request.method == "GET":
         return render_template('report.html')
 
-    # アプリケーションを実行
-
-@app.route('/userlist', methods=['GET'])
+@app.route('/user/list', methods=['GET','POST'])
 def userlist():
     if request.method == "GET":
         # データベース接続
@@ -243,15 +237,43 @@ def userlist():
             ]
 
             # データをHTMLテンプレートに渡す
-            return render_template('userlist.html', stations=stations)
+            return render_template('list.html', stations=stations)
 
         except Exception as e:
             # エラー処理
             error_message = f"データの取得中にエラーが発生しました: {e}"
-            return render_template('userlist.html', error_message=error_message)
+            return render_template('list.html', error_message=error_message)
 
         finally:
             # リソースを解放
+            cursor.close()
+            conn.close()
+
+    if request.method == "POST":
+        station_num = request.form['station_num']
+        action = request.form['action']
+
+    if action == "編集":
+        # 編集画面にリダイレクト
+        return redirect(f"/user/edit/{station_num}")
+
+    elif action == "削除":
+        # データ削除処理
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''USE holo_to_talk''')
+            cursor.execute('''DELETE FROM station_info WHERE station_num = %s''', (station_num,))
+            conn.commit()
+
+            # 削除後にリスト画面にリダイレクト
+            return redirect('/user/list')
+
+        except Exception as e:
+            return f"データ削除中にエラーが発生しました: {e}"
+
+        finally:
             cursor.close()
             conn.close()
 
