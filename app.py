@@ -248,6 +248,13 @@ def report():
 
     if request.method == "GET":
         return render_template('report.html')
+    
+#レポートページの一覧    
+@app.route("/outfoot_report",methods=["POST","GET"])
+def outfoot_report():
+    if request.method == "GET":
+        return render_template("outfoot_report.html")
+    
 
 # アプリケーションを実行
 if __name__ == "__main__":
