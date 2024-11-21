@@ -247,18 +247,38 @@ def edit_station(station_num):
 
         if error_msg:
             return render_template("edit.html", form_data=form_data, error_msg=error_msg)
+        
+        # 新しい station_num が既存のものと重複していないか確認
+        if form_data["station_num"] != station_num:
+            check_query = "SELECT COUNT(*) AS count FROM station_info WHERE station_num = %s"
+            cursor.execute(check_query, (form_data["station_num"],))
+            count = cursor.fetchone()["count"]
+            if count > 0:
+                error_msg.append("この駅番号は既に存在しています。")
+                return render_template("edit.html", form_data=form_data, error_msg=error_msg)
 
         # データを更新
         try:
-            update_query = """
+            conn.start_transaction()
+
+            # `station_info`テーブルのデータを更新
+            update_station_info = """
                 UPDATE station_info
-                SET name = %s, address = %s, phone_num = %s, type_AI = %s
+                SET name = %s, station_num = %s, address = %s, phone_num = %s, type_AI = %s
                 WHERE station_num = %s
             """
             cursor.execute(
-                update_query,
-                (form_data["name"], form_data["address"], form_data["phone_num"], form_data["type_AI"], form_data["station_num"]),
+                update_station_info,
+                (
+                    form_data["name"],
+                    form_data["station_num"],
+                    form_data["address"],
+                    form_data["phone_num"],
+                    form_data["type_AI"],
+                    station_num,
+                ),
             )
+
             print("更新完了",form_data)
             conn.commit()
         except Exception as e:
