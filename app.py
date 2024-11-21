@@ -248,18 +248,21 @@ def edit_station(station_num):
         if error_msg:
             return render_template("edit.html", form_data=form_data, error_msg=error_msg)
         
-        # 新しい station_num が既存のものと重複していないか確認
-        if form_data["station_num"] != station_num:
-            check_query = "SELECT COUNT(*) AS count FROM station_info WHERE station_num = %s"
-            cursor.execute(check_query, (form_data["station_num"],))
-            count = cursor.fetchone()["count"]
-            if count > 0:
-                error_msg.append("この駅番号は既に存在しています。")
-                return render_template("edit.html", form_data=form_data, error_msg=error_msg)
 
         # データを更新
         try:
             conn.start_transaction()
+
+            # 新しい station_num が他の駅番号と重複していないか確認
+            if form_data["station_num"] != station_num:  # 駅番号が変更された場合
+                check_query = "SELECT COUNT(*) AS count FROM station_info WHERE station_num = %s"
+                cursor.execute(check_query, (form_data["station_num"],))
+                count = cursor.fetchone()["count"]  # 重複数を取得
+
+                if count > 0:  # 既に存在する場合
+                    conn.rollback()  # トランザクションを元に戻す
+                    error_msg.append("この駅番号は既に存在しています。")
+                    return render_template("edit.html", form_data=form_data, error_msg=error_msg)
 
             # `station_info`テーブルのデータを更新
             update_station_info = """
@@ -279,9 +282,10 @@ def edit_station(station_num):
                 ),
             )
 
-            print("更新完了",form_data)
-            conn.commit()
+            print("更新完了", form_data)
+            conn.commit()  # トランザクションを確定
         except Exception as e:
+            conn.rollback()  # エラーが発生した場合はロールバック
             return f"更新中にエラーが発生しました: {e}", 500
         finally:
             cursor.close()
