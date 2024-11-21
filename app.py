@@ -171,7 +171,7 @@ def edit():
         return redirect("/")
 
 # ユーザー編集処理
-@app.route('/edit/<station_num>', methods=['GET', 'POST'])
+@app.route('/user/edit/<station_num>', methods=['GET', 'POST'])
 def edit_station(station_num):
     error_msg = []
     form_data = {}
@@ -191,7 +191,7 @@ def edit_station(station_num):
         result = cursor.fetchone()
 
         if not result:
-            return redirect("/user_list?station_num=not_found")
+            return redirect("/user/list?station_num=not_found")
 
         form_data = {
             "name": result["name"],
@@ -272,10 +272,10 @@ def edit_station(station_num):
         finally:
             cursor.close()
 
-        return redirect('/user_list?update_done')
+        return redirect('/user/list?update_done')
 
 # ログアウト処理
-@app.route('/logout')
+@app.route('user/logout')
 def logout():
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
@@ -362,6 +362,5 @@ def userlist():
             conn.close()
 
 # アプリケーションを実行
-
 if __name__ == "__main__":
     app.run(debug=True)
