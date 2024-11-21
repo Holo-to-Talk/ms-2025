@@ -4,22 +4,26 @@ import os
 
 def chatGPT_API_Output(inputContent):
     # 定数
-    # API Key
     load_dotenv()
+    # API Key
     openai.api_key = os.getenv("OPENAI_API_KEY")
+    # ChatGPT Model
+    OUTPUT_MODEL = os.getenv("OUTPUT_MODEL")
+    # Max Token
+    MAX_TOKENS = int(os.getenv("MAX_TOKENS"))
 
     # ChatGPT APIに入力
     response = openai.ChatCompletion.create(
-        # ChatGPT APIのモデル（要相談）
-        model = "g-673c43bd77a48191ab82923135b8a3e5",
+        # ChatGPT APIのモデル
+        model = OUTPUT_MODEL,
 
         # ChatGPT APIの入力内容
         messages = [
             {"role": "user", "content": inputContent}
         ],
 
-        # 最大トークン数の指定（要相談）
-        max_tokens = 10,
+        # 最大トークン数の指定
+        max_tokens = MAX_TOKENS,
 
         # 創造性の度合い
         temperature = 0.7,

@@ -3,17 +3,20 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
+import os
 import time
 
 def phoneAutomation():
     # 定数
+    load_dotenv()
     # URL
     # 本番
-    URL = 'https://holog.net/'
+    URL = os.getenv("URL")
     # 開発
     # URL = 'https://num-0145.holog.net/'
     # 電話番号（代表回線）
-    PHONE_NUMBER = '+1 8302242800'
+    PHONE_NUMBER = os.getenv("PHONE_NUMBER")
     # WebDriverWaitの時間指定
     WEB_DRIVER_WAIT_TIME = 10
     # time.sleepの時間指定

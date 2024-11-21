@@ -4,6 +4,7 @@ from socketio_Config import socketio
 from dotenv import load_dotenv
 import os
 
+import socketio_emit
 import voice_Recording
 import audio_To_Text
 import chatGPT_API_Output
@@ -36,41 +37,42 @@ def ai():
 
     # APIの回答の確認
     if outputContent == 'phoneAutomation':
-        outputContent = "回答することが難しいため、駅員に電話をかけます。"
-
         # クライアントに送信
-        socketio.emit('update_output', {'output': outputContent})
+        outputContent = "回答することが難しいため、駅員に電話をかけます。"
+        socketio_emit.socketio_emit_output(outputContent)
 
         # 電話をかける
         phoneAutomation.phoneAutomation()
 
         # クライアントに送信
-        socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
-        socketio.emit('update_telop_remove_display_none', {})
+        telopContent = "Enterを押して始めてください"
+        socketio_emit.socketio_emit_telop(telopContent)
+        socketio_emit.socketio_emit_telop_remove_display_none()
 
     elif outputContent == 'QRCode':
-        outputContent = "QRCodeを表示します。"
-
         # クライアントに送信
-        socketio.emit('update_output', {'output': outputContent})
+        outputContent = "QRCodeを表示します。"
+        socketio_emit.socketio_emit_output(outputContent)
 
         # QRCodeを表示する
 
 
         # クライアントに送信
-        socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
-        socketio.emit('update_telop_remove_display_none', {})
+        telopContent = "Enterを押して始めてください"
+        socketio_emit.socketio_emit_telop(telopContent)
+        socketio_emit.socketio_emit_telop_remove_display_none()
 
     else :
         # クライアントに送信
-        socketio.emit('update_output', {'output': outputContent})
+        socketio_emit.socketio_emit_output(outputContent)
 
         # 音声出力
         text_To_Audio.text_To_Audio(outputContent)
 
         # クライアントに送信
-        socketio.emit('update_telop', {'telop': "Enterを押して始めてください"})
-        socketio.emit('update_telop_remove_display_none', {})
+        telopContent = "Enterを押して始めてください"
+        socketio_emit.socketio_emit_telop(telopContent)
+        socketio_emit.socketio_emit_telop_remove_display_none()
 
 @app.route('/')
 def main():
