@@ -3,7 +3,6 @@ import re
 import bcrypt
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
-
 from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
@@ -61,7 +60,7 @@ def validate_password(password):
 @app.route('/user/register', methods=['GET', 'POST'])
 def register():
     error_msg = []
-    
+
     form_data = {
         "name": "",
         "station_num": "",
@@ -96,19 +95,19 @@ def register():
 
             # データベースに保存
             conn = db_connection()
-            
+
             print(conn)
             cursor = conn.cursor()
             cursor.execute(''' use holo_to_talk ''')
-            # usersテーブルにデータを挿入  
+            # usersテーブルにデータを挿入
             cursor.execute('''
-                INSERT INTO users (station_num, password) 
+                INSERT INTO users (station_num, password)
                 VALUES (%s, %s)
                 ''', (form_data["station_num"], hashed_password))
 
             # station_infoテーブルにデータを挿入 
             cursor.execute('''
-            INSERT INTO station_info (name, station_num, address, phone_num) 
+            INSERT INTO station_info (name, station_num, address, phone_num)
             VALUES (%s, %s, %s, %s)
             ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
 
@@ -121,19 +120,6 @@ def register():
 
     return render_template('register.html', error_msg=error_msg, form_data=form_data)
 
-    # register.htmlを静的ファイルから読み込み
-    #with open('static/register.html', 'r', encoding='utf-8') as file:
-    #    html_content = file.read()
-
-    # エラーメッセージをHTMLに埋め込む
-    #if error_msg:
-    #    error_html = "<ul>" + "".join([f"<li>{msg}</li>" for msg in error_msg]) + "</ul>"
-    #    html_content = html_content.replace("{% error_msg %}", error_html)
-    #else:
-    #    html_content = html_content.replace("{% error_msg %}", "")
-
-    #return html_content
-
 # 成功メッセージ表示
 @app.route('/success')
 def success():
@@ -143,10 +129,6 @@ def success():
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
-
-@app.route("/index")
-def s_index():
-    return redirect("/")
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
@@ -188,18 +170,18 @@ def voice():
         # 最後に生成されたクライアントIDに接続
         dial.client(IDENTITY["identity"])
         resp.append(dial)
-    
+
     # 発信先が指定されている場合、外部に発信する処理
     elif request.form.get("To"):
         dial = Dial(caller_id=twilio_number)
-        
+
         # 電話番号が数字と記号のみで構成されているか確認
         if phone_pattern.match(request.form["To"]):
             dial.number(request.form["To"])
         else:
             dial.client(request.form["To"])
         resp.append(dial)
-    
+
     # 発信先がない場合のメッセージ
     else:
         resp.say("Thanks for calling!")
@@ -207,12 +189,6 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
-
-
-@app.route('/test_connection')
-def test_connection():
-    return db_connection()
- 
 @app.route("/log-detail",methods=["GET"])
 def log_detail():
     if request.method == "GET":
@@ -250,15 +226,15 @@ def report():
         cursor.execute(''' use holo_to_talk ''')
 
         cursor.execute('''
-                INSERT INTO staff_log (responder, about, detail, answer) 
+                INSERT INTO staff_log (responder, about, detail, answer)
                 VALUES (%s, %s, %s, %s)
                 ''', (form_data["responder"], form_data["about"], form_data["detail"], form_data["answer"]))
-        
+
         # データベースに変更を保存
         conn.commit()
         cursor.close()
         conn.close()
-        
+
         return redirect(url_for('success'))  # 成功ページにリダイレクト
 
     if request.method == "GET":
