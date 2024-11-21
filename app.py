@@ -14,7 +14,22 @@ from validation import *
 load_dotenv()
 
 #DB接続テスト
-db_connection()
+# db_connection()
+def get_db_connection():
+    try:
+        connection = mysql.connector.connect(
+            host='localhost',
+            user='your_username',
+            password='your_password',
+            database='your_database'
+        )
+        
+        if connection.is_connected():
+            print("データベース接続成功")  # 成功メッセージ
+            return connection
+    except Exception as e:
+        print(f"データベース接続エラー: {e}")  # エラーメッセージ
+        return None
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
@@ -171,6 +186,111 @@ def register():
 @app.route('/success')
 def success():
     return "User registered successfully!"
+
+# ユーザー編集処理
+@app.route('/edit/<station_num>', methods=['GET', 'POST'])
+def edit_station(station_num):
+    error_msg = []
+    form_data = {}
+    print(station_num)#編集駅番号
+
+    conn = db_connection()
+    if conn is None:
+        return "データベース接続エラー", 500
+
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("USE holo_to_talk")
+
+    # GETメソッドでデータを取得し編集ページを表示
+    if request.method == 'GET':
+        query = "SELECT * FROM station_info WHERE station_num = %s"
+        cursor.execute(query, (station_num,))
+        result = cursor.fetchone()
+
+        if not result:
+            return "指定された駅の情報が見つかりません", 404
+
+        form_data = {
+            "name": result["name"],
+            "station_num": result["station_num"],
+            "address": result["address"],
+            "phone_num": result["phone_num"],
+            "type_AI": result["type_AI"],
+        }
+        print(form_data)#編集内容
+
+        cursor.close()
+        return render_template("edit.html", form_data=form_data)
+
+    # POSTメソッドでデータを更新
+    if request.method == 'POST':
+        print("POST")
+        form_data = {
+            "name": request.form.get("name", ""),
+            "station_num": request.form.get("station_num", ""),
+            "address": request.form.get("address", ""),
+            "phone_num": request.form.get("phone_num", ""),
+            "type_AI": request.form.get("type_AI", ""),
+        }
+        # type_AI を boolean に変換
+        if form_data["type_AI"].lower() in ("1"):
+            form_data["type_AI"] = 1
+        else:
+            form_data["type_AI"] = 0
+        print("受け取りデータ",form_data)
+
+        # バリデーション
+        error_msg.append(validate_name(form_data["name"]))
+        error_msg.append(validate_address(form_data["address"]))
+        error_msg.append(validate_phone_num(form_data["phone_num"]))
+        error_msg = [msg for msg in error_msg if msg]
+
+        if error_msg:
+            return render_template("edit.html", form_data=form_data, error_msg=error_msg)
+        
+
+        # データを更新
+        try:
+            conn.start_transaction()
+
+            # 新しい station_num が他の駅番号と重複していないか確認
+            if form_data["station_num"] != station_num:  # 駅番号が変更された場合
+                check_query = "SELECT COUNT(*) AS count FROM station_info WHERE station_num = %s"
+                cursor.execute(check_query, (form_data["station_num"],))
+                count = cursor.fetchone()["count"]  # 重複数を取得
+
+                if count > 0:  # 既に存在する場合
+                    conn.rollback()  # トランザクションを元に戻す
+                    error_msg.append("この駅番号は既に存在しています。")
+                    return render_template("edit.html", form_data=form_data, error_msg=error_msg)
+
+            # `station_info`テーブルのデータを更新
+            update_station_info = """
+                UPDATE station_info
+                SET name = %s, station_num = %s, address = %s, phone_num = %s, type_AI = %s
+                WHERE station_num = %s
+            """
+            cursor.execute(
+                update_station_info,
+                (
+                    form_data["name"],
+                    form_data["station_num"],
+                    form_data["address"],
+                    form_data["phone_num"],
+                    form_data["type_AI"],
+                    station_num,
+                ),
+            )
+
+            print("更新完了", form_data)
+            conn.commit()  # トランザクションを確定
+        except Exception as e:
+            conn.rollback()  # エラーが発生した場合はロールバック
+            return f"更新中にエラーが発生しました: {e}", 500
+        finally:
+            cursor.close()
+
+        return redirect('/')
 
 # ログアウト処理
 @app.route('/logout')
