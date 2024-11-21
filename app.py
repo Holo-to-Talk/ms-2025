@@ -3,7 +3,6 @@ import re
 import bcrypt
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
-
 from flask import Flask, Response, jsonify, redirect, request, url_for,render_template
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
@@ -12,8 +11,6 @@ from db import *
 
 # .envファイルから環境変数を読み込む
 load_dotenv()
-
-db_connection()
 
 # Flaskアプリケーションを作成
 app = Flask(__name__,template_folder='./static/')
@@ -133,7 +130,7 @@ def register():
     #    html_content = html_content.replace("{% error_msg %}", "")
 
     #return html_content
-    
+
 # 成功メッセージ表示
 @app.route('/success')
 def success():
@@ -143,10 +140,6 @@ def success():
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
-
-@app.route("/index")
-def s_index():
-    return redirect("/")
 
 # トークンを生成して返すAPIエンドポイント
 @app.route("/token", methods=["GET"])
@@ -207,12 +200,6 @@ def voice():
     # TwiML形式の応答をXMLとして返す
     return Response(str(resp), mimetype="text/xml")
 
-
-
-@app.route('/test_connection')
-def test_connection():
-    return db_connection()
- 
 @app.route("/log-detail",methods=["GET"])
 def log_detail():
     if request.method == "GET":
@@ -222,6 +209,7 @@ def log_detail():
 def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
+
 # レポートページの画面・バック側処理
 @app.route("/report",methods=["POST","GET"])
 def report():
@@ -232,41 +220,40 @@ def report():
         return render_template('report.html')
 
     # アプリケーションを実行
-if __name__ == "__main__":
-    app.run()
-
-
-
-# データベース接続関数
-def db_connection():
-    return mysql.connector.connect(
-        host=os.getenv("DB_HOST"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        database=os.getenv("DB_NAME")
-    )
 
 @app.route('/userlist', methods=['GET'])
 def userlist():
-    # データベース接続
-    conn = db_connection()
-    cursor = conn.cursor()
+    if request.method == "GET":
+        # データベース接続
+        conn = db_connection()
+        cursor = conn.cursor()
 
-    try:
-        # `station_info` テーブルから必要なデータを取得
-        cursor.execute("SELECT name, station_num, address, phone_num FROM station_info")
-        stations = cursor.fetchall()
+        try:
+            # データベースを選択
+            cursor.execute('''USE holo_to_talk''')
 
-        # `userlist.html` にデータを渡す
-        return render_template('userlist.html', stations=stations)
+            # station_infoテーブルから必要なデータを取得
+            cursor.execute('''SELECT name, station_num, address, phone_num FROM station_info''')
+            rows = cursor.fetchall()
 
-    except Exception as e:
-        print(f"エラー: {e}")
-        return "データの取得中にエラーが発生しました。"
+            # カラム名をキーにして辞書形式でデータを作成
+            stations = [
+                {"name": row[0], "station_num": row[1], "address": row[2], "phone_num": row[3]}
+                for row in rows
+            ]
 
-    finally:
-        cursor.close()
-        conn.close()
+            # データをHTMLテンプレートに渡す
+            return render_template('userlist.html', stations=stations)
+
+        except Exception as e:
+            # エラー処理
+            error_message = f"データの取得中にエラーが発生しました: {e}"
+            return render_template('userlist.html', error_message=error_message)
+
+        finally:
+            # リソースを解放
+            cursor.close()
+            conn.close()
 
 if __name__ == "__main__":
     app.run(debug=True)

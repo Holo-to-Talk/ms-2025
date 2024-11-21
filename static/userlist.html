@@ -4,62 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ユーザー一覧</title>
-    <style>
-        /* ページ全体の基本スタイル */
-        body {
-            font-family: Arial, sans-serif;
-        }
-        /* ヘッダー部分のスタイル */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background-color: #f2f2f2;
-        }
-        .header img {
-            height: 50px; /* ロゴのサイズを調整 */
-            margin-right: 10px;
-        }
-        .header h1 {
-            font-size: 1.5em;
-            color: #333;
-        }
-        /* テーブルの基本スタイル */
-        table {
-            width: 80%;
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        /* 戻るボタンのスタイル */
-        .back-button {
-            display: block;
-            width: 100px;
-            margin: 20px auto;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-    </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="" alt="HOLO to Talk ロゴ">
+    <div>
+        <img src="/static/images/logo.png" alt="HOLO to Talk ロゴ">
         <h1>ユーザー一覧</h1>
     </div>
 
-    <table>
+    <table border="1">
+        <caption>駅情報のリスト</caption>
         <tr>
             <th>駅名</th>
             <th>駅番</th>
@@ -68,17 +22,31 @@
             <th>編集</th>
             <th>削除</th>
         </tr>
+        {% for station in stations %}
         <tr>
-            <td>新宿駅</td>
-            <td>1234567890</td>
-            <td>東京都新宿区新宿3丁目38-1</td>
-            <td>050-2016-1600</td>
-            <td><button>編集</button></td>
-            <td><button>削除</button></td>
+            <td>{{ station.name }}</td>
+            <td>{{ station.station_num }}</td>
+            <td>{{ station.address }}</td>
+            <td>{{ station.phone_num }}</td>
+            <td><button onclick="editStation('{{ station.station_num }}')">編集</button></td>
+            <td><button onclick="deleteStation('{{ station.station_num }}')">削除</button></td>
         </tr>
+        {% endfor %}
     </table>
 
-    <a href="#" class="back-button">戻る</a>
+    <a href="/">戻る</a>
+
+    <script>
+        function editStation(stationNum) {
+            alert("駅番号 " + stationNum + " の編集画面に遷移します（未実装）");
+        }
+
+        function deleteStation(stationNum) {
+            if (confirm("駅番号 " + stationNum + " を削除しますか？")) {
+                alert("駅番号 " + stationNum + " を削除しました（未実装）");
+            }
+        }
+    </script>
 
 </body>
 </html>
