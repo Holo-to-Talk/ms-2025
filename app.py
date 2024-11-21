@@ -165,7 +165,7 @@ def register():
     return render_template('register.html', error_msg=error_msg, form_data=form_data)
 
 # /editにアクセスしたときに/にリダイレクト
-@app.route('/edit/',methods=['GET'])
+@app.route('/user/edit/',methods=['GET'])
 def edit():
     if request.method == 'GET':
         return redirect("/")
