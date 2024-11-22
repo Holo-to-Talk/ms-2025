@@ -355,7 +355,7 @@ def log_list():
 
 #レポートリスト表示処理
 @app.route('/report/list', methods=['GET'])
-def userlist():
+def report_list():
     if request.method == "GET":
         # データベース接続
         conn = db_connection()
