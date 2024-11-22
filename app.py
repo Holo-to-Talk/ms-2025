@@ -290,14 +290,24 @@ def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
 
-# レポートページの画面・バック側処理
-@app.route("/report",methods=["POST","GET"])
-def report():
-    if request.method == "POST":
-        return "レポートを作成しました！（本来はDBに情報格納）"
-
+@app.route('/report/list', methods=['GET'])
+def userlist():
     if request.method == "GET":
-        return render_template('report.html')
+        # データベース接続
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        try:
+            # データベースを選択
+            cursor.execute('''USE holo_to_talk''')
+
+            # station_infoテーブルから必要なデータを取得
+            cursor.execute('''SELECT * FROM staff_log''')
+            logs = cursor.fetchall()
+            print(logs)
+
+            # データをHTMLテンプレートに渡す
+            return render_template('report-list.html', logs=logs)
 
 @app.route('/user/list', methods=['GET','POST'])
 def userlist():
