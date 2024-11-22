@@ -188,13 +188,6 @@ def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
 
-#レポートページの一覧    
-@app.route("/outfoot_report",methods=["POST","GET"])
-def outfoot_report():
-    if request.method == "GET":
-        return render_template("outfoot_report.html")
-    
-
 @app.route('/report/list', methods=['GET'])
 def userlist():
     if request.method == "GET":
