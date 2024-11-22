@@ -45,6 +45,9 @@ def ai():
         phoneAutomation.phoneAutomation()
 
         # クライアントに送信
+        socketio_emit.socketio_emit_output_reset()
+
+        # クライアントに送信
         telopContent = "Enterを押して始めてください"
         socketio_emit.socketio_emit_telop(telopContent)
         socketio_emit.socketio_emit_telop_remove_display_none()
@@ -55,7 +58,10 @@ def ai():
         socketio_emit.socketio_emit_output(outputContent)
 
         # QRCodeを表示する
+        # 関数実行
 
+        # クライアントに送信
+        socketio_emit.socketio_emit_output_reset()
 
         # クライアントに送信
         telopContent = "Enterを押して始めてください"
@@ -68,6 +74,9 @@ def ai():
 
         # 音声出力
         text_To_Audio.text_To_Audio(outputContent)
+
+        # クライアントに送信
+        socketio_emit.socketio_emit_output_reset()
 
         # クライアントに送信
         telopContent = "Enterを押して始めてください"

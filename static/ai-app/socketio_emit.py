@@ -14,3 +14,6 @@ def socketio_emit_input(inputContent):
 
 def socketio_emit_output(outputContent):
     socketio.emit('update_output', {'output': outputContent})
+
+def socketio_emit_output_reset():
+    socketio.emit('update_output', {'output': ""})
