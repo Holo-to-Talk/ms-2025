@@ -250,11 +250,57 @@ def report():
         return render_template('report.html')
     
 #レポートページの一覧    
-@app.route("/outfoot_report",methods=["POST","GET"])
+@app.route("/outfoot_report", methods=["GET"])
 def outfoot_report():
-    if request.method == "GET":
-        return render_template("outfoot_report.html")
-    
+    """
+
+    """
+    conn = db_connection()
+    if conn is None:
+        print("データベース接続エラー")
+        return "データベース接続エラー", 500
+
+    try:
+        cursor = conn.cursor()
+        query = """
+            SELECT 
+                id,
+                gpt_log_id,
+                responder AS inquiry_source,
+                about AS inquiry_destination,
+                detail AS person_in_charge,
+                answer AS overview,
+                time AS created_at
+            FROM 
+                staff_log
+            ORDER BY 
+                time DESC
+        """
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        reports = []
+        for row in rows:
+            reports.append({
+                "id": row[0],
+                "gpt_log_id": row[1],
+                "inquiry_source": row[2],
+                "inquiry_destination": row[3],
+                "person_in_charge": row[4],
+                "overview": row[5],
+                "created_at": row[6].strftime("%Y-%m-%d %H:%M:%S")
+            })
+
+    except Exception as e:
+        print(f"データ取得エラー: {e}")
+        return "データ取得エラー", 500
+    finally:
+        cursor.close()
+        conn.close()
+
+    return render_template("outfoot_report.html", reports=reports)
+
+
 
 # アプリケーションを実行
 if __name__ == "__main__":

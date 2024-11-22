@@ -1,4 +1,3 @@
-<!-- templates/reports.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,17 +5,15 @@
     <title>レポート一覧</title>
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
-    <!-- Google Fonts Noto Sans JP -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}" />
 </head>
 <body>
     <div class="container">
-        <h4 class="center-align">レポート一覧</h4>
+        <h4 class="center-align">駅員レポート一覧</h4>
         <table class="highlight">
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>GPTログID</th>
                     <th>問い合わせ元</th>
                     <th>問い合わせ先</th>
                     <th>担当者名</th>
@@ -28,75 +25,17 @@
                 {% for report in reports %}
                 <tr data-id="{{ report.id }}">
                     <td>{{ report.id }}</td>
+                    <td>{{ report.gpt_log_id }}</td>
                     <td>{{ report.inquiry_source }}</td>
                     <td>{{ report.inquiry_destination }}</td>
                     <td>{{ report.person_in_charge }}</td>
                     <td>{{ report.overview }}</td>
-                    <td>{{ report.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                    <td>{{ report.created_at }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <!-- レポート詳細モーダル -->
-        <div id="detailModal" class="modal">
-            <div class="modal-content">
-                <h4>レポート詳細</h4>
-                <p><strong>問い合わせ元:</strong> <span id="detailInquirySource"></span></p>
-                <p><strong>問い合わせ先:</strong> <span id="detailInquiryDestination"></span></p>
-                <p><strong>担当者名:</strong> <span id="detailPersonInCharge"></span></p>
-                <p><strong>概要:</strong> <span id="detailOverview"></span></p>
-                <p><strong>問い合わせ詳細:</strong><br><span id="detailInquiryContent"></span></p>
-                <p><strong>回答内容:</strong><br><span id="detailResponseContent"></span></p>
-                <p><strong>作成日:</strong> <span id="detailCreatedAt"></span></p>
-            </div>
-            <div class="modal-footer">
-                <a href="#!" class="modal-close waves-effect waves-green btn-flat">閉じる</a>
-            </div>
-        </div>
     </div>
-
-    <!-- Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // モーダルの初期化
-            var modalElems = document.querySelectorAll('.modal');
-            var instances = M.Modal.init(modalElems);
-
-            // テーブルの各行にクリックイベントを追加
-            var rows = document.querySelectorAll('table tbody tr');
-            rows.forEach(function(row) {
-                row.addEventListener('click', function() {
-                    var reportId = this.getAttribute('data-id');
-
-                    // AJAXリクエストで詳細情報を取得
-                    fetch(`/report/${reportId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.error) {
-                                alert(data.error);
-                            } else {
-                                document.getElementById('detailInquirySource').textContent = data.inquiry_source;
-                                document.getElementById('detailInquiryDestination').textContent = data.inquiry_destination;
-                                document.getElementById('detailPersonInCharge').textContent = data.person_in_charge;
-                                document.getElementById('detailOverview').textContent = data.overview;
-                                document.getElementById('detailInquiryContent').innerHTML = data.inquiry_content.replace(/\n/g, '<br>');
-                                document.getElementById('detailResponseContent').innerHTML = data.response_content.replace(/\n/g, '<br>');
-                                document.getElementById('detailCreatedAt').textContent = data.created_at;
-
-                                // モーダルを開く
-                                var detailModal = M.Modal.getInstance(document.getElementById('detailModal'));
-                                detailModal.open();
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('詳細情報の取得に失敗しました。');
-                        });
-                });
-            });
-        });
-    </script>
 </body>
 </html>
