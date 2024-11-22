@@ -170,6 +170,69 @@ def edit():
     if request.method == 'GET':
         return redirect("/")
 
+#ユーザーリスト表示処理
+@app.route('/user/list', methods=['GET','POST'])
+def userlist():
+    if request.method == "GET":
+        # データベース接続
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        try:
+            # データベースを選択
+            cursor.execute('''USE holo_to_talk''')
+
+            # station_infoテーブルから必要なデータを取得
+            cursor.execute('''SELECT name, station_num, address, phone_num FROM station_info''')
+            rows = cursor.fetchall()
+
+            # カラム名をキーにして辞書形式でデータを作成
+            stations = [
+                {"name": row[0], "station_num": row[1], "address": row[2], "phone_num": row[3]}
+                for row in rows
+            ]
+
+            # データをHTMLテンプレートに渡す
+            return render_template('user-list.html', stations=stations)
+
+        except Exception as e:
+            # エラー処理
+            error_message = f"データの取得中にエラーが発生しました: {e}"
+            return render_template('user-list.html', error_message=error_message)
+
+        finally:
+            # リソースを解放
+            cursor.close()
+            conn.close()
+
+    if request.method == "POST":
+        station_num = request.form['station_num']
+        action = request.form['action']
+
+    if action == "編集":
+        # 編集画面にリダイレクト
+        return redirect(f"/user/edit/{station_num}")
+
+    elif action == "削除":
+        # データ削除処理
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute('''USE holo_to_talk''')
+            cursor.execute('''DELETE FROM station_info WHERE station_num = %s''', (station_num,))
+            conn.commit()
+
+            # 削除後にリスト画面にリダイレクト
+            return redirect('/user/list')
+
+        except Exception as e:
+            return f"データ削除中にエラーが発生しました: {e}"
+
+        finally:
+            cursor.close()
+            conn.close()
+
 # ユーザー編集処理
 @app.route('/user/edit/<station_num>', methods=['GET', 'POST'])
 def edit_station(station_num):
@@ -275,7 +338,7 @@ def edit_station(station_num):
         return redirect('/user/list?update_done')
 
 # ログアウト処理
-@app.route('user/logout')
+@app.route('/user/logout')
 def logout():
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
@@ -290,6 +353,7 @@ def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
 
+#レポートリスト表示処理
 @app.route('/report/list', methods=['GET'])
 def userlist():
     if request.method == "GET":
@@ -319,68 +383,6 @@ def userlist():
 
         finally:
             # リソースを解放
-            cursor.close()
-            conn.close()
-
-@app.route('/user/list', methods=['GET','POST'])
-def userlist():
-    if request.method == "GET":
-        # データベース接続
-        conn = db_connection()
-        cursor = conn.cursor()
-
-        try:
-            # データベースを選択
-            cursor.execute('''USE holo_to_talk''')
-
-            # station_infoテーブルから必要なデータを取得
-            cursor.execute('''SELECT name, station_num, address, phone_num FROM station_info''')
-            rows = cursor.fetchall()
-
-            # カラム名をキーにして辞書形式でデータを作成
-            stations = [
-                {"name": row[0], "station_num": row[1], "address": row[2], "phone_num": row[3]}
-                for row in rows
-            ]
-
-            # データをHTMLテンプレートに渡す
-            return render_template('list.html', stations=stations)
-
-        except Exception as e:
-            # エラー処理
-            error_message = f"データの取得中にエラーが発生しました: {e}"
-            return render_template('list.html', error_message=error_message)
-
-        finally:
-            # リソースを解放
-            cursor.close()
-            conn.close()
-
-    if request.method == "POST":
-        station_num = request.form['station_num']
-        action = request.form['action']
-
-    if action == "編集":
-        # 編集画面にリダイレクト
-        return redirect(f"/user/edit/{station_num}")
-
-    elif action == "削除":
-        # データ削除処理
-        conn = db_connection()
-        cursor = conn.cursor()
-
-        try:
-            cursor.execute('''USE holo_to_talk''')
-            cursor.execute('''DELETE FROM station_info WHERE station_num = %s''', (station_num,))
-            conn.commit()
-
-            # 削除後にリスト画面にリダイレクト
-            return redirect('/user/list')
-
-        except Exception as e:
-            return f"データ削除中にエラーが発生しました: {e}"
-
-        finally:
             cursor.close()
             conn.close()
 
