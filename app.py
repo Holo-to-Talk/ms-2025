@@ -303,11 +303,24 @@ def userlist():
 
             # station_infoテーブルから必要なデータを取得
             cursor.execute('''SELECT * FROM staff_log''')
-            logs = cursor.fetchall()
-            print(logs)
+            rows = cursor.fetchall()
+
+            # タプルを辞書形式に変換
+            column_names = [desc[0] for desc in cursor.description]
+            logs = [dict(zip(column_names, row)) for row in rows]
 
             # データをHTMLテンプレートに渡す
             return render_template('report-list.html', logs=logs)
+
+        except Exception as e:
+            # エラー処理
+            error_message = f"データの取得中にエラーが発生しました: {e}"
+            return render_template('report-list.html', error_message=error_message)
+
+        finally:
+            # リソースを解放
+            cursor.close()
+            conn.close()
 
 @app.route('/user/list', methods=['GET','POST'])
 def userlist():
