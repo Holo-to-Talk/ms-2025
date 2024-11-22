@@ -188,73 +188,41 @@ def log_list():
     if request.method == "GET":
         return render_template("log-list.html")
 
-# レポートページの画面・バック側処理
-@app.route("/report", methods=["POST", "GET"])
-def report():
-    message = ""
-    message_type = ""  # "success" または "error"
-
-    if request.method == "POST":
-        # フォームからデータを取得
-        inquiry_source = request.form.get("inquirySource", "").strip()
-        inquiry_destination = request.form.get("inquiryDestination", "").strip()
-        person_in_charge = request.form.get("personInCharge", "").strip()
-        overview = request.form.get("overview", "").strip()
-        inquiry_content = request.form.get("inquiryContent", "").strip()
-        response_content = request.form.get("responseContent", "").strip()
-        
-        # データベース接続
-        conn = db_connection()
-        if conn is None:
-            message = "データベースに接続できませんでした。"
-            message_type = "error"
-            return render_template('report.html', message=message, message_type=message_type)
-
-        try:
-            cursor = conn.cursor()
-            # 必要に応じてデータベースを選択
-            cursor.execute('USE holo_to_talk')
-
-            # 1. gpt_logにログを挿入し、gpt_log_idを取得
-            insert_gpt_log_query = """
-                INSERT INTO gpt_log (log_content) VALUES (%s)
-            """
-            gpt_log_content = f"Inquiry: {inquiry_content}, Response: {response_content}"
-            cursor.execute(insert_gpt_log_query, (gpt_log_content,))
-            gpt_log_id = cursor.lastrowid  # 挿入された行のIDを取得
-
-            # 2. staff_logにデータを挿入（gpt_log_idを含む）
-            insert_staff_log_query = """
-                INSERT INTO staff_log (gpt_log_id, responder, about, detail, answer)
-                VALUES (%s, %s, %s, %s, %s)
-            """
-            data_tuple = (gpt_log_id, person_in_charge, overview, inquiry_content, response_content)
-            cursor.execute(insert_staff_log_query, data_tuple)
-            conn.commit()
-            message = "レポートを作成しました！"
-            message_type = "success"
-
-        except Exception as e:
-            print(f"Error while inserting to MySQL: {e}")
-            message = "データの挿入中にエラーが発生しました。"
-            message_type = "error"
-
-        finally:
-            if conn:
-                cursor.close()
-                conn.close()
-
-        return render_template('report.html', message=message, message_type=message_type)
-
-    if request.method == "GET":
-        return render_template('report.html')
-    
 #レポートページの一覧    
 @app.route("/outfoot_report",methods=["POST","GET"])
 def outfoot_report():
     if request.method == "GET":
         return render_template("outfoot_report.html")
     
+
+@app.route('/report/list', methods=['GET'])
+def userlist():
+    if request.method == "GET":
+        # データベース接続
+        conn = db_connection()
+        cursor = conn.cursor()
+
+        try:
+            # データベースを選択
+            cursor.execute('''USE holo_to_talk''')
+
+            # station_infoテーブルから必要なデータを取得
+            cursor.execute('''SELECT * FROM staff_log''')
+            logs = cursor.fetchall()
+            print(logs)
+
+            # データをHTMLテンプレートに渡す
+            return render_template('report-list.html', logs=logs)
+
+        except Exception as e:
+            # エラー処理
+            error_message = f"データの取得中にエラーが発生しました: {e}"
+            return render_template('report-list.html', error_message=error_message)
+
+        finally:
+            # リソースを解放
+            cursor.close()
+            conn.close()
 
 # アプリケーションを実行
 if __name__ == "__main__":
