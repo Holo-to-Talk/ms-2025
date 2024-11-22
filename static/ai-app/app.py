@@ -1,8 +1,10 @@
 from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit
+from socketio_Config import socketio
 from dotenv import load_dotenv
 import os
 
+import socketio_emit
 import voice_Recording
 import audio_To_Text
 import chatGPT_API_Output
@@ -17,18 +19,15 @@ load_dotenv()
 app.secret_key = os.getenv("SECRET_KEY")
 
 # SocketIOでFlask appをラップ
-socketio = SocketIO(app)
+socketio.init_app(app)
 
 # main処理
 def ai():
     # 音声ファイルの生成
     savedDirectory = voice_Recording.voice_Recording()
 
-    # 音声ファイルのテキスト化・取得
+    # 音声ファイルのテキスト化
     inputContent = audio_To_Text.audio_To_Text(savedDirectory)
-
-    # クライアント側にテキスト送信
-    socketio.emit('update_input', {'input': inputContent})
 
     # 応答内容の取得
     outputContent = chatGPT_API_Output.chatGPT_API_Output(inputContent)
@@ -38,19 +37,42 @@ def ai():
 
     # APIの回答の確認
     if outputContent == 'phoneAutomation':
-        outputContent = '回答することが難しいため、駅員に電話をかけます。'
-
-        # クライアント側にテキスト送信
-        socketio.emit('update_output', {'output': outputContent})
+        # クライアントに送信
+        outputContent = "回答することが難しいため、駅員に電話をかけます。"
+        socketio_emit.socketio_emit_output(outputContent)
 
         # 電話をかける
         phoneAutomation.phoneAutomation()
+
+        # クライアントに送信
+        telopContent = "Enterを押して始めてください"
+        socketio_emit.socketio_emit_telop(telopContent)
+        socketio_emit.socketio_emit_telop_remove_display_none()
+
+    elif outputContent == 'QRCode':
+        # クライアントに送信
+        outputContent = "QRCodeを表示します。"
+        socketio_emit.socketio_emit_output(outputContent)
+
+        # QRCodeを表示する
+
+
+        # クライアントに送信
+        telopContent = "Enterを押して始めてください"
+        socketio_emit.socketio_emit_telop(telopContent)
+        socketio_emit.socketio_emit_telop_remove_display_none()
+
     else :
-        # クライアント側にテキスト送信
-        socketio.emit('update_output', {'output': outputContent})
+        # クライアントに送信
+        socketio_emit.socketio_emit_output(outputContent)
 
         # 音声出力
         text_To_Audio.text_To_Audio(outputContent)
+
+        # クライアントに送信
+        telopContent = "Enterを押して始めてください"
+        socketio_emit.socketio_emit_telop(telopContent)
+        socketio_emit.socketio_emit_telop_remove_display_none()
 
 @app.route('/')
 def main():

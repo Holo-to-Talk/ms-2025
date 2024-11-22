@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Holo-to-Talk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
     <!-- テキスト -->
-    <div id="enter_Pressed">Enterを押して始めてください</div>
+    <div id="telop">Enterを押して始めてください</div>
 
     <!-- ホログラム -->
     <div></div>
@@ -19,7 +20,6 @@
     <div id="input"></div>
 
     <!-- js -->
-    <script src="{{ url_for('static', filename='js/enter_Pressed.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/telop.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket.js') }}"></script>
 </body>
 </html>
