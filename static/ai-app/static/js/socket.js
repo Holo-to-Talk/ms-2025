@@ -41,6 +41,11 @@ function switchImage() {
     currentIndex = (currentIndex + 1) % sequence.length;
 }
 
+function resetImage() {
+    images.forEach(img => img.classList.remove('active'));
+    images[sequence[0]].classList.add('active');
+}
+
 socket.on('start_switching', () => {
     if (!intervalId) {
         intervalId = setInterval(switchImage, intervalTime);
@@ -52,4 +57,5 @@ socket.on('stop_switching', () => {
         clearInterval(intervalId);
         intervalId = null;
     }
+    resetImage();
 });
