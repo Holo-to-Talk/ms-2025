@@ -49,3 +49,15 @@ body, html {
 #div_img img.active {
     display: block;
 }
+
+/* アウトプット（テキスト） */
+#output {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    z-index: 1;
+}
