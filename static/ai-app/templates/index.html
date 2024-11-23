@@ -15,7 +15,11 @@
         </div>
 
         <!-- ホログラム -->
-        <div></div>
+        <div id="div_img">
+            <img src="{{ url_for('static', filename='img/image_holo1.jpg') }}" class="active">
+            <img src="{{ url_for('static', filename='img/image_holo2.jpg') }}">
+            <img src="{{ url_for('static', filename='img/image_holo3.jpg') }}">
+        </div>
 
         <!-- テキスト（output） -->
         <div id="output"></div>

@@ -25,3 +25,27 @@ socket.on('update_telop_add_display_none', () => {
 socket.on('update_telop_remove_display_none', () => {
     document.getElementById('div_telop').classList.remove('display_none');
 });
+
+const images = document.querySelectorAll('#div_img img');
+let sequence = [0, 1, 2, 1];
+let currentIndex = 1;
+let intervalId = null;
+
+function switchImage() {
+    images.forEach(img => img.classList.remove('active'));
+    images[sequence[currentIndex]].classList.add('active');
+    currentIndex = (currentIndex + 1) % sequence.length;
+}
+
+socket.on('start_switching', () => {
+    if (!intervalId) {
+        intervalId = setInterval(switchImage, 100);
+    }
+});
+
+socket.on('stop_switching', () => {
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+    }
+});

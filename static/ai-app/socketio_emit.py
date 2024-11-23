@@ -17,3 +17,9 @@ def socketio_emit_output(outputContent):
 
 def socketio_emit_output_reset():
     socketio.emit('update_output', {'output': ""})
+
+def socketio_emit_start_switching():
+    socketio.emit('start_switching', {})
+
+def socketio_emit_stop_switching():
+    socketio.emit('stop_switching', {})

@@ -1,3 +1,18 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
 .display_none {
     display: none;
+}
+
+#div_img img {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+}
+
+#div_img img.active {
+    display: block;
 }
