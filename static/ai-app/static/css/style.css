@@ -7,6 +7,31 @@ body, html {
     display: none;
 }
 
+#wrapper {
+    position: relative;
+}
+
+#div_telop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+#telop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    z-index: 2;
+}
+
 #div_img img {
     display: none;
     width: 100vw;
