@@ -1,12 +1,14 @@
 import pyaudio
 import wave
 import numpy as np
+from dotenv import load_dotenv
 import os
 
 import socketio_emit
 
 def voice_Recording():
     # 録音設定
+    load_dotenv()
     # 音声のフォーマット（16ビットの整数型）
     FORMAT = pyaudio.paInt16
     # モノラル録音
@@ -18,7 +20,7 @@ def voice_Recording():
     # 出力ファイル名
     OUTPUT_FILE = "inputText.wav"
     # 無音判定の閾値（デフォルト：1000）
-    THRESHOLD = 500
+    THRESHOLD = int(os.getenv("THRESHOLD"))
     # 無音が続く秒数（要相談）
     SILENCE_DURATION = 3
 
