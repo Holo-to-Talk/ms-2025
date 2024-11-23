@@ -1,5 +1,9 @@
 const socket = io()
 
+// 定数
+// 画像切替秒数（1000 => 1s）
+const intervalTime = 100
+
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         socket.emit('enter_pressed')
@@ -39,7 +43,7 @@ function switchImage() {
 
 socket.on('start_switching', () => {
     if (!intervalId) {
-        intervalId = setInterval(switchImage, 100);
+        intervalId = setInterval(switchImage, intervalTime);
     }
 });
 
