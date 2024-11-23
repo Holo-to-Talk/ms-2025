@@ -1,25 +1,91 @@
-{"prompt": "学習範囲外の質問には'phoneAutomation'と出力してください。\n\n質問: お手洗いはありますか？\n回答: ", "completion": "お手洗いはあります、構内図をご確認ください。 "}
-{"prompt": "分からない質問には'phoneAutomation'と出力してください。\n\n質問: トイレはありますか？\n回答: ", "completion": "お手洗いはあります、構内図をご確認ください。 "}
-{"prompt": "指定されたデータの範囲外の質問には'phoneAutomation'と出力してください。\n\n質問: お手洗いはどこにありますか？\n回答: ", "completion": "構内図をご確認ください。 "}
-{"prompt": "既存モデルに使われた学習データの質問には'phoneAutomation'と出力してください。\n\n質問: トイレはどこにありますか？\n回答: ", "completion": "構内図をご確認ください。 "}
-{"prompt": "憶測で回答しないでください。\n\n質問: 自動販売機はありますか？\n回答: ", "completion": "自動販売機はありません。 "}
-{"prompt": "'phoneAutomation'と出力する際には、phoneAutomationとだけ出力してください。\n\n質問: 自動販売機はどこにありますか？\n回答: ", "completion": "自動販売機はありません。 "}
-{"prompt": "駅に関する質問にのみ回答してください。\n\n質問: 営業時間について教えて下さい。\n回答: ", "completion": "営業時間は、5:30-22:00です。 "}
-{"prompt": "駅に関する質問以外は、'phoneAutomation'とだけ出力してください。\n\n質問: 駅のシャッターはいつ開きますか？\n回答: ", "completion": "シャッターは始発の発車時刻10分前には開きます。 "}
-{"prompt": "質問: 駅に関する質問以外\n出力: phoneAutomation", "completion": " phoneAutomation"}
-{"prompt": "入力: QRCODE\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: QRcode\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: QRこーど\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: QRコード\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: qrCODE\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: qrcode\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: qrこーど\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: qrコード\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: きゅーあーるCODE\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: きゅーあーるcode\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: きゅーあーるこーど\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: きゅーあーるコード\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: キューアールCODE\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: キューアールcode\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: キューアールこーど\n出力: QRCode", "completion": " QRCode"}
-{"prompt": "入力: キューアールコード\n出力: QRCode", "completion": " QRCode"}
+{
+    "messages": [
+        {"role": "system", "content": "学習範囲外の質問には'phoneAutomation'と出力してください。"},
+        {"role": "user", "content": "お手洗いはありますか？"},
+        {"role": "assistant", "content": "お手洗いはあります、構内図をご確認ください。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "分からない質問には'phoneAutomation'と出力してください。"},
+        {"role": "user", "content": "トイレはありますか？"},
+        {"role": "assistant", "content": "お手洗いはあります、構内図をご確認ください。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "指定されたデータの範囲外の質問には'phoneAutomation'と出力してください。"},
+        {"role": "user", "content": "お手洗いはどこにありますか？"},
+        {"role": "assistant", "content": "構内図をご確認ください。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "既存モデルに使われた学習データの質問には'phoneAutomation'と出力してください。"},
+        {"role": "user", "content": "トイレはどこにありますか？"},
+        {"role": "assistant", "content": "構内図をご確認ください。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "憶測で回答しないでください。"},
+        {"role": "user", "content": "自動販売機はありますか？"},
+        {"role": "assistant", "content": "自動販売機はありません。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "'phoneAutomation'と出力する際には、phoneAutomationとだけ出力してください。"},
+        {"role": "user", "content": "自動販売機はどこにありますか？"},
+        {"role": "assistant", "content": "自動販売機はありません。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "駅に関する質問にのみ回答してください。"},
+        {"role": "user", "content": "営業時間について教えて下さい。"},
+        {"role": "assistant", "content": "営業時間は、5:30-22:00です。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "駅に関する質問以外は、'phoneAutomation'とだけ出力してください。"},
+        {"role": "user", "content": "駅のシャッターはいつ開きますか？"},
+        {"role": "assistant", "content": "シャッターは始発の発車時刻10分前には開きます。"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "駅に関する質問以外は、'phoneAutomation'とだけ出力してください。"},
+        {"role": "user", "content": "駅に関する質問以外"},
+        {"role": "assistant", "content": "phoneAutomation"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},
+        {"role": "user", "content": "QRcode"},
+        {"role": "assistant", "content": "QRCode"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},
+        {"role": "user", "content": "QRコード"},
+        {"role": "assistant", "content": "QRCode"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},
+        {"role": "user", "content": "qrcode"},
+        {"role": "assistant", "content": "QRCode"}
+    ]
+}
+{
+    "messages": [
+        {"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},
+        {"role": "user", "content": "qrコード"},
+        {"role": "assistant", "content": "QRCode"}
+    ]
+}
