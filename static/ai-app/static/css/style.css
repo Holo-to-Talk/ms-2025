@@ -1,12 +1,15 @@
+/* 余白削除 */
 body, html {
     margin: 0;
     padding: 0;
 }
 
+/* pythonで使用 */
 .display_none {
     display: none;
 }
 
+/* 親要素指定 */
 #wrapper {
     position: relative;
 }
@@ -32,12 +35,15 @@ body, html {
     z-index: 2;
 }
 
+/* ホログラム画像 */
 #div_img img {
     display: none;
     width: 100vw;
     height: 100vh;
+    z-index: 0;
 }
 
+/* 画像切替で使用 */
 #div_img img.active {
     display: block;
 }
