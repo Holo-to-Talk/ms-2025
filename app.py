@@ -367,11 +367,8 @@ def report_list():
 
             # station_infoテーブルから必要なデータを取得
             cursor.execute('''SELECT * FROM staff_log''')
-            rows = cursor.fetchall()
-
-            # タプルを辞書形式に変換
-            column_names = [desc[0] for desc in cursor.description]
-            logs = [dict(zip(column_names, row)) for row in rows]
+            logs = cursor.fetchall()
+            print(logs)
 
             # データをHTMLテンプレートに渡す
             return render_template('report-list.html', logs=logs)
