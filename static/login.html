@@ -29,6 +29,10 @@
           <div class="card">
             <div class="card-content">
               <span class="card-title center-align">ログイン</span>
+              <!-- エラーメッセージの表示 -->
+              {% if error_msg %}
+                <p style="color: red;">{{ error_msg }}</p>
+              {% endif %}
               <form method="POST" action="">
                 <!-- 駅番入力フィールド -->
                 <div class="input-field">

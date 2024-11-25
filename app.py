@@ -68,20 +68,22 @@ def index():
 # ログイン処理
 @app.route('/user/login', methods=['GET', 'POST'])
 def login():
+    error_msg = ""  # エラーメッセージを初期化
+
     if request.method == 'GET':
         if 'user' in session:
             return redirect("/")
         else:
-            return render_template('login.html')
+            return render_template('login.html', error_msg=error_msg)
 
     if request.method == 'POST':
         num = request.form.get('num', '')
         password = request.form.get('password', '')
+
         # データベースからユーザー情報を取得
         conn = db_connection()
-
         cursor = conn.cursor()
-        cursor.execute(''' use holo_to_talk ''')
+        cursor.execute('''USE holo_to_talk''')
 
         query = "SELECT * FROM users WHERE station_num = %s"
         cursor.execute(query, (num,))
@@ -95,11 +97,12 @@ def login():
                 session['user'] = user[0]  # セッションにユーザーIDを保存
                 return redirect('/')
             else:
-                return "ログインエラー: IDまたはパスワードが間違っています"
+                error_msg = "ログインエラー: IDまたはパスワードが間違っています"
         else:
-            return "ログインエラー: IDまたはパスワードが間違っています"
+            error_msg = "ログインエラー: IDまたはパスワードが間違っています"
 
-    return render_template('login.html')
+        # エラーメッセージを渡して再度ログインページを表示
+        return render_template('login.html', error_msg=error_msg)
 
 # ユーザー登録処理
 @app.route('/user/register', methods=['GET', 'POST'])
