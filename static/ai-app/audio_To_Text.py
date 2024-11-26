@@ -12,10 +12,12 @@ def audio_To_Text(savedDirectory):
 
     MODEL = os.getenv("AUDIO_TO_TEXT_MODEL")
 
+    LANGUAGE = "ja"
+
     audio_file_path = savedDirectory
 
     with open(audio_file_path, 'rb') as audio_file:
-        transcription = openai.Audio.transcribe(MODEL, audio_file)
+        transcription = openai.Audio.transcribe(MODEL, audio_file, LANGUAGE)
 
         inputContent = transcription['text']
 
