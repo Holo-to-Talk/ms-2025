@@ -6,12 +6,10 @@ let flag_enter = false;
 let flag_space = false;
 
 document.addEventListener('keydown', function(event) {
-    //Enter Spaceどちらも押されてない
     if (!flag_enter && !flag_space) {
         if (event.key === 'Enter') {
             socket.emit('enter_starting')
         }
-    //Enterは押されていて、Spaceは押されてない
     }else if (flag_enter && !flag_space) {
         if (event.key === ' ') {
             socket.emit('space_phone')
@@ -95,6 +93,6 @@ socket.on('image_qr_add_active', () => {
 });
 
 socket.on('image_qr_remove_active', () => {
-    document.getElementById('image_qr').classList.remove('active');
-    images[sequence[currentIndex]].classList.add('active');
+    images.forEach(img => img.classList.remove('active'));
+    images[sequence[0]].classList.add('active');
 });
