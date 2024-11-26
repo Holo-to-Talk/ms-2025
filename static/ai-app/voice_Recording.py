@@ -36,10 +36,8 @@ def voice_Recording():
         frames_per_buffer = CHUNK
     )
 
-    print("Recording...")
-
     # クライアントに送信
-    telopContent = "Recording..."
+    telopContent = "録音しています。"
     socketio_emit.socketio_emit_telop(telopContent)
 
     frames = []
@@ -62,10 +60,8 @@ def voice_Recording():
 
         # 無音がSILENCE_DURATION分続いた場合、録音を終了
         if silent_chunks > int(RATE / CHUNK * SILENCE_DURATION):
-            print("Silence detected, stopping recording")
-
             # クライアントに送信
-            telopContent = "Recording finished"
+            telopContent = "録音が終わりました。"
             socketio_emit.socketio_emit_telop(telopContent)
 
             break
@@ -84,7 +80,6 @@ def voice_Recording():
 
     # 保存したディレクトリを取得
     saved_directory = os.path.abspath(OUTPUT_FILE)
-    print("Recording saved to", saved_directory)
 
     # 保存したディレクトリの返し
     return saved_directory

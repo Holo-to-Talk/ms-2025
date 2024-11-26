@@ -39,8 +39,5 @@ def chatGPT_API_Output(conversation_history, inputContent):
     # 応答内容の取得
     outputContent = response['choices'][0]['message']['content']
 
-    # 応答内容の表示
-    print(outputContent)
-
     # 応答内容の返し
     return outputContent

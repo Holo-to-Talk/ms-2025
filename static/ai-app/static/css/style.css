@@ -2,6 +2,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    background-color: rgb(0, 0, 0);
 }
 
 /* pythonで使用 */
@@ -21,7 +22,7 @@ body, html {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.25);
     z-index: 2;
 }
 
@@ -38,11 +39,18 @@ body, html {
 }
 
 /* ホログラム画像 */
-#div_img img {
+#div_img img:nth-child(1), #div_img img:nth-child(2), #div_img img:nth-child(3) {
     display: none;
     width: 100vw;
     height: 100vh;
     z-index: 0;
+}
+
+#div_img img:nth-child(4) {
+    display: none;
+    width: 100vw;
+    height: auto;
+    z-index: 3;
 }
 
 /* 画像切替で使用 */

@@ -88,3 +88,13 @@ socket.on('stop_switching', () => {
     }
     resetImage();
 });
+
+socket.on('image_qr_add_active', () => {
+    images.forEach(img => img.classList.remove('active'));
+    document.getElementById('image_qr').classList.add('active');
+});
+
+socket.on('image_qr_remove_active', () => {
+    document.getElementById('image_qr').classList.remove('active');
+    images[sequence[currentIndex]].classList.add('active');
+});

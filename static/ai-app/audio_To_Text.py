@@ -26,9 +26,6 @@ def audio_To_Text(savedDirectory):
         # クライアントに送信
         socketio_emit.socketio_emit_telop_add_display_none()
 
-        # テキスト変換結果の表示
-        print(inputContent)
-
         # クライアントに送信
         socketio_emit.socketio_emit_input(inputContent)
 

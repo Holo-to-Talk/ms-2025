@@ -51,9 +51,13 @@ def ai():
         socketio_emit.socketio_emit_start_switching()
         text_To_Audio.text_To_Audio(outputContent)
         socketio_emit.socketio_emit_stop_switching()
+        socketio_emit.socketio_emit_output_reset()
+        time.sleep(TIME_SLEEP)
 
         # QRCodeを表示する
-        # 関数実行
+        socketio_emit.socketio_emit_image_qr_add_active()
+        time.sleep(TIME_SLEEP * 15)
+        socketio_emit.socketio_emit_image_qr_remove_active()
 
     else:
         # 応答内容の取得
@@ -64,12 +68,13 @@ def ai():
         socketio_emit.socketio_emit_start_switching()
         text_To_Audio.text_To_Audio(outputContent)
         socketio_emit.socketio_emit_stop_switching()
+        socketio_emit.socketio_emit_output_reset()
+        time.sleep(TIME_SLEEP)
 
     # 音声ファイルの削除
     delete_Recording.delete_Recording(savedDirectory)
 
     # クライアントに送信
-    socketio_emit.socketio_emit_output_reset()
     telopContent = "電話対応をご希望の場合、Spaceを押してください。"
     socketio_emit.socketio_emit_telop(telopContent)
     socketio_emit.socketio_emit_telop_remove_display_none()
@@ -114,7 +119,7 @@ def ai():
             # クライアントに送信
             telopContent = "会話を保存しました。"
             socketio_emit.socketio_emit_telop(telopContent)
-
+            time.sleep(TIME_SLEEP)
             break
         else:
             time.sleep(TIME_SLEEP)
