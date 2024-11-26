@@ -22,6 +22,10 @@
     />
     <link rel="stylesheet" href="user-list.css" />
     <style>
+      body {
+        font-family: "Noto Sans JP", sans-serif;
+      }
+
       /* 画面幅が600px以下の場合に住所列を非表示にする */
       @media (max-width: 600px) {
         .address-column {
@@ -37,7 +41,7 @@
 
       /* 削除ボタンの背景色を赤に設定 */
       .delete-button {
-        background-color: red !important;
+        background-color: #ff3f3f !important;
       }
 
       /* モーダルのサイズ調整 */
@@ -48,7 +52,7 @@
 
       /* モーダル内の削除ボタンとメッセージのスタイル */
       .modal-delete-btn {
-        background-color: red !important;
+        background-color: #ff3f3f !important;
         color: white !important;
       }
       .modal-cancel-btn {
@@ -59,8 +63,35 @@
         font-size: 1.2em;
       }
     </style>
+    <link rel="stylesheet" href="header.css" />
   </head>
   <body>
+    <!-- ヘッダー -->
+    <nav class="black">
+      <div class="nav-wrapper">
+        <!-- メニューアイコン -->
+        <a href="#" data-target="slide-out" class="sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </a>
+        <!-- ロゴ -->
+        <a href="#" class="brand-logo">
+          <img
+            src="path_to_logo_image.png"
+            alt="Logo"
+            style="height: 50px; margin-top: 5px"
+          />
+        </a>
+      </div>
+    </nav>
+
+    <!-- サイドナビゲーション -->
+    <ul id="slide-out" class="sidenav black">
+      <li>
+        <a href="station-register.html" class="white-text">ログ新規登録</a>
+      </li>
+      <li><a href="log-list.html" class="white-text">ログ一覧</a></li>
+      <li><a href="member-info.html" class="white-text">会員情報</a></li>
+    </ul>
     <div class="container">
       <h4 class="center-align">ユーザー一覧</h4>
 
@@ -85,7 +116,12 @@
               <a href="#!" class="btn-small waves-effect waves-light">
                 <i class="material-icons edit-icon">edit</i>
               </a>
-              <a href="#!" class="btn-small waves-effect waves-light delete-button modal-trigger" data-station="東京駅" data-target="deleteModal">
+              <a
+                href="#!"
+                class="btn-small waves-effect waves-light delete-button modal-trigger"
+                data-station="東京駅"
+                data-target="deleteModal"
+              >
                 <i class="material-icons delete-icon">delete</i>
               </a>
             </td>
@@ -99,7 +135,12 @@
               <a href="#!" class="btn-small waves-effect waves-light">
                 <i class="material-icons edit-icon">edit</i>
               </a>
-              <a href="#!" class="btn-small waves-effect waves-light delete-button modal-trigger" data-station="新宿駅" data-target="deleteModal">
+              <a
+                href="#!"
+                class="btn-small waves-effect waves-light delete-button modal-trigger"
+                data-station="新宿駅"
+                data-target="deleteModal"
+              >
                 <i class="material-icons delete-icon">delete</i>
               </a>
             </td>
@@ -113,7 +154,12 @@
               <a href="#!" class="btn-small waves-effect waves-light">
                 <i class="material-icons edit-icon">edit</i>
               </a>
-              <a href="#!" class="btn-small waves-effect waves-light delete-button modal-trigger" data-station="大阪駅" data-target="deleteModal">
+              <a
+                href="#!"
+                class="btn-small waves-effect waves-light delete-button modal-trigger"
+                data-station="大阪駅"
+                data-target="deleteModal"
+              >
                 <i class="material-icons delete-icon">delete</i>
               </a>
             </td>
@@ -127,13 +173,17 @@
           <p id="deleteMessage"></p>
         </div>
         <div class="modal-footer">
-          <a href="#!" class="modal-close waves-effect modal-cancel-btn btn">キャンセル</a>
-          <a href="#!" class="modal-close waves-effect modal-delete-btn btn">削除</a>
+          <a href="#!" class="modal-close waves-effect modal-cancel-btn btn"
+            >キャンセル</a
+          >
+          <a href="#!" class="modal-close waves-effect modal-delete-btn btn"
+            >削除</a
+          >
         </div>
       </div>
 
       <!-- 戻るボタン -->
-      <div class="center-align" style="margin-top: 20px;">
+      <div class="center-align" style="margin-top: 20px">
         <a href="index.html" class="btn waves-effect waves-light">
           戻る
           <i class="material-icons left">arrow_back</i>
@@ -144,15 +194,22 @@
     <!-- Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.modal');
+      document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll(".sidenav");
+        M.Sidenav.init(elems, {
+          edge: "left",
+          draggable: false, // ドラッグで開閉できないように設定
+        });
+        var elems = document.querySelectorAll(".modal");
         var instances = M.Modal.init(elems);
 
         // 削除ボタンをクリックした際の処理
-        document.querySelectorAll('.delete-button').forEach(button => {
-          button.addEventListener('click', function() {
-            const stationName = this.getAttribute('data-station');
-            document.getElementById('deleteMessage').textContent = `${stationName}を本当に削除しますか？`;
+        document.querySelectorAll(".delete-button").forEach((button) => {
+          button.addEventListener("click", function () {
+            const stationName = this.getAttribute("data-station");
+            document.getElementById(
+              "deleteMessage"
+            ).textContent = `${stationName}を本当に削除しますか？`;
           });
         });
       });

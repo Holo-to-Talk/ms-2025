@@ -4,8 +4,6 @@ body {
   font-family: "Noto Sans JP", sans-serif;
 }
 
-
-
 p {
   padding: 0;
   margin: auto;
@@ -29,14 +27,14 @@ button {
   margin: 20px 0 10px 0;
   border: none;
   border-radius: 3px;
-  background-color: #299fff;
   padding: 5px 25px;
   color: white;
   font-family: "Noto Sans JP", sans-serif;
   font-size: 26px;
   font-weight: 300;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  transition: transform 0.2s ease;  
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  transition: transform 0.2s ease;
 }
 
 #startup-button {
@@ -47,12 +45,13 @@ button:hover {
   transform: scale(0.98);
 }
 
+
 label {
   text-align: left;
   color: #777776;
   display: block;
   margin: 0 0 10px 0;
-  font-size: 20px
+  font-size: 20px;
 }
 
 header {
@@ -115,7 +114,7 @@ input {
   margin: 10px 0;
   border-radius: 10px;
 }
-#phone-number{
+#phone-number {
   padding: 0 10px;
 }
 
@@ -141,7 +140,7 @@ div#volume-indicators > div {
   height: 400px;
   overflow-y: scroll;
   border-radius: 10px;
-  font-size: 14px
+  font-size: 14px;
 }
 #log::-webkit-scrollbar {
   width: 0; /* 幅を0にすることでスクロールバーを非表示に */
@@ -195,7 +194,6 @@ button:disabled {
     width: 70%;
   }
 }
-
 
 /* AppBarのスタイル */
 .appbar {

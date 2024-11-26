@@ -1,17 +1,17 @@
 /* 全体のレイアウト設定 */
 body, html {
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
 }
 
+/* メインコンテンツの中央揃え */
 .container {
-  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px); /* ヘッダーの高さ（例: 64px）を引いた高さに設定 */
+  padding: 20px; /* 余白を追加 */
 }
 
 .card {
@@ -98,4 +98,3 @@ textarea {
     font-size: 22px; /* 画面幅が480px以下のときにタイトルサイズを小さく */
   }
 }
-

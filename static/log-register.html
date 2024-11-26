@@ -22,8 +22,35 @@
     />
 
     <link rel="stylesheet" href="log-register.css" />
+    <link rel="stylesheet" href="header.css" />
   </head>
   <body>
+    <!-- ヘッダー -->
+    <nav class="black">
+      <div class="nav-wrapper">
+        <!-- メニューアイコン -->
+        <a href="#" data-target="slide-out" class="sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </a>
+        <!-- ロゴ -->
+        <a href="#" class="brand-logo">
+          <img
+            src="path_to_logo_image.png"
+            alt="Logo"
+            style="height: 50px; margin-top: 5px"
+          />
+        </a>
+      </div>
+    </nav>
+
+    <!-- サイドナビゲーション -->
+    <ul id="slide-out" class="sidenav black">
+      <li>
+        <a href="station-register.html" class="white-text">ログ新規登録</a>
+      </li>
+      <li><a href="log-list.html" class="white-text">ログ一覧</a></li>
+      <li><a href="member-info.html" class="white-text">会員情報</a></li>
+    </ul>
     <div class="container">
       <h4 class="center-align">ログ内容入力フォーム</h4>
 
@@ -66,12 +93,7 @@
 
         <!-- 概要 -->
         <div class="input-field">
-          <input
-            type="text"
-            id="overview"
-            name="overview"
-            required
-          />
+          <input type="text" id="overview" name="overview" required />
           <label for="overview">問い合わせ概要</label>
         </div>
 
@@ -174,6 +196,11 @@
     <script>
       // 初期化処理
       document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll(".sidenav");
+        M.Sidenav.init(elems, {
+          edge: "left",
+          draggable: false, // ドラッグで開閉できないように設定
+        });
         // Autocompleteコンポーネントの初期化
         var elems = document.querySelectorAll(".autocomplete");
         M.Autocomplete.init(elems, {

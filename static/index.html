@@ -1,35 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Holo >> Talk スタッフ着信画面</title>
-<<<<<<< HEAD
+    <!-- Materialize CSS -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="static/site.css" />
-=======
+    <!-- カスタムCSS -->
     <link rel="stylesheet" href="./static/site.css" />
->>>>>>> 4e38c1b813cecf73228ef94a62fe1f98d19f247c
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./static/header.css" />
+
+
   </head>
   <body>
-    <nav>
+    <!-- ヘッダー -->
+    <nav class="black">
       <div class="nav-wrapper">
-        <a href="#" class="brand-logo">Holo >> Talk</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger">
+        <!-- メニューアイコン -->
+        <a href="#" data-target="slide-out" class="sidenav-trigger">
           <i class="material-icons">menu</i>
         </a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a href="#">ログ入力</a></li>
-          <li><a href="#">ログ一覧</a></li>
-          <li><a href="#">設定</a></li>
-          <li><a href="#">ログアウト</a></li>
-        </ul>
+        <!-- ロゴ -->
+        <a href="#" class="brand-logo">
+          <img
+            src="path_to_logo_image.png"
+            alt="Logo"
+            style="height: 50px; margin-top: 5px"
+          />
+        </a>
       </div>
     </nav>
+
+    <!-- サイドナビゲーション -->
+    <ul id="slide-out" class="sidenav black">
+      <li>
+        <a href="station-register.html" class="white-text">ログ新規登録</a>
+      </li>
+      <li><a href="log-list.html" class="white-text">ログ一覧</a></li>
+      <li><a href="member-info.html" class="white-text">会員情報</a></li>
+    </ul>
+
+    <!-- メインコンテンツ -->
     <header>
-      <h1>Holo >> Talk スタッフ着信画面</h1>
-      <button id="startup-button">デバイスを起動</button>
+      <h1 class="center-align">着信画面</h1>
+      <!-- ボタンにMaterializeのデフォルトスタイルを適用 -->
+      <div class="center-align">
+        <button id="startup-button" class="btn">デバイスを起動</button>
+      </div>
     </header>
 
     <main id="controls">
@@ -42,7 +66,7 @@
           <label>スピーカー先</label>
           <select id="speaker-devices" multiple></select
           ><br />
-          <button id="get-devices">音声デバイス更新</button>
+          <button id="get-devices" class="btn">音声デバイス更新</button>
         </div>
       </section>
 
@@ -53,18 +77,27 @@
             <label for="phone-number"
               >発信先の電話番号を入力してください。</label
             >
-            <input id="phone-number" type="text" placeholder="+15552221234" />
-            <button id="button-call" type="submit">発信</button>
+            <input
+              id="phone-number"
+              type="text"
+              placeholder="+15552221234"
+              class="validate"
+            />
+            <button id="button-call" type="submit" class="btn">発信</button>
           </form>
-          <button id="button-hangup-outgoing" class="hide">電話を終了</button>
+          <button id="button-hangup-outgoing" class="btn hide">
+            電話を終了
+          </button>
           <div id="incoming-call" class="hide">
             <h2>Incoming Call Controls</h2>
             <p class="instructions">
               着信あり<span id="incoming-number"></span>
             </p>
-            <button id="button-accept-incoming">応答</button>
-            <button id="button-reject-incoming">拒否</button>
-            <button id="button-hangup-incoming" class="hide">電話を終了</button>
+            <button id="button-accept-incoming" class="btn green">応答</button>
+            <button id="button-reject-incoming" class="btn red">拒否</button>
+            <button id="button-hangup-incoming" class="btn hide">
+              電話を終了
+            </button>
           </div>
           <div id="volume-indicators" class="hide">
             <label>マイクボリューム</label>
@@ -82,8 +115,19 @@
       </section>
     </main>
 
+    <!-- Materialize JS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script type="text/javascript" src="static/twilio.min.js"></script>
     <script src="static/quickstart.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll(".sidenav");
+        M.Sidenav.init(elems, {
+          edge: "left",
+          draggable: false, // ドラッグで開閉できないように設定
+        });
+      });
+    </script>
   </body>
 </html>
