@@ -30,9 +30,9 @@
 
   const deviceOptions = {
     sounds: {
-      incoming: '../static/Incoming-call.mp3', // 着信音
-      outgoing: '../static/outgoing-call.mp3', //発信音
-      disconnect: '../static/disconnect-call.mp3' //切断音
+      incoming: '../static/sounds/Incoming-call.mp3', // 着信音
+      outgoing: '../static/sounds/outgoing-call.mp3', //発信音
+      disconnect: '../static/sounds/disconnect-call.mp3' //切断音
 
     }
   };

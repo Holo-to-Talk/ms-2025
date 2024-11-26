@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Holo-to-Talk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Contents -->
+    <div id="wrapper">
+
+        <!-- テキスト（telop） -->
+        <div id="div_telop">
+            <div id="telop">Enterを押して始めてください</div>
+        </div>
+
+        <!-- ホログラム -->
+        <div id="div_img">
+            <img src="{{ url_for('static', filename='img/image_holo1.jpg') }}" class="active">
+            <img src="{{ url_for('static', filename='img/image_holo2.jpg') }}">
+            <img src="{{ url_for('static', filename='img/image_holo3.jpg') }}">
+        </div>
+
+        <!-- テキスト（output） -->
+        <div id="output"></div>
+
+        <!-- テキスト（input） -->
+        <div id="input" class="display_none"></div>
+
+    </div><!-- #wrapper -->
+
+    <!-- js -->
+    <script src="{{ url_for('static', filename='js/socket.js') }}"></script>
+</body>
+</html>

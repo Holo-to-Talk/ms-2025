@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログ一覧</title>
+</head>
+<body>
+    <div>
+        <h1>ログ一覧</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>GPTログID</th>
+                    <th>回答者</th>
+                    <th>概要</th>
+                    <th>詳細</th>
+                    <th>回答内容</th>
+                    <th>タイムスタンプ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log[0] }}</td> <!-- ID -->
+                    <td>{{ log[1] }}</td> <!-- GPTログID -->
+                    <td>{{ log[2] }}</td> <!-- 回答者 -->
+                    <td>{{ log[3] }}</td> <!-- 概要 -->
+                    <td>{{ log[4] }}</td> <!-- 詳細 -->
+                    <td>{{ log[5] }}</td> <!-- 回答内容 -->
+                    <td>{{ log[6].strftime("%Y-%m-%d %H:%M:%S") }}</td> <!-- タイムスタンプ -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
