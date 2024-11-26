@@ -29,22 +29,18 @@
           <div class="card">
             <div class="card-content">
               <span class="card-title center-align">ログイン</span>
-              <!-- エラーメッセージの表示 -->
-              {% if error_msg %}
-                <p style="color: red;">{{ error_msg }}</p>
-              {% endif %}
-              <form method="POST" action="">
+              <form>
                 <!-- 駅番入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="station_id" type="text" name="num" required />
+                  <input id="station_id" type="text" required />
                   <label for="station_id">駅番</label>
                 </div>
 
                 <!-- パスワード入力フィールド -->
                 <div class="input-field" style="position: relative;">
                   <i class="material-icons prefix">lock</i>
-                  <input id="password" type="password" name="password" required />
+                  <input id="password" type="password" required />
                   <label for="password">パスワード</label>
                   <i
                     class="material-icons suffix"
@@ -65,12 +61,7 @@
               </form>
             </div>
 
-            <div class="card-action center-align">
-              <p>アカウントがありませんか？</p>
-              <a href="/user/register" class="btn-flat waves-effect">
-                新規登録
-              </a>
-            </div>
+        
           </div>
         </div>
       </div>

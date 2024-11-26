@@ -21,8 +21,35 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="log-list.css" />
+    <link rel="stylesheet" href="header.css" />
   </head>
   <body>
+    <!-- ヘッダー -->
+    <nav class="black">
+      <div class="nav-wrapper">
+        <!-- メニューアイコン -->
+        <a href="#" data-target="slide-out" class="sidenav-trigger">
+          <i class="material-icons">menu</i>
+        </a>
+        <!-- ロゴ -->
+        <a href="#" class="brand-logo">
+          <img
+          src="logo.png"
+            alt="Logo"
+            style="height: 50px; margin-top: 5px"
+          />
+        </a>
+      </div>
+    </nav>
+
+    <!-- サイドナビゲーション -->
+    <ul id="slide-out" class="sidenav black">
+      <li>
+        <a href="station-register.html" class="white-text">ログ新規登録</a>
+      </li>
+      <li><a href="log-list.html" class="white-text">ログ一覧</a></li>
+      <li><a href="member-info.html" class="white-text">会員情報</a></li>
+    </ul>
     <div class="container">
       <h4 class="center-align">ログ一覧</h4>
 
@@ -70,14 +97,22 @@
       </table>
 
       <!-- 戻るボタン -->
-      <div class="center-align" style="margin-top: 20px;">
+      <div class="center-align" style="margin-top: 20px">
         <a href="./" class="btn waves-effect waves-light">
           戻る
           <i class="material-icons left">arrow_back</i>
         </a>
       </div>
     </div>
-
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll(".sidenav");
+        M.Sidenav.init(elems, {
+          edge: "left",
+          draggable: false, // ドラッグで開閉できないように設定
+        });
+      });
+    </script>
     <!-- Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   </body>
