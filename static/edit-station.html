@@ -36,7 +36,7 @@
         <!-- ロゴ -->
         <a href="#" class="brand-logo">
           <img
-            src="path_to_logo_image.png"
+            src="logo.png"
             alt="Logo"
             style="height: 50px; margin-top: 5px"
           />
@@ -169,8 +169,10 @@
       // フォームに既存データを表示
       document.getElementById("station_name").value = existingData.station_name;
       document.getElementById("station_id").value = existingData.station_id;
-      document.getElementById("station_address").value = existingData.station_address;
-      document.getElementById("station_phone").value = existingData.station_phone;
+      document.getElementById("station_address").value =
+        existingData.station_address;
+      document.getElementById("station_phone").value =
+        existingData.station_phone;
 
       // Materializeの再描画処理でラベルを正しい位置にする
       M.updateTextFields();
@@ -184,31 +186,33 @@
         M.Sidenav.init(sidenavElems, { edge: "left", draggable: false });
 
         // プレビューボタンがクリックされた際にフォームの内容をモーダルに表示
-        document.getElementById("previewButton").addEventListener("click", function () {
-          const form = document.getElementById("editForm");
+        document
+          .getElementById("previewButton")
+          .addEventListener("click", function () {
+            const form = document.getElementById("editForm");
 
-          // バリデーションをチェック
-          if (form.checkValidity()) {
-            // プレビューに内容を反映
-            document.getElementById("previewStationName").textContent =
-              document.getElementById("station_name").value;
-            document.getElementById("previewStationId").textContent =
-              document.getElementById("station_id").value;
-            document.getElementById("previewStationAddress").textContent =
-              document.getElementById("station_address").value;
-            document.getElementById("previewStationPhone").textContent =
-              document.getElementById("station_phone").value;
+            // バリデーションをチェック
+            if (form.checkValidity()) {
+              // プレビューに内容を反映
+              document.getElementById("previewStationName").textContent =
+                document.getElementById("station_name").value;
+              document.getElementById("previewStationId").textContent =
+                document.getElementById("station_id").value;
+              document.getElementById("previewStationAddress").textContent =
+                document.getElementById("station_address").value;
+              document.getElementById("previewStationPhone").textContent =
+                document.getElementById("station_phone").value;
 
-            // モーダルを開く
-            const instance = M.Modal.getInstance(
-              document.getElementById("previewModal")
-            );
-            instance.open();
-          } else {
-            // バリデーションエラーを表示
-            form.reportValidity();
-          }
-        });
+              // モーダルを開く
+              const instance = M.Modal.getInstance(
+                document.getElementById("previewModal")
+              );
+              instance.open();
+            } else {
+              // バリデーションエラーを表示
+              form.reportValidity();
+            }
+          });
       });
     </script>
   </body>
