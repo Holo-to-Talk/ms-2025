@@ -1,5 +1,11 @@
 from socketio_Config import socketio
 
+def socketio_emit_flag_enter():
+    socketio.emit('update_flag_enter', {})
+
+def socketio_emit_flag_space():
+    socketio.emit('update_flag_space', {})
+
 def socketio_emit_telop(telopContent):
     socketio.emit('update_telop', {'telop': telopContent})
 
@@ -23,3 +29,9 @@ def socketio_emit_start_switching():
 
 def socketio_emit_stop_switching():
     socketio.emit('stop_switching', {})
+
+def socketio_emit_image_qr_add_active():
+    socketio.emit('image_qr_add_active', {})
+
+def socketio_emit_image_qr_remove_active():
+    socketio.emit('image_qr_remove_active', {})

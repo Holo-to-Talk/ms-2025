@@ -13,14 +13,12 @@ def phoneAutomation():
     # URL
     # 本番
     URL = os.getenv("URL")
-    # 開発
-    # URL = 'https://num-0145.holog.net/'
     # 電話番号（代表回線）
     PHONE_NUMBER = os.getenv("PHONE_NUMBER")
     # WebDriverWaitの時間指定
     WEB_DRIVER_WAIT_TIME = 10
     # time.sleepの時間指定
-    TIME_SLEEP_TIME = 5
+    TIME_SLEEP_TIME = 1.5
 
     # Options指定
     options = Options()
