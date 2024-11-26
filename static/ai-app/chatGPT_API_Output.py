@@ -2,7 +2,7 @@ import openai
 from dotenv import load_dotenv
 import os
 
-def chatGPT_API_Output(inputContent):
+def chatGPT_API_Output(conversation_history, inputContent):
     # 定数
     load_dotenv()
     # API Key
@@ -12,15 +12,22 @@ def chatGPT_API_Output(inputContent):
     # Max Token
     MAX_TOKENS = int(os.getenv("MAX_TOKENS"))
 
+    # 会話履歴があれば使用
+    if conversation_history:
+        conversation_history.append({"role": "user", "content": inputContent})
+        messages = conversation_history
+    else:
+        messages = [
+            {"role": "user", "content": inputContent}
+        ]
+
     # ChatGPT APIに入力
     response = openai.ChatCompletion.create(
         # ChatGPT APIのモデル
         model = OUTPUT_MODEL,
 
-        # ChatGPT APIの入力内容
-        messages = [
-            {"role": "user", "content": inputContent}
-        ],
+        # 会話内容（入力内容）
+        messages = messages,
 
         # 最大トークン数の指定
         max_tokens = MAX_TOKENS,

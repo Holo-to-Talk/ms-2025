@@ -1,12 +1,41 @@
 const socket = io()
 
-// 定数
 // 画像切替秒数（1000 => 1s）
-const intervalTime = 100
+const intervalTime = 100;
+let flag_enter = false;
+let flag_space = false;
 
 document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        socket.emit('enter_pressed')
+    //Enter Spaceどちらも押されてない
+    if (!flag_enter && !flag_space) {
+        if (event.key === 'Enter') {
+            socket.emit('enter_starting')
+        }
+    //Enterは押されていて、Spaceは押されてない
+    }else if (flag_enter && !flag_space) {
+        if (event.key === ' ') {
+            socket.emit('space_phone')
+        }
+    }else if (flag_enter) {
+        if (event.key === 'Enter') {
+            socket.emit('enter_conversation')
+        }
+    }
+});
+
+socket.on('update_flag_enter', () => {
+    if (flag_enter) {
+        flag_enter = false;
+    }else {
+        flag_enter = true;
+    }
+});
+
+socket.on('update_flag_space', () => {
+    if (flag_space) {
+        flag_space = false;
+    }else {
+        flag_space = true;
     }
 });
 

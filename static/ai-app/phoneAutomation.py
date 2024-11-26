@@ -13,8 +13,6 @@ def phoneAutomation():
     # URL
     # 本番
     URL = os.getenv("URL")
-    # 開発
-    # URL = 'https://num-0145.holog.net/'
     # 電話番号（代表回線）
     PHONE_NUMBER = os.getenv("PHONE_NUMBER")
     # WebDriverWaitの時間指定
