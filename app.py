@@ -111,7 +111,8 @@ def register():
         "station_num": "",
         "address": "",
         "phone_num": "",
-        "password": ""
+        "password": "",
+        "type_AI": ""
     }
 
     if request.method == 'POST':
@@ -121,7 +122,8 @@ def register():
             "station_num": request.form.get("station_num", ""),
             "address": request.form.get("address", ""),
             "phone_num": request.form.get("phone_num", ""),
-            "password": request.form.get("password", "")
+            "password": request.form.get("password", ""),
+            "type_AI": request.form.get("type_AI", "")
         }
 
         # バリデーション
@@ -138,11 +140,14 @@ def register():
             # パスワードをハッシュ化
             hashed_password = bcrypt.hashpw(form_data["password"].encode('utf-8'), bcrypt.gensalt())
 
+            # AI選択状態をboolean型に変換
+            type_AI = True if form_data["type_AI"] == "true" else False
+
             # データベースに保存
             conn = db_connection()
-
             cursor = conn.cursor()
             cursor.execute(''' use holo_to_talk ''')
+
             # usersテーブルにデータを挿入
             cursor.execute('''
                 INSERT INTO users (station_num, password)
@@ -151,9 +156,9 @@ def register():
 
             # station_infoテーブルにデータを挿入
             cursor.execute('''
-            INSERT INTO station_info (name, station_num, address, phone_num)
-            VALUES (%s, %s, %s, %s)
-            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
+            INSERT INTO station_info (name, station_num, address, phone_num, type_AI)
+            VALUES (%s, %s, %s, %s, %s)
+            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"], type_AI))
 
             # データベースに変更を保存
             conn.commit()
