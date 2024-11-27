@@ -364,12 +364,12 @@ def report_list():
             print(logs)
 
             # データをHTMLテンプレートに渡す
-            return render_template('./static/report/register.html', logs=logs)
+            return render_template('./report/list.html', logs=logs)
 
         except Exception as e:
             # エラー処理
             error_message = f"データの取得中にエラーが発生しました: {e}"
-            return render_template('./static/report/register.html', error_message=error_message)
+            return render_template('.report/list.html', error_message=error_message)
 
         finally:
             # リソースを解放
