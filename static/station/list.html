@@ -63,7 +63,7 @@
         font-size: 1.2em;
       }
     </style>
-    <link rel="stylesheet" href="header.css" />
+    <link rel="stylesheet" href="/static/header.css" />
   </head>
   <body>
     <!-- ヘッダー -->
@@ -76,7 +76,7 @@
         <!-- ロゴ -->
         <a href="#" class="brand-logo">
           <img
-            src="logo.png"
+            src="/static/logo.png"
             alt="Logo"
             style="height: 50px; margin-top: 5px"
           />
@@ -99,71 +99,32 @@
       <table class="highlight centered">
         <thead>
           <tr>
-            <th>駅番</th>
             <th>駅名</th>
+            <th>駅版</th>
             <th class="address-column">住所</th>
             <th>電話番号</th>
-            <th>操作</th>
+            <th>編集</th>
+            <th>削除</th>
           </tr>
         </thead>
         <tbody>
+          {% for station in stations %}
           <tr>
-            <td>12345</td>
-            <td>東京駅</td>
-            <td class="address-column">東京都千代田区丸の内1丁目</td>
-            <td>03-1234-5678</td>
+            <td>{{ station.name }}</td>
+            <td>{{ station.station_num }}</td>
+            <td class="address-column">{{ station.address }}</td>
+            <td>{{ station.phone_num }}</td>
             <td>
-              <a href="#!" class="btn-small waves-effect waves-light">
-                <i class="material-icons edit-icon">edit</i>
-              </a>
-              <a
-                href="#!"
-                class="btn-small waves-effect waves-light delete-button modal-trigger"
-                data-station="東京駅"
-                data-target="deleteModal"
-              >
-                <i class="material-icons delete-icon">delete</i>
-              </a>
-            </td>
+              <form action="" method="post">
+                  <input type="hidden" name="station_num" value="{{ station.station_num }}">
+                  <input type="submit" name="action" value="編集" class="btn-small waves-effect waves-light">
+          </td>
+          <td>
+              <input type="submit" name="action" value="削除" class="btn-small waves-effect waves-red">
+              </form>
+          </td>
           </tr>
-          <tr>
-            <td>23456</td>
-            <td>新宿駅</td>
-            <td class="address-column">東京都新宿区西新宿1丁目</td>
-            <td>03-2345-6789</td>
-            <td>
-              <a href="#!" class="btn-small waves-effect waves-light">
-                <i class="material-icons edit-icon">edit</i>
-              </a>
-              <a
-                href="#!"
-                class="btn-small waves-effect waves-light delete-button modal-trigger"
-                data-station="新宿駅"
-                data-target="deleteModal"
-              >
-                <i class="material-icons delete-icon">delete</i>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>34567</td>
-            <td>大阪駅</td>
-            <td class="address-column">大阪府大阪市北区梅田3丁目</td>
-            <td>06-3456-7890</td>
-            <td>
-              <a href="#!" class="btn-small waves-effect waves-light">
-                <i class="material-icons edit-icon">edit</i>
-              </a>
-              <a
-                href="#!"
-                class="btn-small waves-effect waves-light delete-button modal-trigger"
-                data-station="大阪駅"
-                data-target="deleteModal"
-              >
-                <i class="material-icons delete-icon">delete</i>
-              </a>
-            </td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
 
