@@ -1,3 +1,30 @@
+/* 全体のレイアウト設定 */
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* メインコンテンツの中央揃え */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px); /* ヘッダーの高さ（例: 64px）を引いた高さに設定 */
+  padding: 20px; /* 余白を追加 */
+}
+
+.card {
+  width: 500px; /* カードの幅を500pxに設定 */
+}
+
+/* 入力フィールドのフォント設定 */
+input[type="text"],
+input[type="password"],
+input[type="tel"] {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
 /* Google Fonts: Noto Sans JP の適用 */
 body,
 input,
@@ -18,7 +45,7 @@ textarea {
   padding: 20px;
 }
 
-#previewModal h4 {
+#previewModal h5 {
   font-size: 24px;
   font-weight: 600;
   text-align: center;
@@ -67,7 +94,7 @@ textarea {
   #previewModal {
     width: 90%; /* モーダルの幅を90%に拡大 */
   }
-  h4 {
+  h5 {
     font-size: 22px; /* 画面幅が480px以下のときにタイトルサイズを小さく */
   }
 }

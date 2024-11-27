@@ -63,10 +63,10 @@ def token():
 def index():
     if 'user' in session:
         return render_template('index.html')
-    return redirect('/user/login')
+    return redirect('/station/login')
 
 # ログイン処理
-@app.route('/user/login', methods=['GET', 'POST'])
+@app.route('/station/login', methods=['GET', 'POST'])
 def login():
     error_msg = ""  # エラーメッセージを初期化
 
@@ -74,7 +74,7 @@ def login():
         if 'user' in session:
             return redirect("/")
         else:
-            return render_template('login.html', error_msg=error_msg)
+            return render_template('./station/login.html', error_msg=error_msg)
 
     if request.method == 'POST':
         num = request.form.get('num', '')
@@ -102,10 +102,10 @@ def login():
             error_msg = "ログインエラー: IDまたはパスワードが間違っています"
 
         # エラーメッセージを渡して再度ログインページを表示
-        return render_template('login.html', error_msg=error_msg)
+        return render_template('.station/login.html', error_msg=error_msg)
 
 # ユーザー登録処理
-@app.route('/user/register', methods=['GET', 'POST'])
+@app.route('/station/register', methods=['GET', 'POST'])
 def register():
     error_msg = []
 
@@ -165,17 +165,17 @@ def register():
 
             return redirect(url_for('login'))  # 成功ページにリダイレクト
 
-    return render_template('register.html', error_msg=error_msg, form_data=form_data)
+    return render_template('./station/register.html', error_msg=error_msg, form_data=form_data)
 
 # /editにアクセスしたときに/にリダイレクト
-@app.route('/user/edit/',methods=['GET'])
-def edit():
+@app.route('/station/edit/',methods=['GET'])
+def edit_index():
     if request.method == 'GET':
         return redirect("/")
 
 #ユーザーリスト表示処理
-@app.route('/user/list', methods=['GET','POST'])
-def userlist():
+@app.route('/station/list', methods=['GET','POST'])
+def station_list():
     if request.method == "GET":
         # データベース接続
         conn = db_connection()
@@ -196,12 +196,12 @@ def userlist():
             ]
 
             # データをHTMLテンプレートに渡す
-            return render_template('user-list.html', stations=stations)
+            return render_template('./station/list.html', stations=stations)
 
         except Exception as e:
             # エラー処理
             error_message = f"データの取得中にエラーが発生しました: {e}"
-            return render_template('user-list.html', error_message=error_message)
+            return render_template('./station/list.html', error_message=error_message)
 
         finally:
             # リソースを解放
@@ -214,7 +214,7 @@ def userlist():
 
     if action == "編集":
         # 編集画面にリダイレクト
-        return redirect(f"/user/edit/{station_num}")
+        return redirect(f"/station/edit/{station_num}")
 
     elif action == "削除":
         # データ削除処理
@@ -227,7 +227,7 @@ def userlist():
             conn.commit()
 
             # 削除後にリスト画面にリダイレクト
-            return redirect('/user/list')
+            return redirect('/station/list')
 
         except Exception as e:
             return f"データ削除中にエラーが発生しました: {e}"
@@ -237,7 +237,7 @@ def userlist():
             conn.close()
 
 # ユーザー編集処理
-@app.route('/user/edit/<station_num>', methods=['GET', 'POST'])
+@app.route('/station/edit/<station_num>', methods=['GET', 'POST'])
 def edit_station(station_num):
     error_msg = []
     form_data = {}
@@ -257,7 +257,7 @@ def edit_station(station_num):
         result = cursor.fetchone()
 
         if not result:
-            return redirect("/user/list?station_num=not_found")
+            return redirect("/station/list?station_num=not_found")
 
         form_data = {
             "name": result["name"],
@@ -269,7 +269,7 @@ def edit_station(station_num):
         print(form_data)#編集内容
 
         cursor.close()
-        return render_template("edit.html", form_data=form_data)
+        return render_template("./station/edit.html", form_data=form_data)
 
     # POSTメソッドでデータを更新
     if request.method == 'POST':
@@ -346,16 +346,6 @@ def logout():
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
 
-@app.route("/log-detail",methods=["GET"])
-def log_detail():
-    if request.method == "GET":
-        return render_template("log-detail.html")
-
-@app.route("/log-list",methods=["GET"])
-def log_list():
-    if request.method == "GET":
-        return render_template("log-list.html")
-
 #レポートリスト表示処理
 @app.route('/report/list', methods=['GET'])
 def report_list():
@@ -374,12 +364,12 @@ def report_list():
             print(logs)
 
             # データをHTMLテンプレートに渡す
-            return render_template('report-list.html', logs=logs)
+            return render_template('./static/report/register.html', logs=logs)
 
         except Exception as e:
             # エラー処理
             error_message = f"データの取得中にエラーが発生しました: {e}"
-            return render_template('report-list.html', error_message=error_message)
+            return render_template('./static/report/register.html', error_message=error_message)
 
         finally:
             # リソースを解放
