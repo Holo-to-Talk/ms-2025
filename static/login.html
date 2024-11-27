@@ -20,7 +20,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./static/login.css" />
+    <link rel="stylesheet" href="login.css" />
   </head>
   <body>
     <div class="container">
@@ -29,18 +29,22 @@
           <div class="card">
             <div class="card-content">
               <span class="card-title center-align">ログイン</span>
-              <form>
+              <!-- エラーメッセージの表示 -->
+              {% if error_msg %}
+                <p style="color: red;">{{ error_msg }}</p>
+              {% endif %}
+              <form method="POST" action="">
                 <!-- 駅番入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">account_circle</i>
-                  <input id="station_id" type="text" required />
+                  <input id="station_id" type="text" name="num" required />
                   <label for="station_id">駅番</label>
                 </div>
 
                 <!-- パスワード入力フィールド -->
                 <div class="input-field" style="position: relative;">
                   <i class="material-icons prefix">lock</i>
-                  <input id="password" type="password" required />
+                  <input id="password" type="password" name="password" required />
                   <label for="password">パスワード</label>
                   <i
                     class="material-icons suffix"
@@ -60,8 +64,6 @@
                 </div>
               </form>
             </div>
-
-        
           </div>
         </div>
       </div>
