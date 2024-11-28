@@ -46,9 +46,14 @@ body, html {
     z-index: 0;
 }
 
+/* QRコード画像 */
 #div_img img:nth-child(4) {
     display: none;
-    width: 100vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1080px;
     height: auto;
     z-index: 3;
 }

@@ -5,5 +5,6 @@ def qr_code_found(inputContent):
 
     if found:
         return True
+
     else:
         return False

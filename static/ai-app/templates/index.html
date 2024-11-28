@@ -7,15 +7,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
-    <!-- Contents -->
     <div id="wrapper">
 
-        <!-- テキスト（telop） -->
         <div id="div_telop">
-            <div id="telop">Enterを押して始めてください</div>
+            <div id="telop">Enterを押して始めてください。</div>
         </div>
 
-        <!-- ホログラム -->
         <div id="div_img">
             <img src="{{ url_for('static', filename='img/image_holo1.jpg') }}" class="active">
             <img src="{{ url_for('static', filename='img/image_holo2.jpg') }}">
@@ -23,15 +20,12 @@
             <img src="{{ url_for('static', filename='img/image_qr.png') }}" id="image_qr">
         </div>
 
-        <!-- テキスト（output） -->
         <div id="output"></div>
 
-        <!-- テキスト（input） -->
         <div id="input" class="display_none"></div>
 
-    </div><!-- #wrapper -->
+    </div>
 
-    <!-- js -->
     <script src="{{ url_for('static', filename='js/socket.js') }}"></script>
 </body>
 </html>
