@@ -3,6 +3,9 @@ from socketio_Config import socketio
 def socketio_emit_flag_enter():
     socketio.emit('update_flag_enter', {})
 
+def socketio_emit_flag_enter2():
+    socketio.emit('update_flag_enter2', {})
+
 def socketio_emit_flag_space():
     socketio.emit('update_flag_space', {})
 

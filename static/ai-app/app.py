@@ -25,7 +25,7 @@ TIME_SLEEP = 1
 TIME_SLEEP_COUNT = 8
 
 flag_space = False
-flag_enter = False
+flag_enter2 = False
 conversation_history = []
 
 def ai():
@@ -86,10 +86,10 @@ def ai():
     telopContent = "会話を続ける（会話を保存する）場合、Enterを押してください。"
     socketio_emit.socketio_emit_telop(telopContent)
 
-    global flag_enter
+    global flag_enter2
     count = 0
     while True:
-        if flag_enter:
+        if flag_enter2:
             conversation_history.append({"role": "user", "content": inputContent})
             conversation_history.append({"role": "assistant", "content": outputContent})
 
@@ -104,14 +104,15 @@ def ai():
         if count == TIME_SLEEP_COUNT:
             conversation_history = []
 
-            flag_enter = True
+            socketio_emit.socketio_emit_flag_enter2()
+            flag_enter2 = True
             break
 
     telopContent = "Enterを押して始めてください。"
     socketio_emit.socketio_emit_telop(telopContent)
 
-    flag_enter = False
-    socketio_emit.socketio_emit_flag_enter()
+    flag_enter2 = False
+    socketio_emit.socketio_emit_flag_enter2()
     flag_space = False
     socketio_emit.socketio_emit_flag_space()
 
@@ -127,8 +128,10 @@ def handle_enter_event():
 
 @socketio.on('enter_conversation')
 def handle_enter_event2():
-    global flag_enter
-    flag_enter = True
+    socketio_emit.socketio_emit_flag_enter2()
+
+    global flag_enter2
+    flag_enter2 = True
 
 @socketio.on('space_phone')
 def handle_space_event():
