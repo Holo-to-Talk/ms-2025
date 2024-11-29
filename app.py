@@ -336,6 +336,80 @@ def edit_station(station_num):
             cursor.close()
 
         return redirect('/user/list?update_done')
+    
+#パスワード変更処理
+@app.route('/user/change-password', methods=['GET', 'POST'])
+def change_password():
+    # エラーメッセージリスト
+    error_msg = []
+
+    # ログインしていない場合はリダイレクト
+    if 'user' not in session:
+        return redirect('/user/login')
+
+    user_id = session['user']  # 現在のユーザーID
+
+    if request.method == 'POST':
+        # フォームデータを取得
+        current_password = request.form.get('current_password', '')
+        new_password = request.form.get('new_password', '')
+        confirm_password = request.form.get('confirm_password', '')
+
+        # 入力チェック　
+        if not current_password:
+            error_msg.append("現在のパスワードを入力してください。")
+        if not new_password or not confirm_password:
+            error_msg.append("新しいパスワードを入力してください。")
+        if new_password != confirm_password:
+            error_msg.append("新しいパスワードが一致していません。")
+        if len(new_password) < 6:
+            error_msg.append("新しいパスワードは6文字以上である必要があります。")
+
+        # エラーメッセージがあればフォームを再表示
+        if error_msg:
+            return render_template('change-password.html', error_msg=error_msg)
+
+        # データベース接続
+        conn = db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("USE holo_to_talk")
+
+        try:
+            # ユーザーの現在のパスワードを取得
+            query = "SELECT password FROM users WHERE id = %s"
+            cursor.execute(query, (user_id,))
+            result = cursor.fetchone()
+
+            if not result:
+                error_msg.append("ユーザーが見つかりません。")
+                return render_template('change-password.html', error_msg=error_msg)
+
+            # 現在のパスワードを検証
+            if not bcrypt.checkpw(current_password.encode('utf-8'), result['password'].encode('utf-8')):
+                error_msg.append("現在のパスワードが正しくありません。")
+                return render_template('change_password.html', error_msg=error_msg)
+
+            # 新しいパスワードをハッシュ化
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+            # パスワードを更新
+            update_query = "UPDATE users SET password = %s WHERE id = %s"
+            cursor.execute(update_query, (hashed_password, user_id))
+            conn.commit()
+
+            return redirect(url_for('login'))
+
+        except Exception as e:
+            conn.rollback()
+            print(f"エラーが発生しました: {e}")
+            return render_template('change-password.html', error_msg=error_msg)
+        finally:
+            cursor.close()
+            conn.close()
+
+    # GETリクエストの場合、フォームを表示
+    return render_template('change-password.html', error_msg=error_msg)
+
 
 # ログアウト処理
 @app.route('/user/logout')
