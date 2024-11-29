@@ -47,7 +47,10 @@ def ai():
         socketio_emit.socketio_emit_output_reset()
 
         socketio_emit.socketio_emit_image_qr_add_active()
-        time.sleep(TIME_SLEEP * TIME_SLEEP_COUNT)
+        for count in range(TIME_SLEEP_COUNT):
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+            time.sleep(TIME_SLEEP)
+        socketio_emit.socketio_emit_countdown_reset()
         socketio_emit.socketio_emit_image_qr_remove_active()
 
     else:
@@ -58,57 +61,81 @@ def ai():
         text_To_Audio.text_To_Audio(outputContent)
         socketio_emit.socketio_emit_stop_switching()
 
-        socketio_emit.socketio_emit_output_reset()
+    outputContent = "電話対応をご希望の場合、Spaceキーを押してください。"
+    socketio_emit.socketio_emit_output(outputContent)
 
-    telopContent = "電話対応をご希望の場合、Spaceを押してください。"
-    socketio_emit.socketio_emit_telop(telopContent)
-    socketio_emit.socketio_emit_telop_remove_display_none()
+    socketio_emit.socketio_emit_start_switching()
+    text_To_Audio.text_To_Audio(outputContent)
+    socketio_emit.socketio_emit_stop_switching()
 
     global flag_space
     count = 0
     while True:
         if flag_space:
-            telopContent = "駅員に電話をかけます。"
-            socketio_emit.socketio_emit_telop(telopContent)
+            socketio_emit.socketio_emit_countdown_reset()
+
+            outputContent = "駅員に電話をかけます。"
+            socketio_emit.socketio_emit_output(outputContent)
+
+            socketio_emit.socketio_emit_start_switching()
+            text_To_Audio.text_To_Audio(outputContent)
+            socketio_emit.socketio_emit_stop_switching()
 
             phoneAutomation.phoneAutomation()
             break
 
-        else:
-            time.sleep(TIME_SLEEP)
-            count += 1
-
-        if count == TIME_SLEEP_COUNT:
+        elif count == TIME_SLEEP_COUNT:
+            socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_space()
             flag_space = True
             break
 
-    telopContent = "会話を続ける（会話を保存する）場合、Enterを押してください。"
-    socketio_emit.socketio_emit_telop(telopContent)
+        else:
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+            time.sleep(TIME_SLEEP)
+            count += 1
+
+    outputContent = "会話を続ける（会話を保存する）場合、Enterキーを押してください。"
+    socketio_emit.socketio_emit_output(outputContent)
+
+    socketio_emit.socketio_emit_start_switching()
+    text_To_Audio.text_To_Audio(outputContent)
+    socketio_emit.socketio_emit_stop_switching()
 
     global flag_enter2
     count = 0
     while True:
         if flag_enter2:
+            socketio_emit.socketio_emit_countdown_reset()
+
             conversation_history.append({"role": "user", "content": inputContent})
             conversation_history.append({"role": "assistant", "content": outputContent})
 
-            telopContent = "会話を保存しました。"
-            socketio_emit.socketio_emit_telop(telopContent)
+            outputContent = "会話を保存しました。"
+            socketio_emit.socketio_emit_output(outputContent)
+
+            socketio_emit.socketio_emit_start_switching()
+            text_To_Audio.text_To_Audio(outputContent)
+            socketio_emit.socketio_emit_stop_switching()
             break
 
-        else:
-            time.sleep(TIME_SLEEP)
-            count += 1
-
-        if count == TIME_SLEEP_COUNT:
+        elif count == TIME_SLEEP_COUNT:
             conversation_history = []
 
+            socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_enter2()
             flag_enter2 = True
             break
 
+        else:
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+            time.sleep(TIME_SLEEP)
+            count += 1
+
+    socketio_emit.socketio_emit_output_reset()
+
     telopContent = "Enterを押して始めてください。"
+    socketio_emit.socketio_emit_telop_remove_display_none()
     socketio_emit.socketio_emit_telop(telopContent)
 
     flag_enter2 = False

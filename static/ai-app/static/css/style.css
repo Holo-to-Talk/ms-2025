@@ -49,13 +49,9 @@ body, html {
 /* QRコード画像 */
 #div_img img:nth-child(4) {
     display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 1080px;
+    width: 100vw;
     height: auto;
-    z-index: 3;
+    z-index: 0;
 }
 
 /* 画像切替で使用 */
@@ -70,6 +66,18 @@ body, html {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 30px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* カウントダウン（テキスト） */
+#countdown {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
     color: rgb(255, 255, 255);
     font-weight: bold;
     z-index: 1;
