@@ -70,3 +70,15 @@ body, html {
     font-weight: bold;
     z-index: 1;
 }
+
+/* カウントダウン（テキスト） */
+#countdown {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    z-index: 1;
+}

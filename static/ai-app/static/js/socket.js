@@ -58,6 +58,10 @@ socket.on('update_output', (data) => {
     document.getElementById('output').textContent = data.output;
 });
 
+socket.on('update_countdown', (data) => {
+    document.getElementById('countdown').textContent = data.countdown;
+});
+
 socket.on('update_telop_add_display_none', () => {
     document.getElementById('div_telop').classList.add('display_none');
 });

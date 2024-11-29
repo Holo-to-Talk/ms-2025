@@ -86,10 +86,12 @@ def ai():
             break
 
         else:
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
             time.sleep(TIME_SLEEP)
             count += 1
 
         if count == TIME_SLEEP_COUNT:
+            socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_space()
             flag_space = True
             break
@@ -121,12 +123,14 @@ def ai():
             break
 
         else:
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
             time.sleep(TIME_SLEEP)
             count += 1
 
         if count == TIME_SLEEP_COUNT:
             conversation_history = []
 
+            socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_enter2()
             flag_enter2 = True
             break
