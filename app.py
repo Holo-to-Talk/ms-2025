@@ -102,7 +102,7 @@ def login():
             error_msg = "ログインエラー: IDまたはパスワードが間違っています"
 
         # エラーメッセージを渡して再度ログインページを表示
-        return render_template('.station/login.html', error_msg=error_msg)
+        return render_template('./station/login.html', error_msg=error_msg)
 
 # ユーザー登録処理
 @app.route('/station/register', methods=['GET', 'POST'])
