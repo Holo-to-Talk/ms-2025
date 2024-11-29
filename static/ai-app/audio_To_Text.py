@@ -20,7 +20,6 @@ def audio_To_Text(savedDirectory):
         transcription = openai.Audio.transcribe(MODEL, audio_file, LANGUAGE)
 
         inputContent = transcription['text']
-
         socketio_emit.socketio_emit_telop_add_display_none()
         socketio_emit.socketio_emit_input(inputContent)
 

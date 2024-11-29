@@ -49,13 +49,9 @@ body, html {
 /* QRコード画像 */
 #div_img img:nth-child(4) {
     display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 1080px;
+    width: 100vw;
     height: auto;
-    z-index: 3;
+    z-index: 0;
 }
 
 /* 画像切替で使用 */

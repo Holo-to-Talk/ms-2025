@@ -60,16 +60,27 @@ def ai():
 
         socketio_emit.socketio_emit_output_reset()
 
-    telopContent = "電話対応をご希望の場合、Spaceを押してください。"
-    socketio_emit.socketio_emit_telop(telopContent)
-    socketio_emit.socketio_emit_telop_remove_display_none()
+    outputContent = "電話対応をご希望の場合、Spaceキーを押してください。"
+    socketio_emit.socketio_emit_output(outputContent)
+
+    socketio_emit.socketio_emit_start_switching()
+    text_To_Audio.text_To_Audio(outputContent)
+    socketio_emit.socketio_emit_stop_switching()
+
+    socketio_emit.socketio_emit_output_reset()
 
     global flag_space
     count = 0
     while True:
         if flag_space:
-            telopContent = "駅員に電話をかけます。"
-            socketio_emit.socketio_emit_telop(telopContent)
+            outputContent = "駅員に電話をかけます。"
+            socketio_emit.socketio_emit_output(outputContent)
+
+            socketio_emit.socketio_emit_start_switching()
+            text_To_Audio.text_To_Audio(outputContent)
+            socketio_emit.socketio_emit_stop_switching()
+
+            socketio_emit.socketio_emit_output_reset()
 
             phoneAutomation.phoneAutomation()
             break
@@ -83,8 +94,14 @@ def ai():
             flag_space = True
             break
 
-    telopContent = "会話を続ける（会話を保存する）場合、Enterを押してください。"
-    socketio_emit.socketio_emit_telop(telopContent)
+    outputContent = "会話を続ける（会話を保存する）場合、Enterキーを押してください。"
+    socketio_emit.socketio_emit_output(outputContent)
+
+    socketio_emit.socketio_emit_start_switching()
+    text_To_Audio.text_To_Audio(outputContent)
+    socketio_emit.socketio_emit_stop_switching()
+
+    socketio_emit.socketio_emit_output_reset()
 
     global flag_enter2
     count = 0
@@ -93,8 +110,14 @@ def ai():
             conversation_history.append({"role": "user", "content": inputContent})
             conversation_history.append({"role": "assistant", "content": outputContent})
 
-            telopContent = "会話を保存しました。"
-            socketio_emit.socketio_emit_telop(telopContent)
+            outputContent = "会話を保存しました。"
+            socketio_emit.socketio_emit_output(outputContent)
+
+            socketio_emit.socketio_emit_start_switching()
+            text_To_Audio.text_To_Audio(outputContent)
+            socketio_emit.socketio_emit_stop_switching()
+
+            socketio_emit.socketio_emit_output_reset()
             break
 
         else:
@@ -109,6 +132,7 @@ def ai():
             break
 
     telopContent = "Enterを押して始めてください。"
+    socketio_emit.socketio_emit_telop_remove_display_none()
     socketio_emit.socketio_emit_telop(telopContent)
 
     flag_enter2 = False
