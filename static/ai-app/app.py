@@ -47,7 +47,10 @@ def ai():
         socketio_emit.socketio_emit_output_reset()
 
         socketio_emit.socketio_emit_image_qr_add_active()
-        time.sleep(TIME_SLEEP * TIME_SLEEP_COUNT)
+        for count in range(TIME_SLEEP_COUNT):
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+            time.sleep(TIME_SLEEP)
+        socketio_emit.socketio_emit_countdown_reset()
         socketio_emit.socketio_emit_image_qr_remove_active()
 
     else:
@@ -85,16 +88,16 @@ def ai():
             phoneAutomation.phoneAutomation()
             break
 
-        else:
-            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
-            time.sleep(TIME_SLEEP)
-            count += 1
-
-        if count == TIME_SLEEP_COUNT:
+        elif count <= TIME_SLEEP_COUNT:
             socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_space()
             flag_space = True
             break
+
+        else:
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+            time.sleep(TIME_SLEEP)
+            count += 1
 
     outputContent = "会話を続ける（会話を保存する）場合、Enterキーを押してください。"
     socketio_emit.socketio_emit_output(outputContent)
@@ -122,18 +125,18 @@ def ai():
             socketio_emit.socketio_emit_output_reset()
             break
 
-        else:
-            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
-            time.sleep(TIME_SLEEP)
-            count += 1
-
-        if count == TIME_SLEEP_COUNT:
+        elif count <= TIME_SLEEP_COUNT:
             conversation_history = []
 
             socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_enter2()
             flag_enter2 = True
             break
+
+        else:
+            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+            time.sleep(TIME_SLEEP)
+            count += 1
 
     telopContent = "Enterを押して始めてください。"
     socketio_emit.socketio_emit_telop_remove_display_none()
