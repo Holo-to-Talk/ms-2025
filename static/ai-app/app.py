@@ -61,8 +61,6 @@ def ai():
         text_To_Audio.text_To_Audio(outputContent)
         socketio_emit.socketio_emit_stop_switching()
 
-        socketio_emit.socketio_emit_output_reset()
-
     outputContent = "電話対応をご希望の場合、Spaceキーを押してください。"
     socketio_emit.socketio_emit_output(outputContent)
 
@@ -70,12 +68,12 @@ def ai():
     text_To_Audio.text_To_Audio(outputContent)
     socketio_emit.socketio_emit_stop_switching()
 
-    socketio_emit.socketio_emit_output_reset()
-
     global flag_space
     count = 0
     while True:
         if flag_space:
+            socketio_emit.socketio_emit_countdown_reset()
+
             outputContent = "駅員に電話をかけます。"
             socketio_emit.socketio_emit_output(outputContent)
 
@@ -83,12 +81,10 @@ def ai():
             text_To_Audio.text_To_Audio(outputContent)
             socketio_emit.socketio_emit_stop_switching()
 
-            socketio_emit.socketio_emit_output_reset()
-
             phoneAutomation.phoneAutomation()
             break
 
-        elif count <= TIME_SLEEP_COUNT:
+        elif count == TIME_SLEEP_COUNT:
             socketio_emit.socketio_emit_countdown_reset()
             socketio_emit.socketio_emit_flag_space()
             flag_space = True
@@ -106,12 +102,12 @@ def ai():
     text_To_Audio.text_To_Audio(outputContent)
     socketio_emit.socketio_emit_stop_switching()
 
-    socketio_emit.socketio_emit_output_reset()
-
     global flag_enter2
     count = 0
     while True:
         if flag_enter2:
+            socketio_emit.socketio_emit_countdown_reset()
+
             conversation_history.append({"role": "user", "content": inputContent})
             conversation_history.append({"role": "assistant", "content": outputContent})
 
@@ -121,11 +117,9 @@ def ai():
             socketio_emit.socketio_emit_start_switching()
             text_To_Audio.text_To_Audio(outputContent)
             socketio_emit.socketio_emit_stop_switching()
-
-            socketio_emit.socketio_emit_output_reset()
             break
 
-        elif count <= TIME_SLEEP_COUNT:
+        elif count == TIME_SLEEP_COUNT:
             conversation_history = []
 
             socketio_emit.socketio_emit_countdown_reset()
@@ -137,6 +131,8 @@ def ai():
             socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
             time.sleep(TIME_SLEEP)
             count += 1
+
+    socketio_emit.socketio_emit_output_reset()
 
     telopContent = "Enterを押して始めてください。"
     socketio_emit.socketio_emit_telop_remove_display_none()
