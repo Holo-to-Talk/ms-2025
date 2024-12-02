@@ -37,7 +37,7 @@ def ai():
 
     global conversation_history
     if qr_code_found.qr_code_found(inputContent):
-        outputContent = "QRCodeを表示します。"
+        outputContent = "QRCodeを表示します"
         socketio_emit.socketio_emit_output(outputContent)
 
         socketio_emit.socketio_emit_start_switching()
@@ -61,7 +61,7 @@ def ai():
         text_To_Audio.text_To_Audio(outputContent)
         socketio_emit.socketio_emit_stop_switching()
 
-    outputContent = "電話対応をご希望の場合、Spaceキーを押してください。"
+    outputContent = "電話対応をご希望の場合、Spaceキーを押してください"
     socketio_emit.socketio_emit_output(outputContent)
 
     socketio_emit.socketio_emit_start_switching()
@@ -74,7 +74,7 @@ def ai():
         if flag_space:
             socketio_emit.socketio_emit_countdown_reset()
 
-            outputContent = "駅員に電話をかけます。"
+            outputContent = "駅員に電話をかけます"
             socketio_emit.socketio_emit_output(outputContent)
 
             socketio_emit.socketio_emit_start_switching()
@@ -95,7 +95,7 @@ def ai():
             time.sleep(TIME_SLEEP)
             count += 1
 
-    outputContent = "会話を続ける（会話を保存する）場合、Enterキーを押してください。"
+    outputContent = "会話を続ける（会話を保存する）場合、Enterキーを押してください"
     socketio_emit.socketio_emit_output(outputContent)
 
     socketio_emit.socketio_emit_start_switching()
@@ -111,7 +111,7 @@ def ai():
             conversation_history.append({"role": "user", "content": inputContent})
             conversation_history.append({"role": "assistant", "content": outputContent})
 
-            outputContent = "会話を保存しました。"
+            outputContent = "会話を保存しました"
             socketio_emit.socketio_emit_output(outputContent)
 
             socketio_emit.socketio_emit_start_switching()
@@ -134,10 +134,11 @@ def ai():
 
     socketio_emit.socketio_emit_output_reset()
 
-    telopContent = "Enterを押して始めてください。"
+    telopContent = "Enterを押して始めてください"
     socketio_emit.socketio_emit_telop_remove_display_none()
     socketio_emit.socketio_emit_telop(telopContent)
 
+    socketio_emit.socketio_emit_flag_enter()
     flag_enter2 = False
     socketio_emit.socketio_emit_flag_enter2()
     flag_space = False
