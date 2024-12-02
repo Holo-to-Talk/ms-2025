@@ -5,6 +5,17 @@ textarea {
   font-family: "Noto Sans JP", sans-serif;
 }
 
+select {
+  display: block; /* ブロック要素として表示 */
+  width: 100%; /* 必要に応じて調整 */
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #333333;
+}
+
 /* モーダルのスタイル */
 #previewModal {
   background-color: #f9f9f9;
