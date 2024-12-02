@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>レポート一覧</title>
+    <!-- Materialize CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h4 class="center-align">駅員レポート一覧</h4>
+        <table class="highlight">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>GPTログID</th>
+                    <th>問い合わせ元</th>
+                    <th>問い合わせ先</th>
+                    <th>担当者名</th>
+                    <th>概要</th>
+                    <th>作成日</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr data-id="{{ report.id }}">
+                    <td>{{ report.id }}</td>
+                    <td>{{ report.gpt_log_id }}</td>
+                    <td>{{ report.inquiry_source }}</td>
+                    <td>{{ report.inquiry_destination }}</td>
+                    <td>{{ report.person_in_charge }}</td>
+                    <td>{{ report.overview }}</td>
+                    <td>{{ report.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

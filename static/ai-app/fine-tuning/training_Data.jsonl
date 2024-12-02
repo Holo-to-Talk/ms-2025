@@ -1,0 +1,20 @@
+{"messages": [{"role": "user", "content": "お手洗いはありますか？"},{"role": "assistant", "content": "お手洗いはあります、構内図をご確認ください。"}]}
+{"messages": [{"role": "user", "content": "トイレはありますか？"},{"role": "assistant", "content": "お手洗いはあります、構内図をご確認ください。"}]}
+{"messages": [{"role": "user", "content": "お手洗いはどこにありますか？"},{"role": "assistant", "content": "構内図をご確認ください。"}]}
+{"messages": [{"role": "user", "content": "トイレはどこにありますか？"},{"role": "assistant", "content": "構内図をご確認ください。"}]}
+{"messages": [{"role": "user", "content": "自動販売機はありますか？"},{"role": "assistant", "content": "自動販売機はありません。"}]}
+{"messages": [{"role": "user", "content": "自動販売機はどこにありますか？"},{"role": "assistant", "content": "自動販売機はありません。"}]}
+{"messages": [{"role": "user", "content": "営業時間について教えて下さい。"},{"role": "assistant", "content": "営業時間は、5:30-22:00です。"}]}
+{"messages": [{"role": "user", "content": "駅のシャッターはいつ開きますか？"},{"role": "assistant", "content": "シャッターは始発の発車時刻10分前には開きます。"}]}
+{"messages": [{"role": "system", "content": "憶測で回答しないでください。"},{"role": "user", "content": "これは何ですか？"},{"role": "assistant", "content": "phoneAutomation"}]}
+{"messages": [{"role": "system", "content": "学習範囲外の質問には'phoneAutomation'と出力してください。"},{"role": "user", "content": "これは何ですか？"},{"role": "assistant", "content": "phoneAutomation"}]}
+{"messages": [{"role": "system", "content": "駅に関する質問以外は、'phoneAutomation'とだけ出力してください。"},{"role": "user", "content": "これは何ですか？"},{"role": "assistant", "content": "phoneAutomation"}]}
+{"messages": [{"role": "system", "content": "'phoneAutomation'と出力する際には、phoneAutomationとだけ出力してください。"},{"role": "user", "content": "これは何ですか？"},{"role": "assistant", "content": "phoneAutomation"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "QRCode"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "QRコード"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "qrCode"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "qrコード"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "QR Code"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "QR コード"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "qr Code"},{"role": "assistant", "content": "QRCode"}]}
+{"messages": [{"role": "system", "content": "入力に応じて適切な形式で'QRCode'を出力してください。"},{"role": "user", "content": "qr コード"},{"role": "assistant", "content": "QRCode"}]}

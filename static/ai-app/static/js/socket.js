@@ -1,0 +1,61 @@
+const socket = io()
+
+// 定数
+// 画像切替秒数（1000 => 1s）
+const intervalTime = 100
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        socket.emit('enter_pressed')
+    }
+});
+
+socket.on('update_telop', (data) => {
+    document.getElementById('telop').textContent = data.telop;
+});
+
+socket.on('update_input', (data) => {
+    document.getElementById('input').textContent = data.input;
+});
+
+socket.on('update_output', (data) => {
+    document.getElementById('output').textContent = data.output;
+});
+
+socket.on('update_telop_add_display_none', () => {
+    document.getElementById('div_telop').classList.add('display_none');
+});
+
+socket.on('update_telop_remove_display_none', () => {
+    document.getElementById('div_telop').classList.remove('display_none');
+});
+
+const images = document.querySelectorAll('#div_img img');
+let sequence = [0, 1, 2, 1];
+let currentIndex = 1;
+let intervalId = null;
+
+function switchImage() {
+    images.forEach(img => img.classList.remove('active'));
+    images[sequence[currentIndex]].classList.add('active');
+    currentIndex = (currentIndex + 1) % sequence.length;
+}
+
+function resetImage() {
+    images.forEach(img => img.classList.remove('active'));
+    images[sequence[0]].classList.add('active');
+}
+
+socket.on('start_switching', () => {
+    if (!intervalId) {
+        intervalId = setInterval(switchImage, intervalTime);
+    }
+});
+
+socket.on('stop_switching', () => {
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+    }
+    resetImage();
+});
