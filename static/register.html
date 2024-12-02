@@ -35,7 +35,7 @@
         <!-- ロゴ -->
         <a href="#" class="brand-logo">
           <img
-          src="logo.png"
+            src="logo.png"
             alt="Logo"
             style="height: 50px; margin-top: 5px"
           />
@@ -51,6 +51,7 @@
       <li><a href="log-list.html" class="white-text">ログ一覧</a></li>
       <li><a href="member-info.html" class="white-text">会員情報</a></li>
     </ul>
+
     <div class="container">
       <div class="row">
         <div class="col s12">
@@ -158,9 +159,9 @@
       <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect btn-flat">閉じる</a>
         <button
-          type="submit"
-          form="registrationForm"
-          class="modal-close btn waves-effect waves-light"
+          type="button"
+          id="confirmButton"
+          class="btn waves-effect waves-light"
         >
           確定
         </button>
@@ -170,33 +171,35 @@
     <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-      // パスワードの表示/非表示切り替え
-      document
-        .getElementById("toggle-password")
-        .addEventListener("click", function () {
-          const passwordInput = document.getElementById("password");
-          const icon = this;
-
-          if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            icon.textContent = "visibility_off";
-          } else {
-            passwordInput.type = "password";
-            icon.textContent = "visibility";
-          }
-        });
-
-      // モーダルの初期化
       document.addEventListener("DOMContentLoaded", function () {
-        var elems = document.querySelectorAll(".sidenav");
-        M.Sidenav.init(elems, {
+        // サイドナビゲーションの初期化
+        var sidenavElems = document.querySelectorAll(".sidenav");
+        M.Sidenav.init(sidenavElems, {
           edge: "left",
           draggable: false, // ドラッグで開閉できないように設定
         });
+
+        // モーダルの初期化
         var modalElems = document.querySelectorAll(".modal");
         M.Modal.init(modalElems);
 
-        // プレビューボタンがクリックされた際にバリデーションを実行し、フォームの内容をモーダルに表示
+        // パスワードの表示/非表示切り替え
+        document
+          .getElementById("toggle-password")
+          .addEventListener("click", function () {
+            const passwordInput = document.getElementById("password");
+            const icon = this;
+
+            if (passwordInput.type === "password") {
+              passwordInput.type = "text";
+              icon.textContent = "visibility_off";
+            } else {
+              passwordInput.type = "password";
+              icon.textContent = "visibility";
+            }
+          });
+
+        // プレビューボタンのクリックイベント
         document
           .getElementById("previewButton")
           .addEventListener("click", function () {
@@ -204,7 +207,7 @@
 
             // HTML5のバリデーションをトリガー
             if (form.checkValidity()) {
-              // バリデーションが成功した場合、モーダルに内容を表示
+              // フォームデータをモーダルに表示
               document.getElementById("previewStationName").textContent =
                 document.getElementById("station_name").value;
               document.getElementById("previewStationId").textContent =
@@ -213,14 +216,58 @@
                 document.getElementById("station_address").value;
               document.getElementById("previewStationPhone").textContent =
                 document.getElementById("station_phone").value;
-              const instance = M.Modal.getInstance(
+
+              // モーダルを表示
+              const modalInstance = M.Modal.getInstance(
                 document.getElementById("previewModal")
               );
-              instance.open(); // モーダルを表示
+              modalInstance.open();
             } else {
               // バリデーションエラーがある場合、デフォルトのエラーメッセージを表示
               form.reportValidity();
             }
+          });
+
+        // 確定ボタンのクリックイベント
+        document
+          .getElementById("confirmButton")
+          .addEventListener("click", function () {
+            const data = {
+              station_name: document.getElementById("previewStationName").textContent,
+              station_id: document.getElementById("previewStationId").textContent,
+              station_address: document.getElementById("previewStationAddress").textContent,
+              station_phone: document.getElementById("previewStationPhone").textContent,
+              password: document.getElementById("password").value, // パスワードも送信する場合
+            };
+
+            fetch("/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("ネットワークエラー");
+                }
+                return response.json();
+              })
+              .then((result) => {
+                // 登録成功の処理
+                M.toast({ html: "登録が完了しました。" });
+                // フォームをリセットする場合
+                document.getElementById("registrationForm").reset();
+                // モーダルを閉じる
+                const modalInstance = M.Modal.getInstance(
+                  document.getElementById("previewModal")
+                );
+                modalInstance.close();
+              })
+              .catch((error) => {
+                console.error("エラー:", error);
+                M.toast({ html: "登録中にエラーが発生しました。" });
+              });
           });
       });
     </script>

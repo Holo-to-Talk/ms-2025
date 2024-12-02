@@ -151,7 +151,13 @@
       </div>
       <div class="modal-footer">
         <a href="#!" class="modal-close waves-effect btn-flat">閉じる</a>
-        <a href="#!" class="modal-close btn waves-effect waves-light">確定</a>
+        <button
+          type="button"
+          id="confirmButton"
+          class="btn waves-effect waves-light"
+        >
+          確定
+        </button>
       </div>
     </div>
 
@@ -212,6 +218,39 @@
               // バリデーションエラーを表示
               form.reportValidity();
             }
+          });
+
+        // 確定ボタンのクリックイベント
+        document
+          .getElementById("confirmButton")
+          .addEventListener("click", function () {
+            const data = {
+              station_name: document.getElementById("previewStationName").textContent,
+              station_id: document.getElementById("previewStationId").textContent,
+              station_address: document.getElementById("previewStationAddress").textContent,
+              station_phone: document.getElementById("previewStationPhone").textContent,
+            };
+
+            fetch("/edit", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("ネットワークエラー");
+                }
+                return response.json();
+              })
+              .then((result) => {
+                M.toast({ html: "編集が完了しました。" });
+              })
+              .catch((error) => {
+                console.error("エラー:", error);
+                M.toast({ html: "編集中にエラーが発生しました。" });
+              });
           });
       });
     </script>
