@@ -13,6 +13,8 @@ body, html {
 /* 親要素指定 */
 #wrapper {
     position: relative;
+    width: 100vw;
+    height: 100vh;
 }
 
 /* テロップ（枠組み） */
@@ -31,8 +33,12 @@ body, html {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 30px;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    text-align: center;
+    width: 80vw;
+    height: auto;
+    font-size: 50px;
     color: rgb(255, 255, 255);
     font-weight: bold;
     z-index: 2;
@@ -64,8 +70,12 @@ body, html {
     position: absolute;
     top: 85%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 30px;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    text-align: center;
+    width: 80vw;
+    height: auto;
+    font-size: 50px;
     color: rgb(255, 255, 255);
     font-weight: bold;
     z-index: 1;
@@ -76,8 +86,12 @@ body, html {
     position: absolute;
     top: 90%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 25px;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    text-align: center;
+    width: 56vw;
+    height: auto;
+    font-size: 35px;
     color: rgb(255, 255, 255);
     font-weight: bold;
     z-index: 1;
