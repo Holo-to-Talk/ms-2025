@@ -134,7 +134,7 @@ def ai():
 
     socketio_emit.socketio_emit_output_reset()
 
-    telopContent = "Enterを押して始めてください"
+    telopContent = "Enterキーを押して始めてください"
     socketio_emit.socketio_emit_telop_remove_display_none()
     socketio_emit.socketio_emit_telop(telopContent)
 
