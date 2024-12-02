@@ -10,14 +10,11 @@ body, html {
     display: none;
 }
 
-/* 反射を考慮してY軸に回転 */
-.rotate {
-    transform: rotateY(180deg);
-}
-
 /* 親要素指定 */
 #wrapper {
     position: relative;
+    width: 100vw;
+    height: 100vh;
 }
 
 /* テロップ（枠組み） */
@@ -36,7 +33,9 @@ body, html {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    text-align: center;
     width: 80vw;
     height: auto;
     font-size: 50px;
@@ -71,7 +70,9 @@ body, html {
     position: absolute;
     top: 85%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    text-align: center;
     width: 80vw;
     height: auto;
     font-size: 50px;
@@ -85,7 +86,9 @@ body, html {
     position: absolute;
     top: 90%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) rotateY(180deg);
+    text-align: center;
     width: 56vw;
     height: auto;
     font-size: 35px;
