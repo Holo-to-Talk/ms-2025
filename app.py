@@ -295,7 +295,7 @@ def edit_station(station_num):
         error_msg = [msg for msg in error_msg if msg]
 
         if error_msg:
-            return render_template("edit.html", form_data=form_data, error_msg=error_msg)
+            return render_template("./station/edit.html", form_data=form_data, error_msg=error_msg)
 
         # データを更新
         try:
@@ -338,7 +338,7 @@ def edit_station(station_num):
         finally:
             cursor.close()
 
-        return redirect('/user/list?update_done')
+        return redirect('/station/list?update_done')
     
 #パスワード変更処理
 @app.route('/user/change-password', methods=['GET', 'POST'])
