@@ -347,7 +347,7 @@ def logout():
     return redirect(url_for('login'))
 
 # レポートページの処理
-@app.route("/report", methods=["POST", "GET"])
+@app.route("/report/register", methods=["POST", "GET"])
 def report():
     form_data = {
         "responder": "",
