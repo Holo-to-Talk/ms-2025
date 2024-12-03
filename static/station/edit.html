@@ -60,11 +60,11 @@
           <div class="card">
             <div class="card-content">
               <span class="card-title center-align">会員編集</span>
-              <form id="editForm">
+              <form id="editForm" method="post">
                 <!-- 駅名入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">location_on</i>
-                  <input id="station_name" type="text" required value="{{ form_data.name }}"/>
+                  <input id="station_name" type="text" required value="{{ form_data.name }}" name="name"/>
                   <label for="station_name" class="active">駅名</label>
                 </div>
 
@@ -77,7 +77,9 @@
                     required
                     pattern="^[A-Za-z0-9]+$"
                     title="半角英数字のみを入力してください"
+                    name="station_num"
                     value="{{ form_data.station_num }}"
+                    required
                   />
                   <label for="station_id" class="active">駅番</label>
                 </div>
@@ -85,7 +87,8 @@
                 <!-- 駅の住所入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">home</i>
-                  <input id="station_address" type="text" required value="{{ form_data.address }}"/>
+                  <input id="station_address" type="text" required name="address" value="{{ form_data.address }}"
+                  />
                   <label for="station_address" class="active">駅の住所</label>
                 </div>
 
@@ -98,25 +101,37 @@
                     required
                     pattern="^[0-9\-]+$"
                     title="数字とハイフンのみを入力してください"
+                    name="phone_num"
                     value="{{ form_data.phone_num }}"
                   />
                   <label for="station_phone" class="active">駅の電話番号</label>
                 </div>
 
-                  <!-- 駅のAI入力フィールド -->
-                  <div class="type_AI">
-                    <label>AI選択:</label>
-                        <input type="radio" id="ai" name="type_AI" value="true" checked>
-                        <label for="ai">AI</label>
+                <!-- 駅のAI入力フィールド -->
+                <div class="type_AI">
+                  <label for="type_AI">AI選択:</label>
+                  <input type="radio" id="type_AI" name="type_AI" value="1" {% if form_data.type_AI == 1 %} checked {% endif %} required
+                  />AI
 
-                        <input type="radio" id="not_ai" name="type_AI" value="false">
-                        <label for="not_ai">notAI</label>
-                  </div>
+                  <input type="radio" id="type_AI" name="type_AI" value="0" {% if form_data.type_AI == 0 %} checked {% endif %} required
+                  />notAI
+              </div>
+
+              <!-- エラーメッセージ -->
+              <div>
+                {% if error_msg %}
+                <ul>
+                  {% for msg in error_msg %}
+                  <li>{{ msg }}</li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+              </div>
 
                 <!-- 編集完了ボタン -->
                 <div class="center-align">
                   <button
-                    type="button"
+                    type="submit"
                     class="btn waves-effect waves-light modal-trigger"
                     href="#previewModal"
                     id="previewButton"
