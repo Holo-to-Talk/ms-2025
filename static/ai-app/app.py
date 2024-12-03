@@ -22,7 +22,8 @@ app.secret_key = os.getenv("SECRET_KEY")
 socketio.init_app(app)
 
 TIME_SLEEP = 1
-TIME_SLEEP_COUNT = 8
+QR_TIME_SLEEP_COUNT = 10
+TIME_SLEEP_COUNT = 5
 
 flag_space = False
 flag_enter2 = False
@@ -47,8 +48,8 @@ def ai():
         socketio_emit.socketio_emit_output_reset()
 
         socketio_emit.socketio_emit_image_qr_add_active()
-        for count in range(TIME_SLEEP_COUNT):
-            socketio_emit.socketio_emit_countdown(TIME_SLEEP_COUNT - count)
+        for count in range(QR_TIME_SLEEP_COUNT):
+            socketio_emit.socketio_emit_countdown(QR_TIME_SLEEP_COUNT - count)
             time.sleep(TIME_SLEEP)
         socketio_emit.socketio_emit_countdown_reset()
         socketio_emit.socketio_emit_image_qr_remove_active()
