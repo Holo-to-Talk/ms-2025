@@ -7,9 +7,12 @@ def validate_name(name):
     return ""
 
 def validate_station_num(station_num):
-    if not station_num.isdigit():
-        return "駅番号を入力して下さい。"
+    if not station_num.isalnum():
+        return "駅番号は英数字のみを入力してください。"
+    if len(station_num) >= 6:
+        return "駅番号は5文字以下で入力してください。"
     return ""
+
 
 def validate_address(address):
     if not address:
@@ -23,6 +26,6 @@ def validate_phone_num(phone_num):
     return ""
 
 def validate_password(password):
-    if len(password) < 6:
-        return "パスワードは6文字以上で入力して下さい。"
+    if len(password) < 5:
+        return "パスワードは5文字以上で入力して下さい。"
     return ""
