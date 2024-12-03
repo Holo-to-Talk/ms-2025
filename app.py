@@ -420,6 +420,62 @@ def logout():
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
 
+# レポートページの処理
+@app.route("/report/register", methods=["POST", "GET"])
+def report():
+    form_data = {
+        "responder": "",
+        "about": "",
+        "detail": "",
+        "answer": "",
+        "gpt_log_id": ""
+    }
+
+    if request.method == "GET":
+        try:
+            with db_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute('''USE holo_to_talk''')
+                    # gpt_talk_log テーブルから id のみ取得
+                    cursor.execute('''SELECT id FROM gpt_talk_log''')
+                    gpt_log_ids = [row[0] for row in cursor.fetchall()]
+        except Exception as e:
+            gpt_log_ids = []
+            print(f"エラーが発生しました: {e}")
+
+        # GETメソッド用のHTMLレンダリング
+        return render_template('report/register.html', form_data=form_data, gpt_log_ids=gpt_log_ids)
+
+    if request.method == "POST":
+        # POSTデータを取得
+        form_data = {
+            "responder": request.form.get("responder", ""),
+            "about": request.form.get("about", ""),
+            "detail": request.form.get("detail", ""),
+            "answer": request.form.get("answer", ""),
+        }
+
+        try:
+            with db_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute('''USE holo_to_talk''')
+                    # staff_logテーブルにデータを挿入
+                    cursor.execute('''
+                        INSERT INTO staff_log (responder, about, detail, answer)
+                        VALUES (%s, %s, %s, %s)
+                    ''', (
+                        form_data["responder"],
+                        form_data["about"],
+                        form_data["detail"],
+                        form_data["answer"]
+                    ))
+                conn.commit()
+            return redirect(url_for('report_list'))  # 成功ページにリダイレクト
+        except Exception as e:
+            print(f"エラーが発生しました: {e}")
+            return "エラーが発生しました", 500
+
+
 #レポートリスト表示処理
 @app.route('/report/list', methods=['GET'])
 def report_list():
