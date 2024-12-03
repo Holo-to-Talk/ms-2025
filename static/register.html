@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>会員編集</title>
+    <title>新規会員登録</title>
 
     <!-- Google Material Icons -->
     <link
@@ -21,9 +21,8 @@
       rel="stylesheet"
     />
     <!-- 外部CSSファイル -->
-    <link rel="stylesheet" href="/statc/register.css" />
-    <!-- ヘッダー用CSS -->
-    <link rel="stylesheet" href="/static/header.css" />
+    <link rel="stylesheet" href="./static/station-register.css" />
+    <link rel="stylesheet" href="./static/header.css" />
   </head>
   <body>
     <!-- ヘッダー -->
@@ -36,7 +35,11 @@
         <!-- ロゴ -->
         <a href="#" class="brand-logo">
           <img
-            src="/static/logo.png"
+<<<<<<< HEAD
+            src="logo.png"
+=======
+          src="./static/logo.png"
+>>>>>>> a800065c9d29b3203134cd9c83ee04d584d5d736
             alt="Logo"
             style="height: 50px; margin-top: 5px"
           />
@@ -47,73 +50,69 @@
     <!-- サイドナビゲーション -->
     <ul id="slide-out" class="sidenav black">
       <li>
-        <a href="/report/input" class="white-text">ログ入力</a>
+        <a href="station-register.html" class="white-text">ログ新規登録</a>
       </li>
-      <li><a href="/report/list" class="white-text">ログ一覧</a></li>
-      <li><a href="/station/list" class="white-text">駅新規登録</a></li>
+      <li><a href="log-list.html" class="white-text">ログ一覧</a></li>
+      <li><a href="member-info.html" class="white-text">会員情報</a></li>
     </ul>
 
-    <!-- メインコンテンツ -->
     <div class="container">
       <div class="row">
         <div class="col s12">
           <div class="card">
             <div class="card-content">
-              <span class="card-title center-align">会員編集</span>
-              <form id="editForm">
+              <span class="card-title center-align">新規会員登録</span>
+              <form id="registrationForm">
                 <!-- 駅名入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">location_on</i>
-                  <input id="station_name" type="text" required value="{{ form_data.name }}"/>
-                  <label for="station_name" class="active">駅名</label>
+                  <input id="station_name" type="text" required />
+                  <label for="station_name">駅名</label>
                 </div>
 
                 <!-- 駅番入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">account_circle</i>
-                  <input
-                    id="station_id"
-                    type="text"
-                    required
-                    pattern="^[A-Za-z0-9]+$"
-                    title="半角英数字のみを入力してください"
-                    value="{{ form_data.station_num }}"
-                  />
-                  <label for="station_id" class="active">駅番</label>
+                  <input id="station_id" type="text" required />
+                  <label for="station_id">駅番</label>
                 </div>
 
                 <!-- 駅の住所入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">home</i>
-                  <input id="station_address" type="text" required value="{{ form_data.address }}"/>
-                  <label for="station_address" class="active">駅の住所</label>
+                  <input id="station_address" type="text" required />
+                  <label for="station_address">駅の住所</label>
                 </div>
 
                 <!-- 駅の電話番号入力フィールド -->
                 <div class="input-field">
                   <i class="material-icons prefix">phone</i>
-                  <input
-                    id="station_phone"
-                    type="tel"
-                    required
-                    pattern="^[0-9\-]+$"
-                    title="数字とハイフンのみを入力してください"
-                    value="{{ form_data.phone_num }}"
-                  />
-                  <label for="station_phone" class="active">駅の電話番号</label>
+                  <input id="station_phone" type="tel" required />
+                  <label for="station_phone">駅の電話番号</label>
                 </div>
 
-                  <!-- 駅のAI入力フィールド -->
-                  <div class="type_AI">
-                    <label>AI選択:</label>
-                        <input type="radio" id="ai" name="type_AI" value="true" checked>
-                        <label for="ai">AI</label>
+                <!-- パスワード入力フィールド -->
+                <div class="input-field" style="position: relative">
+                  <i class="material-icons prefix">lock</i>
+                  <input id="password" type="password" required />
+                  <label for="password">パスワード</label>
+                  <i
+                    class="material-icons suffix"
+                    id="toggle-password"
+                    style="
+                      position: absolute;
+                      right: 0;
+                      top: 0;
+                      bottom: 0;
+                      margin: auto;
+                      cursor: pointer;
+                    "
+                  >
+                    visibility
+                  </i>
+                </div>
 
-                        <input type="radio" id="not_ai" name="type_AI" value="false">
-                        <label for="not_ai">notAI</label>
-                  </div>
-
-                <!-- 編集完了ボタン -->
+                <!-- 会員登録ボタン -->
                 <div class="center-align">
                   <button
                     type="button"
@@ -121,8 +120,8 @@
                     href="#previewModal"
                     id="previewButton"
                   >
-                    編集完了
-                    <i class="material-icons right">check</i>
+                    プレビュー
+                    <i class="material-icons right">visibility</i>
                   </button>
                 </div>
               </form>
@@ -135,7 +134,7 @@
     <!-- プレビューモーダル -->
     <div id="previewModal" class="modal">
       <div class="modal-content">
-        <h5>編集内容プレビュー</h5>
+        <h5>登録内容プレビュー</h5>
 
         <!-- 駅名 -->
         <div class="preview-item">
@@ -176,35 +175,43 @@
     <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
-
-      // フォームに既存データを表示
-      document.getElementById("station_name").value = existingData.station_name;
-      document.getElementById("station_id").value = existingData.station_id;
-      document.getElementById("station_address").value =
-        existingData.station_address;
-      document.getElementById("station_phone").value =
-        existingData.station_phone;
-
-      // Materializeの再描画処理でラベルを正しい位置にする
-      M.updateTextFields();
-
-      // モーダルとサイドナビの初期化
       document.addEventListener("DOMContentLoaded", function () {
+        // サイドナビゲーションの初期化
+        var sidenavElems = document.querySelectorAll(".sidenav");
+        M.Sidenav.init(sidenavElems, {
+          edge: "left",
+          draggable: false, // ドラッグで開閉できないように設定
+        });
+
+        // モーダルの初期化
         var modalElems = document.querySelectorAll(".modal");
         M.Modal.init(modalElems);
 
-        var sidenavElems = document.querySelectorAll(".sidenav");
-        M.Sidenav.init(sidenavElems, { edge: "left", draggable: false });
+        // パスワードの表示/非表示切り替え
+        document
+          .getElementById("toggle-password")
+          .addEventListener("click", function () {
+            const passwordInput = document.getElementById("password");
+            const icon = this;
 
-        // プレビューボタンがクリックされた際にフォームの内容をモーダルに表示
+            if (passwordInput.type === "password") {
+              passwordInput.type = "text";
+              icon.textContent = "visibility_off";
+            } else {
+              passwordInput.type = "password";
+              icon.textContent = "visibility";
+            }
+          });
+
+        // プレビューボタンのクリックイベント
         document
           .getElementById("previewButton")
           .addEventListener("click", function () {
-            const form = document.getElementById("editForm");
+            const form = document.getElementById("registrationForm");
 
-            // バリデーションをチェック
+            // HTML5のバリデーションをトリガー
             if (form.checkValidity()) {
-              // プレビューに内容を反映
+              // フォームデータをモーダルに表示
               document.getElementById("previewStationName").textContent =
                 document.getElementById("station_name").value;
               document.getElementById("previewStationId").textContent =
@@ -214,13 +221,13 @@
               document.getElementById("previewStationPhone").textContent =
                 document.getElementById("station_phone").value;
 
-              // モーダルを開く
-              const instance = M.Modal.getInstance(
+              // モーダルを表示
+              const modalInstance = M.Modal.getInstance(
                 document.getElementById("previewModal")
               );
-              instance.open();
+              modalInstance.open();
             } else {
-              // バリデーションエラーを表示
+              // バリデーションエラーがある場合、デフォルトのエラーメッセージを表示
               form.reportValidity();
             }
           });
@@ -234,9 +241,10 @@
               station_id: document.getElementById("previewStationId").textContent,
               station_address: document.getElementById("previewStationAddress").textContent,
               station_phone: document.getElementById("previewStationPhone").textContent,
+              password: document.getElementById("password").value, // パスワードも送信する場合
             };
 
-            fetch("/edit", {
+            fetch("/register", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -250,11 +258,19 @@
                 return response.json();
               })
               .then((result) => {
-                M.toast({ html: "編集が完了しました。" });
+                // 登録成功の処理
+                M.toast({ html: "登録が完了しました。" });
+                // フォームをリセットする場合
+                document.getElementById("registrationForm").reset();
+                // モーダルを閉じる
+                const modalInstance = M.Modal.getInstance(
+                  document.getElementById("previewModal")
+                );
+                modalInstance.close();
               })
               .catch((error) => {
                 console.error("エラー:", error);
-                M.toast({ html: "編集中にエラーが発生しました。" });
+                M.toast({ html: "登録中にエラーが発生しました。" });
               });
           });
       });
