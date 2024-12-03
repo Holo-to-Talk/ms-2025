@@ -108,14 +108,33 @@
                 </div>
 
                 <!-- 駅のAI入力フィールド -->
-                <div class="type_AI">
-                  <label for="type_AI">AI選択:</label>
-                  <input type="radio" id="type_AI" name="type_AI" value="1" {% if form_data.type_AI == 1 %} checked {% endif %} required
-                  />AI
-
-                  <input type="radio" id="type_AI" name="type_AI" value="0" {% if form_data.type_AI == 0 %} checked {% endif %} required
-                  />notAI
-              </div>
+                <div class="input-field">
+                  <div class="radio-group">
+                    <label>
+                      <input
+                        type="radio"
+                        id="type_AI"
+                        name="type_AI"
+                        value="1"
+                        {% if form_data.type_AI == 1 %} checked {% endif %}
+                        required
+                      />
+                      <span>AI</span>
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        id="type_AI"
+                        name="type_AI"
+                        value="0"
+                        {% if form_data.type_AI == 0 %} checked {% endif %}
+                        required
+                      />
+                      <span>notAI</span>
+                    </label>
+                  </div>
+                </div>
+              
 
               <!-- エラーメッセージ -->
               <div>
