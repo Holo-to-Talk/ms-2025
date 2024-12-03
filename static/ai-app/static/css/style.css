@@ -33,9 +33,9 @@ body, html {
     position: absolute;
     top: 50%;
     left: 50%;
+    text-align: center;
     transform-origin: 50% 50%;
     transform: translate(-50%, -50%) rotateY(180deg);
-    text-align: center;
     width: 80vw;
     height: auto;
     font-size: 50px;
@@ -70,9 +70,9 @@ body, html {
     position: absolute;
     top: 85%;
     left: 50%;
+    text-align: center;
     transform-origin: 50% 50%;
     transform: translate(-50%, -50%) rotateY(180deg);
-    text-align: center;
     width: 80vw;
     height: auto;
     font-size: 50px;
@@ -86,9 +86,9 @@ body, html {
     position: absolute;
     top: 90%;
     left: 50%;
+    text-align: center;
     transform-origin: 50% 50%;
     transform: translate(-50%, -50%) rotateY(180deg);
-    text-align: center;
     width: 56vw;
     height: auto;
     font-size: 35px;
