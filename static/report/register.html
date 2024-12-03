@@ -56,14 +56,6 @@
 
         <form id="reportForm" method="POST" action="">
 
-        <!-- gpt_log_id -->>
-        <label>GPT Log ID:</label>
-        <select name="gpt_log_id">
-            {% for id in gpt_log_ids %}
-                <option value="{{ id }}">{{ id }}</option>
-            {% endfor %}
-        </select>
-
         <!-- 担当者名 -->
         <div class="input-field">
           <input
@@ -122,12 +114,6 @@
 <div id="previewModal" class="modal">
   <div class="modal-content">
     <h4>プレビュー</h4>
-
-    <!-- GPT Log ID -->
-    <div class="preview-item">
-      <div class="preview-item-title">GPT Log ID</div>
-      <div class="preview-item-content" id="previewGptLogId"></div>
-    </div>
 
     <!-- 担当者名 -->
     <div class="preview-item">
@@ -199,25 +185,20 @@
           return str.replace(/\n/g, "<br>");
         }
 
-        // プレビューボタンがクリックされた際にフォームの内容をモーダルに表示
-        document
-          .getElementById("previewButton")
-          .addEventListener("click", function () {
-            document.getElementById("previewInquirySource").textContent =
-              document.getElementById("inquirySource").value;
-            document.getElementById("previewInquiryDestination").textContent =
-              document.getElementById("inquiryDestination").value;
-            document.getElementById("previewOverview").textContent =
-              document.getElementById("overview").value;
-            document.getElementById("previewInquiryContent").innerHTML = nl2br(
-              document.getElementById("inquiryContent").value
-            );
-            document.getElementById("previewResponseContent").innerHTML = nl2br(
-              document.getElementById("responseContent").value
-            );
-            document.getElementById("previewPersonInCharge").textContent =
-              document.getElementById("personInCharge").value;
-          });
+        // プレビューボタンがクリックされた際の処理
+        document.getElementById("previewButton").addEventListener("click", function () {
+          // 各フィールドの値をプレビュー表示
+          document.getElementById("previewPersonInCharge").textContent =
+            document.getElementById("personInCharge").value;
+          document.getElementById("previewOverview").textContent =
+            document.getElementById("overview").value;
+          document.getElementById("previewInquiryContent").innerHTML = nl2br(
+            document.getElementById("inquiryContent").value
+          );
+          document.getElementById("previewResponseContent").innerHTML = nl2br(
+            document.getElementById("responseContent").value
+          );
+        });
       });
     </script>
   </body>

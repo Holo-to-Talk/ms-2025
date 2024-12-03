@@ -379,7 +379,6 @@ def report():
             "about": request.form.get("about", ""),
             "detail": request.form.get("detail", ""),
             "answer": request.form.get("answer", ""),
-            "gpt_log_id": request.form.get("gpt_log_id", "")
         }
 
         try:
@@ -388,17 +387,16 @@ def report():
                     cursor.execute('''USE holo_to_talk''')
                     # staff_logテーブルにデータを挿入
                     cursor.execute('''
-                        INSERT INTO staff_log (gpt_log_id, responder, about, detail, answer)
-                        VALUES (%s, %s, %s, %s, %s)
+                        INSERT INTO staff_log (responder, about, detail, answer)
+                        VALUES (%s, %s, %s, %s)
                     ''', (
-                        form_data["gpt_log_id"],
                         form_data["responder"],
                         form_data["about"],
                         form_data["detail"],
                         form_data["answer"]
                     ))
                 conn.commit()
-            return redirect(url_for('success'))  # 成功ページにリダイレクト
+            return redirect(url_for('report_list'))  # 成功ページにリダイレクト
         except Exception as e:
             print(f"エラーが発生しました: {e}")
             return "エラーが発生しました", 500
