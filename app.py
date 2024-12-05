@@ -114,6 +114,9 @@ def register():
         "station_num": "",
         "address": "",
         "phone_num": "",
+        "twilio_twiml_app_sid": "",
+        "api_key": "",
+        "api_secret": "",
         "password": ""
     }
 
@@ -124,6 +127,9 @@ def register():
             "station_num": request.form.get("station_num", ""),
             "address": request.form.get("address", ""),
             "phone_num": request.form.get("phone_num", ""),
+            "twilio_twiml_app_sid": request.form.get("twilio_twiml_app_sid", ""),
+            "api_key": request.form.get("api_key", ""),
+            "api_secret": request.form.get("api_secret", ""),
             "password": request.form.get("password", "")
         }
 
@@ -132,6 +138,9 @@ def register():
         error_msg.append(validate_station_num(form_data["station_num"]))
         error_msg.append(validate_address(form_data["address"]))
         error_msg.append(validate_phone_num(form_data["phone_num"]))
+        error_msg.append(validate_twilio_twiml_app_sid(form_data["twilio_twiml_app_sid"]))
+        error_msg.append(validate_api_key(form_data["api_key"]))
+        error_msg.append(validate_api_secret(form_data["api_secret"]))
         error_msg.append(validate_password(form_data["password"]))
 
         error_msg = [msg for msg in error_msg if msg]
@@ -154,9 +163,9 @@ def register():
 
             # station_infoテーブルにデータを挿入
             cursor.execute('''
-            INSERT INTO station_info (name, station_num, address, phone_num)
-            VALUES (%s, %s, %s, %s)
-            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
+            INSERT INTO station_info (name, station_num, address, phone_num, twilio_twiml_app_sid, api_key, api_secret)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"], form_data["twilio_twiml_app_sid"], form_data["api_key"], form_data["api_secret"]))
 
             # データベースに変更を保存
             conn.commit()
