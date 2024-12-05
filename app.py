@@ -114,6 +114,9 @@ def register():
         "station_num": "",
         "address": "",
         "phone_num": "",
+        "app_sid": "",
+        "app_key": "",
+        "app_secret": "",
         "password": ""
     }
 
@@ -124,6 +127,9 @@ def register():
             "station_num": request.form.get("station_num", ""),
             "address": request.form.get("address", ""),
             "phone_num": request.form.get("phone_num", ""),
+            "app_sid": request.form.get("app_sid", ""),
+            "app_key": request.form.get("app_key", ""),
+            "app_secret": request.form.get("app_secret", ""),
             "password": request.form.get("password", "")
         }
 
@@ -132,6 +138,9 @@ def register():
         error_msg.append(validate_station_num(form_data["station_num"]))
         error_msg.append(validate_address(form_data["address"]))
         error_msg.append(validate_phone_num(form_data["phone_num"]))
+        error_msg.append(validate_app_sid(form_data["app_sid"]))
+        error_msg.append(validate_app_key(form_data["app_key"]))
+        error_msg.append(validate_app_secret(form_data["app_secret"]))
         error_msg.append(validate_password(form_data["password"]))
 
         error_msg = [msg for msg in error_msg if msg]
@@ -154,9 +163,9 @@ def register():
 
             # station_infoテーブルにデータを挿入
             cursor.execute('''
-            INSERT INTO station_info (name, station_num, address, phone_num)
-            VALUES (%s, %s, %s, %s)
-            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"]))
+            INSERT INTO station_info (name, station_num, address, phone_num, app_sid, app_key, app_secret)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ''', (form_data["name"], form_data["station_num"], form_data["address"], form_data["phone_num"], form_data["app_sid"], form_data["app_key"], form_data["app_secret"]))
 
             # データベースに変更を保存
             conn.commit()
@@ -419,6 +428,62 @@ def change_password():
 def logout():
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
+
+# レポートページの処理
+@app.route("/report/register", methods=["POST", "GET"])
+def report():
+    form_data = {
+        "responder": "",
+        "about": "",
+        "detail": "",
+        "answer": "",
+        "gpt_log_id": ""
+    }
+
+    if request.method == "GET":
+        try:
+            with db_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute('''USE holo_to_talk''')
+                    # gpt_talk_log テーブルから id のみ取得
+                    cursor.execute('''SELECT id FROM gpt_talk_log''')
+                    gpt_log_ids = [row[0] for row in cursor.fetchall()]
+        except Exception as e:
+            gpt_log_ids = []
+            print(f"エラーが発生しました: {e}")
+
+        # GETメソッド用のHTMLレンダリング
+        return render_template('report/register.html', form_data=form_data, gpt_log_ids=gpt_log_ids)
+
+    if request.method == "POST":
+        # POSTデータを取得
+        form_data = {
+            "responder": request.form.get("responder", ""),
+            "about": request.form.get("about", ""),
+            "detail": request.form.get("detail", ""),
+            "answer": request.form.get("answer", ""),
+        }
+
+        try:
+            with db_connection() as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute('''USE holo_to_talk''')
+                    # staff_logテーブルにデータを挿入
+                    cursor.execute('''
+                        INSERT INTO staff_log (responder, about, detail, answer)
+                        VALUES (%s, %s, %s, %s)
+                    ''', (
+                        form_data["responder"],
+                        form_data["about"],
+                        form_data["detail"],
+                        form_data["answer"]
+                    ))
+                conn.commit()
+            return redirect(url_for('report_list'))  # 成功ページにリダイレクト
+        except Exception as e:
+            print(f"エラーが発生しました: {e}")
+            return "エラーが発生しました", 500
+
 
 #レポートリスト表示処理
 @app.route('/report/list', methods=['GET'])

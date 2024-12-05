@@ -61,6 +61,24 @@
       #deleteMessage {
         font-size: 1.2em;
       }
+      .move{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+      .move_menu{
+        width: 10%;
+      }
+
+      .move_menu a{
+        color: #000;
+      }
+
+      .move_menu a:hover{
+        color: #555;
+      }
+
+
     </style>
     <link rel="stylesheet" href="/static/header.css" />
   </head>
@@ -93,7 +111,10 @@
     </ul>
     <div class="container">
       <h4 class="center-align">ユーザー一覧</h4>
-
+      <div class="move">
+        <div class="move_menu"><a href="/">＜ 戻る</a></div>
+        <div class="move_menu"><a href="/station/register">新規登録 ＞</a></div>
+      </div>
       <!-- ユーザー一覧テーブル -->
       <table class="highlight centered">
         <thead>
