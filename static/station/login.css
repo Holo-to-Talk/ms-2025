@@ -7,7 +7,6 @@ body, html {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif; /* フォントを適用 */
 }
-
 .container {
   max-width: 400px;
   width: 100%;
@@ -16,6 +15,7 @@ body, html {
 /* 入力フィールドのフォント設定 */
 input[type="text"],
 input[type="password"],
-input[type="tel"] {
+input[type="tel"],
+button {
   font-family: 'Noto Sans JP', sans-serif;
 }
