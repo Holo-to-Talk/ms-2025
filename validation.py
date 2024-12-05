@@ -24,24 +24,24 @@ def validate_phone_num(phone_num):
         return "電話番号が無効です。"
     return ""
 
-def validate_twilio_twiml_app_sid(twilio_twiml_app_sid):
-    if not twilio_twiml_app_sid.encode('utf-8').isalnum():
+def validate_app_sid(app_sid):
+    if not app_sid.encode('utf-8').isalnum():
         return "twilio_twiml_app_sidは半角英数字のみを入力してください。"
-    if len(twilio_twiml_app_sid) != 35:
+    if len(app_sid) != 35:
         return "twilio_twiml_app_sidは半角英数字35文字です。"
     return ""
 
-def validate_api_key(api_key):
-    if not api_key.encode('utf-8').isalnum():
+def validate_app_key(app_key):
+    if not app_key.encode('utf-8').isalnum():
         return "api_keyは半角英数字のみを入力してください。"
-    if len(api_key) != 35:
+    if len(app_key) != 35:
         return "api_keyは半角英数字35文字です。"
     return ""
 
-def validate_api_secret(api_secret):
-    if not api_secret.encode('utf-8').isalnum():
+def validate_app_secret(app_secret):
+    if not app_secret.encode('utf-8').isalnum():
         return "api_secretは半角英数字のみを入力してください。"
-    if len(api_secret) != 33:
+    if len(app_secret) != 33:
         return "api_secretは半角英数字33文字です。"
     return ""
 
