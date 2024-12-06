@@ -124,7 +124,6 @@
             <th class="address-column">住所</th>
             <th>電話番号</th>
             <th>編集</th>
-            <th>削除</th>
           </tr>
         </thead>
         <tbody>
@@ -138,30 +137,13 @@
               <form action="" method="post">
                   <input type="hidden" name="station_num" value="{{ station.station_num }}">
                   <input type="submit" name="action" value="編集" class="btn-small waves-effect waves-light">
-          </td>
-          <td>
-              <input type="submit" name="action" value="削除" class="btn-small waves-effect waves-red">
+                  <input type="submit" name="action" value="削除" class="btn-small waves-effect waves-red">
               </form>
-          </td>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-
-      <!-- 削除確認モーダル -->
-      <div id="deleteModal" class="modal">
-        <div class="modal-content">
-          <p id="deleteMessage"></p>
-        </div>
-        <div class="modal-footer">
-          <a href="#!" class="modal-close waves-effect modal-cancel-btn btn"
-            >キャンセル</a
-          >
-          <a href="#!" class="modal-close waves-effect modal-delete-btn btn"
-            >削除</a
-          >
-        </div>
-      </div>
 
       <!-- 戻るボタン -->
       <div class="center-align" style="margin-top: 20px">
@@ -174,26 +156,5 @@
 
     <!-- Materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var elems = document.querySelectorAll(".sidenav");
-        M.Sidenav.init(elems, {
-          edge: "left",
-          draggable: false, // ドラッグで開閉できないように設定
-        });
-        var elems = document.querySelectorAll(".modal");
-        var instances = M.Modal.init(elems);
-
-        // 削除ボタンをクリックした際の処理
-        document.querySelectorAll(".delete-button").forEach((button) => {
-          button.addEventListener("click", function () {
-            const stationName = this.getAttribute("data-station");
-            document.getElementById(
-              "deleteMessage"
-            ).textContent = `${stationName}を本当に削除しますか？`;
-          });
-        });
-      });
-    </script>
   </body>
 </html>
