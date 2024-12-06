@@ -1,5 +1,6 @@
 import openai
 from dotenv import load_dotenv
+from constats import ChatGPTAPIOutputSettings
 import os
 
 def chatGPT_API_Output(conversation_history, inputContent):
@@ -8,9 +9,9 @@ def chatGPT_API_Output(conversation_history, inputContent):
     API_KEY = os.getenv("OPENAI_API_KEY")
     openai.api_key = API_KEY
 
-    MODEL = 'gpt-3.5-turbo'
+    MODEL = ChatGPTAPIOutputSettings.MODEL
 
-    MAX_TOKENS = 100
+    MAX_TOKENS = ChatGPTAPIOutputSettings.MAX_TOKENS
 
     if conversation_history:
         conversation_history.append({"role": "user", "content": inputContent})

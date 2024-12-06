@@ -1,5 +1,6 @@
 import openai
 from dotenv import load_dotenv
+from constats import AudioToTextSettings
 import os
 
 import socketio_emit
@@ -10,7 +11,7 @@ def audio_To_Text(savedDirectory):
     API_KEY = os.getenv("OPENAI_API_KEY")
     openai.api_key = API_KEY
 
-    MODEL = 'whisper-1'
+    MODEL = AudioToTextSettings.MODEL
 
     audio_file_path = savedDirectory
 

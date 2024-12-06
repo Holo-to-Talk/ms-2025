@@ -3,21 +3,18 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from dotenv import load_dotenv
+from constats import PhoneAutomationSettings
 import os
 import time
 
 def phoneAutomation():
-    load_dotenv()
+    URL = PhoneAutomationSettings.URL
 
-    URL = 'https://holog.net'
-    # URL = 'https://num-0145.holog.net'
+    PHONE_NUMBER = PhoneAutomationSettings.PHONE_NUMBER
 
-    PHONE_NUMBER = '+1 8302242800'
+    WEB_DRIVER_WAIT_TIME = PhoneAutomationSettings.WEB_DRIVER_WAIT_TIME
 
-    WEB_DRIVER_WAIT_TIME = 10
-
-    TIME_SLEEP_TIME = 1
+    TIME_SLEEP_TIME = PhoneAutomationSettings.TIME_SLEEP_TIME
 
     options = Options()
     options.add_argument('--use-fake-ui-for-media-stream')

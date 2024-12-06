@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit
 from socketio_Config import socketio
 from dotenv import load_dotenv
+from constats import AppSettings
 import os
 import time
 
@@ -21,9 +22,9 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 socketio.init_app(app)
 
-TIME_SLEEP = 1
-QR_TIME_SLEEP_COUNT = 10
-TIME_SLEEP_COUNT = 5
+TIME_SLEEP = AppSettings.TIME_SLEEP
+QR_TIME_SLEEP_COUNT = AppSettings.QR_TIME_SLEEP_COUNT
+TIME_SLEEP_COUNT = AppSettings.TIME_SLEEP_COUNT
 
 flag_space = False
 flag_enter2 = False

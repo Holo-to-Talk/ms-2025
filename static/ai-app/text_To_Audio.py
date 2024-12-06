@@ -1,11 +1,15 @@
 import pyttsx3
+from constats import TextToAudioSettings
 
 def text_To_Audio(outputContent):
+    RATE = TextToAudioSettings.RATE
+    VOLUME = TextToAudioSettings.VOLUME
+
     engine = pyttsx3.init()
 
-    engine.setProperty('rate', 150)
+    engine.setProperty('rate', RATE)
 
-    engine.setProperty('volume', 1)
+    engine.setProperty('volume', VOLUME)
 
     text = outputContent
     engine.say(text)

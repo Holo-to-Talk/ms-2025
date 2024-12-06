@@ -2,6 +2,7 @@ import pyaudio
 import wave
 import numpy as np
 from dotenv import load_dotenv
+from constats import VoiceRecordingSettings
 import os
 
 import socketio_emit
@@ -9,19 +10,19 @@ import socketio_emit
 def voice_Recording():
     load_dotenv()
 
-    FORMAT = pyaudio.paInt16
+    FORMAT = VoiceRecordingSettings.FORMAT
 
-    CHANNELS = 1
+    CHANNELS = VoiceRecordingSettings.CHANNELS
 
-    RATE = 44100
+    RATE = VoiceRecordingSettings.RATE
 
-    CHUNK = 1024
+    CHUNK = VoiceRecordingSettings.CHUNK
 
-    OUTPUT_FILE = "inputText.wav"
+    OUTPUT_FILE = VoiceRecordingSettings.OUTPUT_FILE
 
-    THRESHOLD = 500
+    THRESHOLD = VoiceRecordingSettings.THRESHOLD
 
-    SILENCE_DURATION = 3
+    SILENCE_DURATION = VoiceRecordingSettings.SILENCE_DURATION
 
     audio = pyaudio.PyAudio()
 
