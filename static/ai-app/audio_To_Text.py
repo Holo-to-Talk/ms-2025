@@ -10,7 +10,7 @@ def audio_To_Text(savedDirectory):
     API_KEY = os.getenv("OPENAI_API_KEY")
     openai.api_key = API_KEY
 
-    MODEL = os.getenv("AUDIO_TO_TEXT_MODEL")
+    MODEL = 'whisper-1'
 
     audio_file_path = savedDirectory
 

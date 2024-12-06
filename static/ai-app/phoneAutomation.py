@@ -10,9 +10,10 @@ import time
 def phoneAutomation():
     load_dotenv()
 
-    URL = os.getenv("URL")
+    URL = 'https://holog.net'
+    # URL = 'https://num-0145.holog.net'
 
-    PHONE_NUMBER = os.getenv("PHONE_NUMBER")
+    PHONE_NUMBER = '+1 8302242800'
 
     WEB_DRIVER_WAIT_TIME = 10
 

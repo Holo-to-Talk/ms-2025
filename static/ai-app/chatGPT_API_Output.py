@@ -8,9 +8,9 @@ def chatGPT_API_Output(conversation_history, inputContent):
     API_KEY = os.getenv("OPENAI_API_KEY")
     openai.api_key = API_KEY
 
-    OUTPUT_MODEL = os.getenv("OUTPUT_MODEL")
+    MODEL = 'gpt-3.5-turbo'
 
-    MAX_TOKENS = int(os.getenv("MAX_TOKENS"))
+    MAX_TOKENS = 100
 
     if conversation_history:
         conversation_history.append({"role": "user", "content": inputContent})
@@ -22,7 +22,7 @@ def chatGPT_API_Output(conversation_history, inputContent):
         ]
 
     response = openai.ChatCompletion.create(
-        model = OUTPUT_MODEL,
+        model = MODEL,
 
         messages = messages,
 

@@ -19,9 +19,9 @@ def voice_Recording():
 
     OUTPUT_FILE = "inputText.wav"
 
-    THRESHOLD = int(os.getenv("THRESHOLD"))
+    THRESHOLD = 500
 
-    SILENCE_DURATION = int(os.getenv("SILENCE_DURATION"))
+    SILENCE_DURATION = 3
 
     audio = pyaudio.PyAudio()
 
