@@ -28,9 +28,12 @@ input[type="tel"] {
 /* Google Fonts: Noto Sans JP の適用 */
 body,
 input,
-textarea {
+textarea,
+button {
   font-family: "Noto Sans JP", sans-serif;
 }
+
+
 
 /* モーダルのスタイル */
 #previewModal {
