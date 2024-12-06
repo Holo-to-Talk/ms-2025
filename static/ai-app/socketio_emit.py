@@ -44,3 +44,9 @@ def socketio_emit_image_qr_add_active():
 
 def socketio_emit_image_qr_remove_active():
     socketio.emit('image_qr_remove_active', {})
+
+def socketio_emit_start_telop_animation():
+    socketio.emit('start_telop_animation', {})
+
+def socketio_emit_stop_telop_animation():
+    socketio.emit('stop_telop_animation', {})

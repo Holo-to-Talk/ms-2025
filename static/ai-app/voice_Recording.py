@@ -33,8 +33,7 @@ def voice_Recording():
         frames_per_buffer = CHUNK
     )
 
-    telopContent = "録音しています"
-    socketio_emit.socketio_emit_telop(telopContent)
+    socketio_emit.socketio_emit_start_telop_animation()
 
     frames = []
     silent_chunks = 0
@@ -53,8 +52,7 @@ def voice_Recording():
             silent_chunks = 0
 
         if silent_chunks > int(RATE / CHUNK * SILENCE_DURATION):
-            telopContent = "録音が終わりました"
-            socketio_emit.socketio_emit_telop(telopContent)
+            socketio_emit.socketio_emit_stop_telop_animation()
             break
 
     stream.stop_stream()
