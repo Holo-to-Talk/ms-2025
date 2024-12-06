@@ -145,7 +145,7 @@ def ai():
     flag_space = False
     socketio_emit.socketio_emit_flag_space()
 
-@app.route('/home/')
+@app.route('/home')
 def main():
     return render_template('index.html')
 
