@@ -311,9 +311,6 @@ def edit_station(station_num):
             "address": result["address"],
             "phone_num": result["phone_num"],
             "type_AI": result["type_AI"],
-            "app_sid": result["app_sid"],
-            "app_key": result["app_key"],
-            "app_secret": result["app_secret"]
         }
         print(form_data)#編集内容
 

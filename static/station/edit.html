@@ -99,57 +99,12 @@
                     id="station_phone"
                     type="tel"
                     required
-                    pattern="^\+[0-9]{11}$"
-                    title="先頭に「+」を含め、全体で12文字（+と11桁の数字）のみ入力してください"
+                    pattern="^[0-9\-]+$"
+                    title="数字とハイフンのみを入力してください"
                     name="phone_num"
                     value="{{ form_data.phone_num }}"
                   />
                   <label for="station_phone" class="active">駅の電話番号</label>
-                </div>
-
-                <!-- twilio_twiml_app_sidフィールド -->
-                <div class="input-field">
-                  <i class="material-icons prefix">key</i>
-                  <input
-                    id="twilio_twiml_app_sid"
-                    type="text"
-                    readonly
-                    pattern="^[a-zA-Z0-9]{34}$"
-                    title="半角英数字34文字のみを入力してください"
-                    name="twilio_twiml_app_sid"
-                    value="{{ form_data.app_sid }}"
-                  />
-                  <label for="twilio_twiml_app_sid" class="active">twilio_twiml_app_sid</label>
-                </div>
-
-                <!-- api_keyフィールド -->
-                <div class="input-field">
-                  <i class="material-icons prefix">key</i>
-                  <input
-                    id="app_key"
-                    type="text"
-                    readonly
-                    pattern="^[a-zA-Z0-9]{34}$"
-                    title="半角英数字34文字のみを入力してください"
-                    name="app_key"
-                    value="{{ form_data.app_key }}"
-                  />
-                  <label for="app_key" class="active">app_key</label>
-                </div>
-
-                <!-- api_secretフィールド -->
-                <div class="input-field">
-                  <i class="material-icons prefix">key</i>
-                  <input
-                    id="app_secret"
-                    type="text"
-                    readonly
-                    pattern="^[a-zA-Z0-9]{32}$"
-                    title="半角英数字32文字のみを入力してください"
-                    name="app_key"
-                    value="{{ form_data.app_secret }}"
-                  />
-                  <label for="app_secret" class="active">app_secret</label>
                 </div>
 
                 <!-- 駅のAI入力フィールド -->
@@ -179,6 +134,7 @@
                     </label>
                   </div>
                 </div>
+              
 
               <!-- エラーメッセージ -->
               <div>
