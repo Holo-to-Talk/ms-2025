@@ -387,7 +387,7 @@ def edit_station(station_num):
         return redirect('/station/list?update_done')
     
 #パスワード変更処理
-@app.route('/user/change-password', methods=['GET', 'POST'])
+@app.route('/user/ed-pass', methods=['GET', 'POST'])
 def change_password():
     # エラーメッセージリスト
     error_msg = []
@@ -416,7 +416,7 @@ def change_password():
 
         # エラーメッセージがあればフォームを再表示
         if error_msg:
-            return render_template('change-password.html', error_msg=error_msg)
+            return render_template('/temp/change-password.html', error_msg=error_msg)
 
         # データベース接続
         conn = db_connection()
@@ -431,12 +431,12 @@ def change_password():
 
             if not result:
                 error_msg.append("ユーザーが見つかりません。")
-                return render_template('change-password.html', error_msg=error_msg)
+                return render_template('/temp/change-password.html', error_msg=error_msg)
 
             # 現在のパスワードを検証
             if not bcrypt.checkpw(current_password.encode('utf-8'), result['password'].encode('utf-8')):
                 error_msg.append("現在のパスワードが正しくありません。")
-                return render_template('change_password.html', error_msg=error_msg)
+                return render_template('/temp/change_password.html', error_msg=error_msg)
 
             # 新しいパスワードをハッシュ化
             hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
@@ -451,13 +451,13 @@ def change_password():
         except Exception as e:
             conn.rollback()
             print(f"エラーが発生しました: {e}")
-            return render_template('change-password.html', error_msg=error_msg)
+            return render_template('/temp/change-password.html', error_msg=error_msg)
         finally:
             cursor.close()
             conn.close()
 
     # GETリクエストの場合、フォームを表示
-    return render_template('change-password.html', error_msg=error_msg)
+    return render_template('/temp/change-password.html', error_msg=error_msg)
 
 # ログアウト処理
 @app.route('/user/logout')
