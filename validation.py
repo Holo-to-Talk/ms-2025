@@ -19,9 +19,10 @@ def validate_address(address):
     return ""
 
 def validate_phone_num(phone_num):
-    pattern = r"^\+?[0-9]{10,15}$"
+    # 電話番号が+で始まり、12文字であることを確認する正規表現
+    pattern = r"^\+[0-9]{11}$"
     if not re.match(pattern, phone_num):
-        return "電話番号が無効です。"
+        return "電話番号が無効です。フォーマットは「+」を含めた12文字にしてください。"
     return ""
 
 def validate_app_sid(app_sid):
