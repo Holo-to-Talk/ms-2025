@@ -1,7 +1,9 @@
-def qr_code_found(inputContent):
-    search_list = ['QRCode', 'QRコード', 'qrCode', 'qrコード', 'QR Code', 'QR コード', 'qr Code', 'qr コード']
+from constants import QRCodeFoundSettings
 
-    found = any(char in inputContent for char in search_list)
+def qr_code_found(inputContent):
+    SEARCH_LIST = QRCodeFoundSettings.SEARCH_LIST
+
+    found = any(char in inputContent for char in SEARCH_LIST)
 
     if found:
         return True

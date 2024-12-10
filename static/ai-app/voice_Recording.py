@@ -2,6 +2,7 @@ import pyaudio
 import wave
 import numpy as np
 from dotenv import load_dotenv
+from constants import VoiceRecordingSettings
 import os
 
 import socketio_emit
@@ -11,17 +12,17 @@ def voice_Recording():
 
     FORMAT = pyaudio.paInt16
 
-    CHANNELS = 1
+    CHANNELS = VoiceRecordingSettings.CHANNELS
 
-    RATE = 44100
+    RATE = VoiceRecordingSettings.RATE
 
-    CHUNK = 1024
+    CHUNK = VoiceRecordingSettings.CHUNK
 
-    OUTPUT_FILE = "inputText.wav"
+    OUTPUT_FILE = VoiceRecordingSettings.OUTPUT_FILE
 
-    THRESHOLD = int(os.getenv("THRESHOLD"))
+    THRESHOLD = VoiceRecordingSettings.THRESHOLD
 
-    SILENCE_DURATION = int(os.getenv("SILENCE_DURATION"))
+    SILENCE_DURATION = VoiceRecordingSettings.SILENCE_DURATION
 
     audio = pyaudio.PyAudio()
 
@@ -33,8 +34,7 @@ def voice_Recording():
         frames_per_buffer = CHUNK
     )
 
-    telopContent = "録音しています"
-    socketio_emit.socketio_emit_telop(telopContent)
+    socketio_emit.socketio_emit_start_telop_animation()
 
     frames = []
     silent_chunks = 0
@@ -53,8 +53,7 @@ def voice_Recording():
             silent_chunks = 0
 
         if silent_chunks > int(RATE / CHUNK * SILENCE_DURATION):
-            telopContent = "録音が終わりました"
-            socketio_emit.socketio_emit_telop(telopContent)
+            socketio_emit.socketio_emit_stop_telop_animation()
             break
 
     stream.stop_stream()

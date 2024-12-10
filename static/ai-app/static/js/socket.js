@@ -1,7 +1,9 @@
 const socket = io()
 
 // 画像切替秒数（1000 => 1s）
-const intervalTime = 100;
+const switchImageIntervalTime = 10;
+const telopAnimationIntervalTime = 500;
+const dotsLength = 3;
 let flag_enter = false;
 let flag_enter2 = false;
 let flag_space = false;
@@ -88,7 +90,7 @@ function resetImage() {
 
 socket.on('start_switching', () => {
     if (!intervalId) {
-        intervalId = setInterval(switchImage, intervalTime);
+        intervalId = setInterval(switchImage, switchImageIntervalTime);
     }
 });
 
@@ -108,4 +110,32 @@ socket.on('image_qr_add_active', () => {
 socket.on('image_qr_remove_active', () => {
     images.forEach(img => img.classList.remove('active'));
     images[sequence[0]].classList.add('active');
+});
+
+const telop = document.getElementById('telop');
+let dots = "";
+let intervalId2 = null;
+
+function startTelopAnimation() {
+    dots = dots.length < dotsLength ? dots + "." : "";
+    telop.textContent = "録音しています" + dots;
+}
+
+function resetTelopAnimation() {
+    dots = "";
+    telop.textContent = "録音が終わりました";
+}
+
+socket.on('start_telop_animation', () => {
+    if (!intervalId2) {
+        intervalId2 = setInterval(startTelopAnimation, telopAnimationIntervalTime);
+    }
+});
+
+socket.on('stop_telop_animation', () => {
+    if (intervalId2) {
+        clearInterval(intervalId2);
+        intervalId2 = null;
+    }
+    resetTelopAnimation();
 });
