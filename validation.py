@@ -1,4 +1,5 @@
 import re
+from db import *
 
 # バリデーション関数
 def validate_name(name):
@@ -9,8 +10,27 @@ def validate_name(name):
 def validate_station_num(station_num):
     if not station_num.encode('utf-8').isalnum():
         return "駅番号は半角英数字のみを入力してください。"
-    if len(station_num) >= 6:
+    if len(station_num) > 5:
         return "駅番号は5文字以下で入力してください。"
+    
+    try:
+        # データベース接続とクエリ実行
+        cursor = mysql.connection.cursor()
+        cursor.execute(''' use holo_to_talk ''')
+        query = "SELECT COUNT(*) FROM station_info WHERE station_num = %s"
+        cursor.execute(query, (station_num,))
+        count = cursor.fetchone()[0]
+
+        if count > 0:
+            return f"駅番号「{station_num}」はすでに登録されています。"
+
+    except Exception as e:
+        return f"データベースエラー: {e}"
+
+    finally:
+        # カーソルを閉じる
+        cursor.close()
+
     return ""
 
 def validate_address(address):
