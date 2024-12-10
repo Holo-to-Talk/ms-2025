@@ -390,7 +390,7 @@ def edit_station(station_num):
         return redirect('/station/list?update_done')
     
 #パスワード変更処理
-@app.route('/user/change-password', methods=['GET', 'POST'])
+@app.route('/user/ed-pass', methods=['GET', 'POST'])
 def change_password():
     # エラーメッセージリスト
     error_msg = []
@@ -414,7 +414,7 @@ def change_password():
             error_msg.append("新しいパスワードを入力してください。")
         if new_password != confirm_password:
             error_msg.append("新しいパスワードが一致していません。")
-        if len(new_password) < 6:
+        if len(new_password) < 5:
             error_msg.append("新しいパスワードは6文字以上である必要があります。")
 
         # エラーメッセージがあればフォームを再表示
