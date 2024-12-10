@@ -4,7 +4,6 @@ class AppSettings:
     TIME_SLEEP_COUNT = 5
 
 class VoiceRecordingSettings:
-    FORMAT = pyaudio.paInt16
     CHANNELS = 1
     RATE = 44100
     CHUNK = 1024

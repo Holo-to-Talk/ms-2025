@@ -10,7 +10,7 @@ import socketio_emit
 def voice_Recording():
     load_dotenv()
 
-    FORMAT = VoiceRecordingSettings.FORMAT
+    FORMAT = pyaudio.paInt16
 
     CHANNELS = VoiceRecordingSettings.CHANNELS
 
