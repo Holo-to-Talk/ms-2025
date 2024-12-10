@@ -411,7 +411,7 @@ def change_password():
             error_msg.append("新しいパスワードを入力してください。")
         if new_password != confirm_password:
             error_msg.append("新しいパスワードが一致していません。")
-        if len(new_password) < 6:
+        if len(new_password) < 5:
             error_msg.append("新しいパスワードは6文字以上である必要があります。")
 
         # エラーメッセージがあればフォームを再表示
