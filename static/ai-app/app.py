@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit
 from socketio_Config import socketio
 from dotenv import load_dotenv
-from constatns import AppSettings
+from constants import AppSettings
 import os
 import time
 
