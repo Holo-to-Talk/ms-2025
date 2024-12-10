@@ -2,7 +2,7 @@ import pyaudio
 import wave
 import numpy as np
 from dotenv import load_dotenv
-from constats import VoiceRecordingSettings
+from constants import VoiceRecordingSettings
 import os
 
 import socketio_emit

@@ -1,6 +1,6 @@
 import openai
 from dotenv import load_dotenv
-from constats import ChatGPTAPIOutputSettings
+from constants import ChatGPTAPIOutputSettings
 import os
 
 def chatGPT_API_Output(conversation_history, inputContent):

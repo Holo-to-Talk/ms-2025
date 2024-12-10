@@ -1,6 +1,6 @@
 import openai
 from dotenv import load_dotenv
-from constats import AudioToTextSettings
+from constants import AudioToTextSettings
 import os
 
 import socketio_emit

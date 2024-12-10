@@ -1,5 +1,5 @@
 import pyttsx3
-from constats import TextToAudioSettings
+from constants import TextToAudioSettings
 
 def text_To_Audio(outputContent):
     RATE = TextToAudioSettings.RATE

@@ -1,4 +1,4 @@
-from constats import QRCodeFoundSettings
+from constants import QRCodeFoundSettings
 
 def qr_code_found(inputContent):
     SEARCH_LIST = QRCodeFoundSettings.SEARCH_LIST
