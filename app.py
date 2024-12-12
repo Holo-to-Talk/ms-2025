@@ -270,6 +270,8 @@ def station_list():
         try:
             cursor.execute('''USE holo_to_talk''')
             cursor.execute('''DELETE FROM station_info WHERE station_num = %s''', (station_num,))
+            cursor.execute('''DELETE FROM users WHERE station_num = %s''', (station_num,))
+
             conn.commit()
 
             # 削除後にリスト画面にリダイレクト
