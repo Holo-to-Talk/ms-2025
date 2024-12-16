@@ -33,6 +33,7 @@ class TextToAudioSettings:
 class ChatGPTAPIOutputSettings:
     MODEL = "gpt-3.5-turbo"
     MAX_TOKENS = 100
+    CHATGPT_SYSTEM_CONTENT = "デフォルトは日本語で対応してください。ただし、日本語以外で質問がなされた場合は対応する言語で対応してください"
 
 class PhoneAutomationSettings:
     URL = "https://holog.net"

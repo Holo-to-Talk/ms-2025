@@ -13,12 +13,15 @@ def chatGPT_API_Output(conversation_history, inputContent):
 
     MAX_TOKENS = ChatGPTAPIOutputSettings.MAX_TOKENS
 
+    SYSTEM_CONTENT = ChatGPTAPIOutputSettings.CHATGPT_SYSTEM_CONTENT
+
     if conversation_history:
         conversation_history.append({"role": "user", "content": inputContent})
         messages = conversation_history
 
     else:
         messages = [
+            {"role": "system", "content": SYSTEM_CONTENT}
             {"role": "user", "content": inputContent}
         ]
 
