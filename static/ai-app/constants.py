@@ -1,3 +1,12 @@
+class TextSettings:
+    QREVENT = "QRCodeを表示します"
+    PHONEEVENT = "電話対応をご希望の場合、Spaceキーを押してください"
+    PHONEEVENT2 = "駅員に電話をかけます"
+    ENTEREVENT ="会話を終了する場合、Enterキーを押してください"
+    CONVERSATIONEVENT = "会話を続けます"
+    CONVERSATIONEVENT2 = "会話を終了します"
+    ENTEREVENT2 = "Enterキーを押して始めてください"
+
 class AppSettings:
     TIME_SLEEP = 1
     QR_TIME_SLEEP_COUNT = 10
