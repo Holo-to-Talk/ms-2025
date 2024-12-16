@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit
 from socketio_Config import socketio
 from dotenv import load_dotenv
-from constants import AppSettings
+from constants import AppSettings, TextSettings
 import os
 import time
 
@@ -43,7 +43,7 @@ def ai():
 
     global conversation_history
     if qr_code_found.qr_code_found(inputContent):
-        outputContent = "QRCodeを表示します"
+        outputContent = TextSettings.QREVENT
         conversation_output = outputContent
         socketio_emit.socketio_emit_output(outputContent)
 
@@ -69,7 +69,7 @@ def ai():
         text_To_Audio.text_To_Audio(outputContent)
         socketio_emit.socketio_emit_stop_switching()
 
-    outputContent = "電話対応をご希望の場合、Spaceキーを押してください"
+    outputContent = TextSettings.PHONEEVENT
     socketio_emit.socketio_emit_output(outputContent)
 
     socketio_emit.socketio_emit_start_switching()
@@ -82,7 +82,7 @@ def ai():
         if flag_space:
             socketio_emit.socketio_emit_countdown_reset()
 
-            outputContent = "駅員に電話をかけます"
+            outputContent = TextSettings.PHONEEVENT2
             socketio_emit.socketio_emit_output(outputContent)
 
             socketio_emit.socketio_emit_start_switching()
@@ -103,7 +103,7 @@ def ai():
             time.sleep(TIME_SLEEP)
             count += 1
 
-    outputContent = "会話を終了する場合、Enterキーを押してください"
+    outputContent = TextSettings.ENTEREVENT
     socketio_emit.socketio_emit_output(outputContent)
 
     socketio_emit.socketio_emit_start_switching()
@@ -148,7 +148,7 @@ def ai():
     socketio_emit.socketio_emit_flag_space()
 
     if flag_continuation:
-        outputContent = "会話を続けます"
+        outputContent = TextSettings.CONVERSATIONEVENT
         socketio_emit.socketio_emit_output(outputContent)
 
         socketio_emit.socketio_emit_start_switching()
@@ -164,7 +164,7 @@ def ai():
         socketio.start_background_task(target = ai)
 
     elif not flag_continuation:
-        outputContent = "会話を終了します"
+        outputContent = TextSettings.CONVERSATIONEVENT2
         socketio_emit.socketio_emit_output(outputContent)
 
         socketio_emit.socketio_emit_start_switching()
@@ -173,7 +173,7 @@ def ai():
 
         socketio_emit.socketio_emit_output_reset()
 
-        telopContent = "Enterキーを押して始めてください"
+        telopContent = TextSettings.ENTEREVENT2
         socketio_emit.socketio_emit_telop_remove_display_none()
         socketio_emit.socketio_emit_telop(telopContent)
 
