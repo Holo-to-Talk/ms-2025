@@ -26,20 +26,25 @@ TIME_SLEEP = AppSettings.TIME_SLEEP
 QR_TIME_SLEEP_COUNT = AppSettings.QR_TIME_SLEEP_COUNT
 TIME_SLEEP_COUNT = AppSettings.TIME_SLEEP_COUNT
 
+flag_continuation =True
 flag_space = False
 flag_enter2 = False
 conversation_history = []
+conversation_input = ""
+conversation_output = ""
 
 def ai():
     savedDirectory = voice_Recording.voice_Recording()
 
     inputContent = audio_To_Text.audio_To_Text(savedDirectory)
+    conversation_input = inputContent
 
     delete_Recording.delete_Recording(savedDirectory)
 
     global conversation_history
     if qr_code_found.qr_code_found(inputContent):
         outputContent = "QRCodeを表示します"
+        conversation_output = outputContent
         socketio_emit.socketio_emit_output(outputContent)
 
         socketio_emit.socketio_emit_start_switching()
@@ -57,6 +62,7 @@ def ai():
 
     else:
         outputContent = chatGPT_API_Output.chatGPT_API_Output(conversation_history, inputContent)
+        conversation_output = outputContent
         socketio_emit.socketio_emit_output(outputContent)
 
         socketio_emit.socketio_emit_start_switching()
@@ -97,36 +103,37 @@ def ai():
             time.sleep(TIME_SLEEP)
             count += 1
 
-    outputContent = "会話を続ける（会話を保存する）場合、Enterキーを押してください"
+    outputContent = "会話を終了する場合、Enterキーを押してください"
     socketio_emit.socketio_emit_output(outputContent)
 
     socketio_emit.socketio_emit_start_switching()
     text_To_Audio.text_To_Audio(outputContent)
     socketio_emit.socketio_emit_stop_switching()
 
+    global flag_continuation
     global flag_enter2
     count = 0
     while True:
         if flag_enter2:
             socketio_emit.socketio_emit_countdown_reset()
 
-            conversation_history.append({"role": "user", "content": inputContent})
-            conversation_history.append({"role": "assistant", "content": outputContent})
+            conversation_history = []
 
-            outputContent = "会話を保存しました"
-            socketio_emit.socketio_emit_output(outputContent)
+            flag_continuation = False
 
-            socketio_emit.socketio_emit_start_switching()
-            text_To_Audio.text_To_Audio(outputContent)
-            socketio_emit.socketio_emit_stop_switching()
             break
 
         elif count == TIME_SLEEP_COUNT:
-            conversation_history = []
-
             socketio_emit.socketio_emit_countdown_reset()
+
+            conversation_history.append({"role": "user", "content": conversation_input})
+            conversation_history.append({"role": "assistant", "content": conversation_output})
+
+            flag_continuation = True
+
             socketio_emit.socketio_emit_flag_enter2()
             flag_enter2 = True
+
             break
 
         else:
@@ -134,17 +141,41 @@ def ai():
             time.sleep(TIME_SLEEP)
             count += 1
 
-    socketio_emit.socketio_emit_output_reset()
-
-    telopContent = "Enterキーを押して始めてください"
-    socketio_emit.socketio_emit_telop_remove_display_none()
-    socketio_emit.socketio_emit_telop(telopContent)
-
     socketio_emit.socketio_emit_flag_enter()
     flag_enter2 = False
     socketio_emit.socketio_emit_flag_enter2()
     flag_space = False
     socketio_emit.socketio_emit_flag_space()
+
+    if flag_continuation:
+        outputContent = "会話を続けます"
+        socketio_emit.socketio_emit_output(outputContent)
+
+        socketio_emit.socketio_emit_start_switching()
+        text_To_Audio.text_To_Audio(outputContent)
+        socketio_emit.socketio_emit_stop_switching()
+
+        socketio_emit.socketio_emit_output_reset()
+
+        socketio_emit.socketio_emit_telop_remove_display_none()
+        socketio_emit.socketio_emit_telop_reset()
+
+        socketio_emit.socketio_emit_flag_enter()
+        socketio.start_background_task(target = ai)
+
+    elif not flag_continuation:
+        outputContent = "会話を終了します"
+        socketio_emit.socketio_emit_output(outputContent)
+
+        socketio_emit.socketio_emit_start_switching()
+        text_To_Audio.text_To_Audio(outputContent)
+        socketio_emit.socketio_emit_stop_switching()
+
+        socketio_emit.socketio_emit_output_reset()
+
+        telopContent = "Enterキーを押して始めてください"
+        socketio_emit.socketio_emit_telop_remove_display_none()
+        socketio_emit.socketio_emit_telop(telopContent)
 
 @app.route('/home/')
 def main():

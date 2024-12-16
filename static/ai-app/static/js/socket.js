@@ -2,7 +2,7 @@ const socket = io()
 
 // 画像切替秒数（1000 => 1s）
 const switchImageIntervalTime = 1;
-const telopAnimationIntervalTime = 500;
+const telopAnimationIntervalTime = 450;
 const dotsLength = 3;
 let flag_enter = false;
 let flag_enter2 = false;

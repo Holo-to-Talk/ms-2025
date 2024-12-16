@@ -12,6 +12,9 @@ def socketio_emit_flag_space():
 def socketio_emit_telop(telopContent):
     socketio.emit('update_telop', {'telop': telopContent})
 
+def socketio_emit_telop_reset():
+    socketio.emit('update_telop', {'telop': ""})
+
 def socketio_emit_telop_add_display_none():
     socketio.emit('update_telop_add_display_none', {})
 
