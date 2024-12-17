@@ -30,7 +30,7 @@ def chatGPT_API_Output(conversation_history, inputContent):
     else:
         # メッセージ作成
         messages = [
-            {"role": "system", "content": SYSTEM_CONTENT}
+            {"role": "system", "content": SYSTEM_CONTENT},
             {"role": "user", "content": inputContent}
         ]
 

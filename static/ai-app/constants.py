@@ -56,7 +56,7 @@ class ChatGPTAPIOutputSettings:
     # トークン
     MAX_TOKENS = 100
     # プロンプト
-    CHATGPT_SYSTEM_CONTENT = "デフォルトは日本語で対応してください。ただし、日本語以外で質問がなされた場合は対応する言語で対応してください"
+    CHATGPT_SYSTEM_CONTENT = "日本語で対応してください"
 
 # phoneAutomation.py
 class PhoneAutomationSettings:

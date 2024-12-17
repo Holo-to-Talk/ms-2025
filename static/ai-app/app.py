@@ -244,20 +244,20 @@ def handle_enter_event():
     # メイン処理始動
     socketio.start_background_task(target = ai)
 
-global flag_enter2
 # Enterが押されたら
 @socketio.on('enter_conversation')
 def handle_enter_event2():
     # Flag変更
     socketio_emit.socketio_emit_flag_enter2()
+    global flag_enter2
     flag_enter2 = True
 
-global flag_space
 # Spaceが押されたら
 @socketio.on('space_phone')
 def handle_space_event():
     # Flag変更
     socketio_emit.socketio_emit_flag_space()
+    global flag_space
     flag_space = True
 
 # FLask起動
