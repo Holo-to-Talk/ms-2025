@@ -84,14 +84,12 @@ main {
 }
 
 select {
-  -webkit-appearance: none; /* Chrome, Safari, Edge */
-  -moz-appearance: none; /* Firefox */
-  width: 250px;
-  height: 120px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 18px;
+  height: 150px;
+}
+
+select option {
+  font-family: "Noto Sans JP", sans-serif;
+  padding: 8px 4px;
 }
 
 select::-webkit-scrollbar {
@@ -99,11 +97,6 @@ select::-webkit-scrollbar {
   height: 0;
 }
 
-select option {
-  white-space: normal; /* テキストを改行可能にする */
-  word-wrap: break-word; /* 長い単語を自動で改行する */
-  overflow-wrap: break-word;
-}
 /* Center Column */
 input {
   font-size: 25px;
