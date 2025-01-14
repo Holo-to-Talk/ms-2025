@@ -157,6 +157,10 @@ def register():
         "password": ""
     }
 
+        # ログインしていない場合はリダイレクト
+    if 'user' not in session:
+        return redirect('/station/login')
+
     if request.method == 'POST':
         # 入力内容を保持
         form_data = {
@@ -222,6 +226,9 @@ def edit_index():
 #ユーザーリスト表示処理
 @app.route('/station/list', methods=['GET','POST'])
 def station_list():
+    # ログインしていない場合はリダイレクト
+    if 'user' not in session:
+        return redirect('/station/login')
     if request.method == "GET":
         # データベース接続
         conn = db_connection()
@@ -290,6 +297,10 @@ def edit_station(station_num):
     error_msg = []
     form_data = {}
     print(station_num)#編集駅番号
+
+        # ログインしていない場合はリダイレクト
+    if 'user' not in session:
+        return redirect('/station/login')
 
     conn = db_connection()
     if conn is None:
@@ -467,6 +478,7 @@ def change_password():
 # ログアウト処理
 @app.route('/user/logout')
 def logout():
+    
     session.clear()  # セッションをクリア
     return redirect(url_for('login'))
 
@@ -480,6 +492,9 @@ def report():
         "answer": "",
         "gpt_log_id": ""
     }
+        # ログインしていない場合はリダイレクト
+    if 'user' not in session:
+        return redirect('/station/login')
 
     if request.method == "GET":
         try:
@@ -528,6 +543,9 @@ def report():
 #レポートリスト表示処理
 @app.route('/report/list', methods=['GET'])
 def report_list():
+    # ログインしていない場合はリダイレクト
+    if 'user' not in session:
+        return redirect('/station/login')
     if request.method == "GET":
         # データベース接続
         conn = db_connection()
