@@ -72,6 +72,38 @@ def token():
     # トークンとユーザーIDをJSON形式で返す
     return jsonify(identity=identity, token=token)
 
+# 音声通話に対応するAPIエンドポイント
+@app.route("/voice", methods=["POST"])
+def voice():
+    resp = VoiceResponse()
+
+    # 発信先がTwilioの電話番号の場合、着信として処理
+    if request.form.get("To") == twilio_number:
+        dial = Dial()
+        # 最後に生成されたクライアントIDに接続
+        dial.client(IDENTITY["identity"])
+        resp.append(dial)
+
+    # 発信先が指定されている場合、外部に発信する処理
+    elif request.form.get("To"):
+        dial = Dial(caller_id=twilio_number)
+
+        print(twilio_number)
+
+        # 電話番号が数字と記号のみで構成されているか確認
+        if phone_pattern.match(request.form["To"]):
+            dial.number(request.form["To"])
+        else:
+            dial.client(request.form["To"])
+        resp.append(dial)
+
+    # 発信先がない場合のメッセージ
+    else:
+        resp.say("Thanks for calling!")
+
+    # TwiML形式の応答をXMLとして返す
+    return Response(str(resp), mimetype="text/xml")
+
 # ルートURLにアクセスされた際の処理
 @app.route('/')
 def index():
@@ -557,4 +589,4 @@ def report_list():
 
 # アプリケーションを実行
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
